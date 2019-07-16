@@ -1,10 +1,12 @@
 package com.example.helpq.model;
 
+import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.Date;
 
+@ParseClassName("Question")
 public class Question extends ParseObject {
 
     private static final String KEY_TEXT = "questionText";
