@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/action_favorites"
+        android:id="@+id/action_view_queue"
         android:enabled="true"
         android:icon="@drawable/ic_launcher_background"
-        android:title="Test"
+        android:title="Queue"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_view_students"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="Students"
         app:showAsAction="ifRoom" />
 </menu>
