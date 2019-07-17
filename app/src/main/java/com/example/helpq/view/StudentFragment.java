@@ -14,15 +14,16 @@ import android.view.ViewGroup;
 
 import com.example.helpq.R;
 
-public class AdminFragment extends Fragment {
+public class StudentFragment extends Fragment {
 
-    public static final String TAG = "AdminFragment";
+
+    public static final String TAG = "StudentFragment";
     FragmentManager fragmentManager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_admin, container, false);
+        return inflater.inflate(R.layout.fragment_student, container, false);
     }
 
     @Override
@@ -41,9 +42,7 @@ public class AdminFragment extends Fragment {
                         setFragment(new AdminQueueFragment(),
                                 new String[]{AdminQueueFragment.TAG, AdminStudentsFragment.TAG});
                         return true;
-                    case R.id.action_view_students:
-                        setFragment(new AdminStudentsFragment(),
-                                new String[]{AdminStudentsFragment.TAG, AdminQueueFragment.TAG});
+                    case R.id.action_view_workshops:
                         return true;
                     default:
                         return true;

@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">HelpQ</string>
+    <string name="queue_tab">Queue</string>
+    <string name="admin_students_tab">Students</string>
+    <string name="workshops_tab">Workshops</string>
 </resources>

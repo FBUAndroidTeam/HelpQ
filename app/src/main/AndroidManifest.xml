@@ -12,8 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".ParseApp"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:name=".ParseApp">
         <activity android:name=".view.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
