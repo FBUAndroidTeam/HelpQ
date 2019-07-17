@@ -24,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     private Button btnAdmin;
     private Button btnStudent;
+    private Button btnRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,23 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         btnAdmin = findViewById(R.id.btnAdmin);
         btnStudent = findViewById(R.id.btnStudent);
+        btnRegister = findViewById(R.id.btnRegister);
         btnSubmit();
+
+        if(ParseUser.getCurrentUser() != null) {
+            ParseUser.logOut();
+        }
+
+    }
+
+    //launches registration page for new users
+    private void startRegistrationActivity() {
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
+            }
+        });
     }
 
     //handles onclick listeners for login
@@ -67,25 +84,31 @@ public class LoginActivity extends AppCompatActivity {
                     Intent toHome = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(toHome);
                     finish(); // finishes login so user cannot press back button to go back to login
+                } else {
+                    Toast.makeText(LoginActivity.this, "Invalid username/password", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
     //checks backend if such user exists
-    private void queryValidUsers(final String username, final String password, boolean isAdmin) {
-        ParseQuery<ParseUser> query = ParseQuery.getQuery("User");
+    private void queryValidUsers(final String username, final String password, final boolean isAdmin) {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("isInstructor", isAdmin);
-        query.whereEqualTo("username", username);
-        query.whereEqualTo("password", password);
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
-                if(objects != null && objects.size() != 0) {
-                    login(username, password);
-                } else {
-                    Toast.makeText(LoginActivity.this, "Incorrect username/password or login button", Toast.LENGTH_LONG).show();
+                if(objects.size() != 0) {
+                    for(int i = 0; i < objects.size(); i++) {
+                        ParseUser user = objects.get(i);
+                        if(user.getUsername().equals(username)) {
+                            login(username, password);
+                            return;
+                        }
+                    }
                 }
+                Toast.makeText(LoginActivity.this, "Incorrect username/password or login button", Toast.LENGTH_LONG).show();
+
             }
         });
     }
