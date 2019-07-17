@@ -1,4 +1,4 @@
-package com.example.helpq;
+package com.example.helpq.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,13 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class AdminQueueFragment extends Fragment {
+import com.example.helpq.R;
 
-    public static final String TAG = "AdminQueueFragment";
+public class AdminStudentsFragment extends Fragment {
+
+    public static final String TAG = "AdminStudentsFragment";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_admin_queue, container, false);
+        return inflater.inflate(R.layout.fragment_admin_students, container, false);
+
+
     }
 }

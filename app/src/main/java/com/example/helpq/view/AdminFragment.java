@@ -1,4 +1,4 @@
-package com.example.helpq;
+package com.example.helpq.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.helpq.R;
 
 public class AdminFragment extends Fragment {
 
@@ -44,8 +46,6 @@ public class AdminFragment extends Fragment {
                                 new String[]{AdminStudentsFragment.TAG, AdminQueueFragment.TAG});
                         return true;
                     default:
-                        setFragment(new AdminQueueFragment(),
-                                new String[]{AdminQueueFragment.TAG, AdminStudentsFragment.TAG});
                         return true;
                 }
             }
@@ -61,7 +61,6 @@ public class AdminFragment extends Fragment {
             fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag(tags[0])).commit();
         } else {
             // if the fragment does not exist, add it to fragment manager.
-            // always add a new fragment if it is a PostDetailsFragment
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.add(R.id.flStudentContainer, fragment, tags[0]).commit();
         }
