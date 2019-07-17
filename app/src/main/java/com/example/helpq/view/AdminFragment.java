@@ -38,12 +38,12 @@ public class AdminFragment extends Fragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_view_queue:
-                        setFragment(new AdminQueueFragment(),
-                                new String[]{AdminQueueFragment.TAG, AdminStudentsFragment.TAG});
+                        setFragment(new QueueFragment(),
+                                new String[]{QueueFragment.TAG, AdminStudentsFragment.TAG});
                         return true;
                     case R.id.action_view_students:
                         setFragment(new AdminStudentsFragment(),
-                                new String[]{AdminStudentsFragment.TAG, AdminQueueFragment.TAG});
+                                new String[]{AdminStudentsFragment.TAG, QueueFragment.TAG});
                         return true;
                     default:
                         return true;

@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 
 import com.example.helpq.R;
 
-public class AdminQueueFragment extends Fragment {
+public class QueueFragment extends Fragment {
 
-    public static final String TAG = "AdminQueueFragment";
+    public static final String TAG = "QueueFragment";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_admin_queue, container, false);
+        return inflater.inflate(R.layout.fragment_queue, container, false);
     }
 }
