@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     // Show/add the given fragment with tag stored in tags[0], and hide fragments with all other tags.
     public void setFragment(Fragment fragment, String[] tags) {
 
-        if(fragmentManager.findFragmentByTag(tags[0]) != null) {
+        if (fragmentManager.findFragmentByTag(tags[0]) != null) {
             // if the fragment exists, show it.
             fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag(tags[0])).commit();
         } else {
