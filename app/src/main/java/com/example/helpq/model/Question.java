@@ -9,9 +9,9 @@ import java.util.Date;
 @ParseClassName("Question")
 public class Question extends ParseObject {
 
-    private static final String KEY_TEXT = "questionText";
-    private static final String KEY_ASKER = "student";
-    private static final String KEY_PRIORITY = "priorityEmoji";
+    public static final String KEY_TEXT = "questionText";
+    public static final String KEY_ASKER = "student";
+    public static final String KEY_PRIORITY = "priorityEmoji";
 
     //stretch keys
     private static final String KEY_ANSWER = "answerText";
