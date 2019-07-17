@@ -1,4 +1,4 @@
-package com.example.helpq.fragment;
+package com.example.helpq.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
