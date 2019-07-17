@@ -15,8 +15,15 @@ import java.util.List;
 
 public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> {
 
+    private static final String TAG = "QueueAdapter";
     private Context context;
     private List<Question> mQuestions;
+
+    // Constructor
+    public QueueAdapter(Context context, List<Question> questions) {
+        this.context = context;
+        this.mQuestions = questions;
+    }
 
     @NonNull
     @Override
@@ -54,7 +61,16 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
         // Bind the view elements to the Question.
         public void bind(Question question) {
-            // TODO - update TextView fields with data from parse
+
+            String name = null;
+            try {
+                name = question.getAsker().fetchIfNeeded().getUsername();
+            } catch (com.parse.ParseException e) {
+                e.printStackTrace();
+            }
+            tvStudentName.setText(name);
+            tvPriorityEmoji.setText(question.getPriority());
+            tvDescription.setText(question.getText());
         }
     }
 
