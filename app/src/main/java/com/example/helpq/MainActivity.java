@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.helpq.fragment.StudentQueueFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager;
@@ -14,6 +16,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.flMainContainer, new AdminFragment(), AdminFragment.TAG).commit();
+        fragmentManager.beginTransaction().add(R.id.flMainContainer, new StudentQueueFragment(), StudentQueueFragment.TAG).commit();
     }
 }
