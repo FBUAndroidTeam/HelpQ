@@ -1,8 +1,10 @@
-package com.example.helpq;
+package com.example.helpq.view;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.helpq.R;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.helpq;
+package com.example.helpq.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.helpq.R;
 
 public class AdminFragment extends Fragment {
 
