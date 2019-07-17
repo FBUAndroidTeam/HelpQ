@@ -39,8 +39,8 @@ public class StudentFragment extends Fragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_view_queue:
-                        setFragment(new QueueFragment(),
-                                new String[]{QueueFragment.TAG, AdminStudentsFragment.TAG});
+                        setFragment(new StudentQueueFragment(),
+                                new String[]{StudentQueueFragment.TAG});
                         return true;
                     case R.id.action_view_workshops:
                         return true;

@@ -15,6 +15,7 @@ public class StudentQueueFragment extends Fragment {
     private FloatingActionButton fabCreateQuestion;
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "StudentQueueFragment";
+    FragmentManager fragmentManager;
 
     public static StudentQueueFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -27,6 +28,10 @@ public class StudentQueueFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_student_queue, parent, false);
+
+        fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.flStudentQueueContainer, new QueueFragment(), QueueFragment.TAG).commit();
+
         fabCreateQuestion = view.findViewById(R.id.fabCreateQuestion);
         fabCreateQuestion.setOnClickListener(new View.OnClickListener() {
             @Override

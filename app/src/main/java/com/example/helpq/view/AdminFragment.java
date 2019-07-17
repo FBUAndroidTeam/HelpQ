@@ -38,12 +38,12 @@ public class AdminFragment extends Fragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_view_queue:
-                        setFragment(new QueueFragment(),
-                                new String[]{QueueFragment.TAG, AdminStudentsFragment.TAG});
+                        setFragment(new AdminQueueFragment(),
+                                new String[]{AdminQueueFragment.TAG, AdminEnrolledFragment.TAG});
                         return true;
-                    case R.id.action_view_students:
-                        setFragment(new AdminStudentsFragment(),
-                                new String[]{AdminStudentsFragment.TAG, QueueFragment.TAG});
+                    case R.id.action_view_enrolled:
+                        setFragment(new AdminEnrolledFragment(),
+                                new String[]{AdminEnrolledFragment.TAG, AdminQueueFragment.TAG});
                         return true;
                     default:
                         return true;
@@ -62,7 +62,7 @@ public class AdminFragment extends Fragment {
         } else {
             // if the fragment does not exist, add it to fragment manager.
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.add(R.id.flStudentContainer, fragment, tags[0]).commit();
+            transaction.add(R.id.flAdminContainer, fragment, tags[0]).commit();
         }
 
         for (int i = 1; i < tags.length; i++) {
