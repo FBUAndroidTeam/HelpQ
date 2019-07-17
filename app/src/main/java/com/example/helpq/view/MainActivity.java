@@ -16,6 +16,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.flMainContainer, new AdminFragment(), AdminFragment.TAG).commit();
+        fragmentManager.beginTransaction().add(R.id.flMainContainer, new StudentFragment(), StudentFragment.TAG).commit();
     }
 }
