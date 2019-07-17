@@ -62,7 +62,7 @@ public class AdminFragment extends Fragment {
         } else {
             // if the fragment does not exist, add it to fragment manager.
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.add(R.id.flAdminContainer, fragment, tags[0]).commit();
+            transaction.add(R.id.flStudentContainer, fragment, tags[0]).commit();
         }
 
         for (int i = 1; i < tags.length; i++) {
