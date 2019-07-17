@@ -10,7 +10,7 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_view_students"
+        android:id="@+id/action_view_enrolled"
         android:enabled="true"
         android:icon="@drawable/ic_launcher_background"
         android:title="@string/admin_students_tab"

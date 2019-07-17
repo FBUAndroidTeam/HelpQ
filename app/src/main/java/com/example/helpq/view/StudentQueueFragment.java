@@ -1,4 +1,4 @@
-package com.example.helpq.fragment;
+package com.example.helpq.view;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +15,7 @@ public class StudentQueueFragment extends Fragment {
     private FloatingActionButton fabCreateQuestion;
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "StudentQueueFragment";
+    FragmentManager fragmentManager;
 
     public static StudentQueueFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -27,12 +28,16 @@ public class StudentQueueFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_student_queue, parent, false);
+
+        fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.flStudentQueueContainer, new QueueFragment(), QueueFragment.TAG).commit();
+
         fabCreateQuestion = view.findViewById(R.id.fabCreateQuestion);
         fabCreateQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getFragmentManager();
-                CreateQuestionFragment CreateQuestionFragment = com.example.helpq.fragment.CreateQuestionFragment.newInstance("Some Title");
+                CreateQuestionFragment CreateQuestionFragment = com.example.helpq.view.CreateQuestionFragment.newInstance("Some Title");
                 CreateQuestionFragment.show(fm, "fragment_create_question");
             }
         });

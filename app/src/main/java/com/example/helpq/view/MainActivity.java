@@ -6,9 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.helpq.R;
 
-import com.example.helpq.fragment.StudentQueueFragment;
-import com.example.helpq.view.StudentFragment;
-
 public class MainActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager;
