@@ -12,11 +12,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
 import com.parse.ParseException;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 public class CreateQuestionFragment extends DialogFragment {
@@ -27,6 +30,7 @@ public class CreateQuestionFragment extends DialogFragment {
     private ToggleButton tbExplanation;
     private ToggleButton toggleSelected;
     private Button btnSubmit;
+    private TextView tvStudent;
 
 
     public CreateQuestionFragment() {
@@ -58,6 +62,10 @@ public class CreateQuestionFragment extends DialogFragment {
         tbStretch = view.findViewById(R.id.tbStretch);
         etQuestion = (EditText) view.findViewById(R.id.etQuestion);
         btnSubmit = view.findViewById(R.id.btnSubmit);
+        tvStudent = view.findViewById(R.id.tvStudent);
+
+        tvStudent.setText(ParseUser.getCurrentUser().getString("fullName"));
+
         // Fetch arguments from bundle and set title
         String title = getArguments().getString("title", "New Question");
         getDialog().setTitle(title);
@@ -111,7 +119,7 @@ public class CreateQuestionFragment extends DialogFragment {
                 if(!etQuestion.getText().equals("") && toggleSelected != null) {
                     Question newQuestion = new Question();
                     newQuestion.setText(etQuestion.getText().toString());
-                    //newQuestion.setAsker(ParseUser.getCurrentUser());
+                    newQuestion.setAsker(ParseUser.getCurrentUser());
                     newQuestion.setPriority(toggleSelected.getText().toString());
                     newQuestion.saveInBackground(new SaveCallback() {
                         @Override
@@ -125,6 +133,8 @@ public class CreateQuestionFragment extends DialogFragment {
                             }
                         }
                     });
+                } else {
+                    Toast.makeText(getContext(), "Please enter a question and/or priority level", Toast.LENGTH_LONG).show();
                 }
             }
         });
