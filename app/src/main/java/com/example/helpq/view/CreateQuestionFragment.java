@@ -117,7 +117,19 @@ public class CreateQuestionFragment extends DialogFragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!etQuestion.getText().equals("") && toggleSelected != null) {
+                if((etQuestion.getText().toString()).matches("")) {
+                    Toast.makeText(getContext(),
+                            "Please enter a question.",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else if(toggleSelected == null) {
+                    Toast.makeText(getContext(),
+                            "Please select type of priority.",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else {
                     Question newQuestion = new Question();
                     newQuestion.setText(etQuestion.getText().toString());
                     newQuestion.setAsker(ParseUser.getCurrentUser());
@@ -135,10 +147,6 @@ public class CreateQuestionFragment extends DialogFragment {
                             }
                         }
                     });
-                } else {
-                    Toast.makeText(getContext(),
-                            "Please enter a question and/or priority level",
-                            Toast.LENGTH_LONG).show();
                 }
             }
         });
