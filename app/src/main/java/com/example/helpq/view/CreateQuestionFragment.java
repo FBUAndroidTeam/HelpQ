@@ -17,6 +17,7 @@ import android.widget.ToggleButton;
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
 import com.parse.ParseException;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 public class CreateQuestionFragment extends DialogFragment {
@@ -111,7 +112,7 @@ public class CreateQuestionFragment extends DialogFragment {
                 if(!etQuestion.getText().equals("") && toggleSelected != null) {
                     Question newQuestion = new Question();
                     newQuestion.setText(etQuestion.getText().toString());
-                    //newQuestion.setAsker(ParseUser.getCurrentUser());
+                    newQuestion.setAsker(ParseUser.getCurrentUser());
                     newQuestion.setPriority(toggleSelected.getText().toString());
                     newQuestion.saveInBackground(new SaveCallback() {
                         @Override
