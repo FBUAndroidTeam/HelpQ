@@ -24,6 +24,7 @@ import com.parse.SaveCallback;
 
 public class CreateQuestionFragment extends DialogFragment {
 
+    private static final String TAG = "CreateQuestionFragment";
     private EditText etQuestion;
     private ToggleButton tbBlocker;
     private ToggleButton tbStretch;
@@ -45,11 +46,10 @@ public class CreateQuestionFragment extends DialogFragment {
         return frag;
     }
 
-
-
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_create_question, container, false);
 
     }
@@ -71,8 +71,9 @@ public class CreateQuestionFragment extends DialogFragment {
         getDialog().setTitle(title);
         // Show soft keyboard automatically and request focus to text
         etQuestion.requestFocus();
-        getDialog().getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        getDialog()
+                .getWindow()
+                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         toggleButtons();
         submitQuestion();
     }
@@ -126,16 +127,18 @@ public class CreateQuestionFragment extends DialogFragment {
                         @Override
                         public void done(ParseException e) {
                             if(e == null) {
-                                Log.d("CreateQuestion", "Question created successfully");
+                                Log.d(TAG, "Question created successfully");
                                 dismiss();
                             } else {
-                                Log.d("CreateQuestion", "Question failed to create");
+                                Log.d(TAG, "Question failed to create");
                                 e.printStackTrace();
                             }
                         }
                     });
                 } else {
-                    Toast.makeText(getContext(), "Please enter a question and/or priority level", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),
+                            "Please enter a question and/or priority level",
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });

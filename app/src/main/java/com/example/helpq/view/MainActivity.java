@@ -9,7 +9,7 @@ import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    FragmentManager fragmentManager;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +21,15 @@ public class MainActivity extends AppCompatActivity {
         ParseUser user = ParseUser.getCurrentUser();
 
         if (user.getBoolean("isInstructor")) {
-            fragmentManager.beginTransaction().add(R.id.flMainContainer, new AdminFragment(), AdminFragment.TAG).commit();
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.flMainContainer, new AdminFragment(), AdminFragment.TAG)
+                    .commit();
         } else {
-            fragmentManager.beginTransaction().add(R.id.flMainContainer, new StudentFragment(), StudentFragment.TAG).commit();
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.flMainContainer, new StudentFragment(), StudentFragment.TAG)
+                    .commit();
         }
     }
 }
