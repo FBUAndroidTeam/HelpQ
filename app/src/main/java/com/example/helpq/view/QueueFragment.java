@@ -81,12 +81,6 @@ public class QueueFragment extends Fragment {
     }
 
     private void queryQuestions() {
-        queryQuestionsWithPriority(getString(R.string.PRIORITY_BLOCKING));
-        queryQuestionsWithPriority(getString(R.string.PRIORITY_STRETCH));
-        queryQuestionsWithPriority(getString(R.string.PRIORITY_CURIOSITY));
-    }
-
-    private void queryQuestionsWithPriority(final String priorityEmoji) {
         final ParseQuery<Question> questionQuery = new ParseQuery<Question>(Question.class);
         questionQuery.whereEqualTo("isArchived", false);
         questionQuery.findInBackground(new FindCallback<Question>() {
@@ -97,14 +91,7 @@ public class QueueFragment extends Fragment {
                     e.printStackTrace();
                     return;
                 }
-                for (int i = 0; i < objects.size(); i++) {
-                    Question q = objects.get(i);
-                    if (q.getPriority().equals(priorityEmoji)) {
-                        mQuestions.add(q);
-                        Log.d(TAG, q.getPriority() + ": " + q.getText() + " " + priorityEmoji);
-                        adapter.notifyDataSetChanged();
-                    }
-                }
+                adapter.addAll(objects);
             }
         });
     }
