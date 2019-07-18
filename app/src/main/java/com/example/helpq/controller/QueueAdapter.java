@@ -5,13 +5,14 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.helpq.R;
-import com.example.helpq.model.OnSwipeTouchListener;
 import com.example.helpq.model.Question;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -60,6 +61,23 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    //archives question
+    private void archiveQuestion(int adapterPosition) {
+        Question question = mQuestions.get(adapterPosition);
+        question.setIsArchived(true);
+        question.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null) {
+                    Toast.makeText(mContext, "Question archived", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.d(TAG, "failed");
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         // Layout fields of item_question
@@ -75,18 +93,38 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
             tvDescription = itemView.findViewById(R.id.tvDescription);
 
-            itemView.setOnTouchListener(new OnSwipeTouchListener(mContext) {
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onSwipeLeft() {
+                public boolean onLongClick(View v) {
                     ParseUser currentUser = ParseUser.getCurrentUser();
                     if(currentUser.getBoolean("isInstructor") ||
                             currentUser.getString("fullName")
                                     .equals(tvStudentName.getText().toString())) {
-                        swipeToArchive(getAdapterPosition());
+                        showFilterPopup(v);
                     }
+                    return false;
                 }
             });
         }
+
+        // Displays anchored popup menu based on view selected
+        private void showFilterPopup(View v) {
+            PopupMenu popup = new PopupMenu(mContext, v);
+            popup.inflate(R.menu.popup_filters);
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.menu_delete:
+                            archiveQuestion(getAdapterPosition());
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+            popup.show();
+        }
+
 
         // Bind the view elements to the Question.
         public void bind(Question question) {
@@ -100,23 +138,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvPriorityEmoji.setText(question.getPriority());
             tvDescription.setText(question.getText());
         }
-    }
-
-    //archives question
-    private void swipeToArchive(int adapterPosition) {
-        Question question = mQuestions.get(adapterPosition);
-        question.setIsArchived(true);
-        question.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(e == null) {
-                    Toast.makeText(mContext, "Question archived", Toast.LENGTH_LONG).show();
-                } else {
-                    Log.d(TAG, "failed");
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
 }
