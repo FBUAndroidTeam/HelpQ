@@ -36,7 +36,9 @@ public class LoginActivity extends AppCompatActivity {
         btnStudent = findViewById(R.id.btnStudent);
         btnRegister = findViewById(R.id.btnRegister);
         btnSubmit();
+        startRegistrationActivity();
 
+        //ensures user from last session has been logged out since no logout button has been implemented
         if(ParseUser.getCurrentUser() != null) {
             ParseUser.logOut();
         }
@@ -48,7 +50,8 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
+                startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
+                finish();
             }
         });
     }

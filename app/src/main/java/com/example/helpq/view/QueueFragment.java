@@ -46,12 +46,15 @@ public class QueueFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvQuestions.setLayoutManager(layoutManager);
 
-        blockingQueryQuestion();
-        stretchQueryQuestion();
-        curiousQueryQuestion();
+        queryQuestions(getString(R.string.PRIORITY_BLOCKING));
+        queryQuestions(getString(R.string.PRIORITY_STRETCH));
+        queryQuestions(getString(R.string.PRIORITY_CURIOSITY));
+
+
     }
 
-    private void blockingQueryQuestion() {
+
+    private void queryQuestions (final String priorityEmoji) {
         final ParseQuery<Question> questionQuery = new ParseQuery<Question>(Question.class);
         questionQuery.findInBackground(new FindCallback<Question>() {
             @Override
@@ -61,55 +64,11 @@ public class QueueFragment extends Fragment {
                     e.printStackTrace();
                     return;
                 }
-                for(int i = 0; i < objects.size(); i++) {
+                for (int i = 0; i < objects.size(); i++) {
                     Question q = objects.get(i);
-                    if(q.getPriority().equals("\uD83D\uDED1")) {
+                    if (q.getPriority().equals(priorityEmoji)) {
                         mQuestions.add(q);
-                        Log.d(TAG, q.getPriority() + ": " + q.getText());
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            }
-        });
-    }
-
-    private void stretchQueryQuestion() {
-        final ParseQuery<Question> questionQuery = new ParseQuery<Question>(Question.class);
-        questionQuery.findInBackground(new FindCallback<Question>() {
-            @Override
-            public void done(List<Question> objects, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "error with query");
-                    e.printStackTrace();
-                    return;
-                }
-                for(int i = 0; i < objects.size(); i++) {
-                    Question q = objects.get(i);
-                    if(q.getPriority().equals("\uD83D\uDE80")) {
-                        mQuestions.add(q);
-                        Log.d(TAG, q.getPriority() + ": " + q.getText());
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            }
-        });
-    }
-
-    private void curiousQueryQuestion() {
-        final ParseQuery<Question> questionQuery = new ParseQuery<Question>(Question.class);
-        questionQuery.findInBackground(new FindCallback<Question>() {
-            @Override
-            public void done(List<Question> objects, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "error with query");
-                    e.printStackTrace();
-                    return;
-                }
-                for(int i = 0; i < objects.size(); i++) {
-                    Question q = objects.get(i);
-                    if(q.getPriority().equals("\uD83D\uDD0D")) {
-                        mQuestions.add(q);
-                        Log.d(TAG, q.getPriority() + ": " + q.getText());
+                        Log.d(TAG, q.getPriority() + ": " + q.getText() + " " + priorityEmoji);
                         adapter.notifyDataSetChanged();
                     }
                 }
@@ -117,3 +76,5 @@ public class QueueFragment extends Fragment {
         });
     }
 }
+
+
