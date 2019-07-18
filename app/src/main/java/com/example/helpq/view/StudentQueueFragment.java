@@ -17,6 +17,10 @@ public class StudentQueueFragment extends Fragment {
     public static final String TAG = "StudentQueueFragment";
     private FragmentManager fragmentManager;
 
+    public static StudentQueueFragment newInstance() {
+        return new StudentQueueFragment();
+    }
+
     public static StudentQueueFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);

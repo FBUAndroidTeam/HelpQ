@@ -30,6 +30,10 @@ public class QueueFragment extends Fragment {
     private QueueAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
 
+    public static QueueFragment newInstance() {
+        return new QueueFragment();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
