@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,11 +16,12 @@ import com.example.helpq.R;
 public class AdminFragment extends Fragment {
 
     public static final String TAG = "AdminFragment";
-    FragmentManager fragmentManager;
+    private FragmentManager fragmentManager;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_admin, container, false);
     }
 
@@ -30,7 +30,8 @@ public class AdminFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         fragmentManager = getFragmentManager();
-        BottomNavigationView navigationView = (BottomNavigationView) view.findViewById(R.id.top_navigation);
+        BottomNavigationView navigationView =
+                (BottomNavigationView) view.findViewById(R.id.top_navigation);
 
         // Set top menu to navigate between "Queue" and "Students" tabs
         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -58,17 +59,25 @@ public class AdminFragment extends Fragment {
 
         if (fragmentManager.findFragmentByTag(tags[0]) != null) {
             // if the fragment exists, show it.
-            fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag(tags[0])).commit();
+            fragmentManager
+                    .beginTransaction()
+                    .show(fragmentManager.findFragmentByTag(tags[0]))
+                    .commit();
         } else {
             // if the fragment does not exist, add it to fragment manager.
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.add(R.id.flAdminContainer, fragment, tags[0]).commit();
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.flAdminContainer, fragment, tags[0])
+                    .commit();
         }
 
         for (int i = 1; i < tags.length; i++) {
             if(fragmentManager.findFragmentByTag(tags[i]) != null) {
                 //if the other fragment is visible, hide it.
-                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag(tags[i])).commit();
+                fragmentManager
+                        .beginTransaction()
+                        .hide(fragmentManager.findFragmentByTag(tags[i]))
+                        .commit();
             }
         }
     }

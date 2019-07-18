@@ -21,6 +21,8 @@ import java.util.List;
 
 public class RegistrationActivity extends AppCompatActivity {
 
+    private static final String TAG = "RegistrationActivity";
+
     private EditText etNewUsername;
     private EditText etNewPassword;
     private EditText etInstructor;
@@ -66,19 +68,21 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void done(ParseUser user, ParseException e) {
                 if (e == null) {
-                    Log.d("LoginActivity", "Login successful");
-                    Intent toHome = new Intent(RegistrationActivity.this, MainActivity.class);
-                    startActivity(toHome);
+                    Log.d(TAG, "Login successful");
+                    startActivity(new Intent(RegistrationActivity.this,
+                            MainActivity.class));
                     finish(); // finishes login so user cannot press back button to go back to login
                 } else {
-                    Toast.makeText(RegistrationActivity.this, "Invalid username/password", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegistrationActivity.this,
+                            "Invalid username/password", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
     //queries backend to see if inputted instructor is valid
-    private void queryInstructor(final String instructor, final ParseUser newUser, final String username, final String password) {
+    private void queryInstructor(final String instructor, final ParseUser newUser,
+                                 final String username, final String password) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("isInstructor", true);
         query.findInBackground(new FindCallback<ParseUser>() {
@@ -92,7 +96,8 @@ public class RegistrationActivity extends AppCompatActivity {
                         signUp(newUser, username, password);
                         return;
                     } else if(i == objects.size() - 1) {
-                        Toast.makeText(RegistrationActivity.this, "Invalid admin", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegistrationActivity.this,
+                                "Invalid admin", Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -105,11 +110,12 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 if(e == null) {
-                    Log.d("SignUp","Signup successful!");
+                    Log.d(TAG,"Signup successful!");
                     login(username, password);
                 } else {
-                    Toast.makeText(RegistrationActivity.this, "username already taken", Toast.LENGTH_LONG).show();
-                    Log.d("SignUp", "Signup failed");
+                    Toast.makeText(RegistrationActivity.this,
+                            "username already taken", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "Signup failed");
                     e.printStackTrace();
                 }
             }

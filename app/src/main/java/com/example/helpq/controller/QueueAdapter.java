@@ -22,26 +22,25 @@ import java.util.List;
 public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> {
 
     private static final String TAG = "QueueAdapter";
-    private Context context;
+    private Context mContext;
     private List<Question> mQuestions;
 
     // Constructor
     public QueueAdapter(Context context, List<Question> questions) {
-        this.context = context;
+        this.mContext = context;
         this.mQuestions = questions;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_question, viewGroup, false);
-        return new ViewHolder(view);
+        return new ViewHolder(LayoutInflater.from(mContext)
+                .inflate(R.layout.item_question, viewGroup, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Question question = mQuestions.get(i);
-        viewHolder.bind(question);
+        viewHolder.bind(mQuestions.get(i));
     }
 
     @Override
@@ -76,12 +75,13 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
             tvDescription = itemView.findViewById(R.id.tvDescription);
 
-            itemView.setOnTouchListener(new OnSwipeTouchListener(context) {
+            itemView.setOnTouchListener(new OnSwipeTouchListener(mContext) {
                 @Override
                 public void onSwipeLeft() {
                     ParseUser currentUser = ParseUser.getCurrentUser();
                     if(currentUser.getBoolean("isInstructor") ||
-                            currentUser.getString("fullName").equals(tvStudentName.getText().toString())) {
+                            currentUser.getString("fullName")
+                                    .equals(tvStudentName.getText().toString())) {
                         swipeToArchive(getAdapterPosition());
                     }
                 }
@@ -90,7 +90,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
         // Bind the view elements to the Question.
         public void bind(Question question) {
-
             String name = null;
             try {
                 name = question.getAsker().fetchIfNeeded().getString("fullName");
@@ -101,7 +100,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvPriorityEmoji.setText(question.getPriority());
             tvDescription.setText(question.getText());
         }
-
     }
 
     //archives question
@@ -112,9 +110,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             @Override
             public void done(ParseException e) {
                 if(e == null) {
-                    Toast.makeText(context, "Question archived", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "Question archived", Toast.LENGTH_LONG).show();
                 } else {
-                    Log.d("SwipeToDelete", "failed");
+                    Log.d(TAG, "failed");
                     e.printStackTrace();
                 }
             }

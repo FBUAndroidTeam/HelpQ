@@ -20,6 +20,8 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String TAG = "LoginActivity";
+
     private EditText etUsername;
     private EditText etPassword;
     private Button btnAdmin;
@@ -38,7 +40,8 @@ public class LoginActivity extends AppCompatActivity {
         btnSubmit();
         startRegistrationActivity();
 
-        //ensures user from last session has been logged out since no logout button has been implemented
+        //ensures user from last session has been logged out since no logout button
+        //has been implemented
         if(ParseUser.getCurrentUser() != null) {
             ParseUser.logOut();
         }
@@ -50,7 +53,8 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
+                startActivity(new Intent(LoginActivity.this,
+                        RegistrationActivity.class));
                 finish();
             }
         });
@@ -83,19 +87,20 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void done(ParseUser user, ParseException e) {
                 if (e == null) {
-                    Log.d("LoginActivity", "Login successful");
-                    Intent toHome = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(toHome);
+                    Log.d(TAG, "Login successful");
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish(); // finishes login so user cannot press back button to go back to login
                 } else {
-                    Toast.makeText(LoginActivity.this, "Invalid username/password", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Invalid username/password",
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
     //checks backend if such user exists
-    private void queryValidUsers(final String username, final String password, final boolean isAdmin) {
+    private void queryValidUsers(final String username, final String password,
+                                 final boolean isAdmin) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("isInstructor", isAdmin);
         query.findInBackground(new FindCallback<ParseUser>() {
@@ -110,7 +115,9 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 }
-                Toast.makeText(LoginActivity.this, "Incorrect username/password or login button", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this,
+                        "Incorrect username/password or login button",
+                        Toast.LENGTH_LONG).show();
 
             }
         });
