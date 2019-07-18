@@ -48,8 +48,8 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:text="Blocker"
-        android:textOff="🛑"
-        android:textOn="🛑"
+        android:textOff="@string/PRIORITY_BLOCKING"
+        android:textOn="@string/PRIORITY_BLOCKING"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
 
@@ -59,8 +59,8 @@
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:text="Stretch"
-        android:textOff="🚀"
-        android:textOn="🚀"
+        android:textOff="@string/PRIORITY_STRETCH"
+        android:textOn="@string/PRIORITY_STRETCH"
         app:layout_constraintStart_toEndOf="@+id/tbBlocker"
         app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
 
@@ -72,8 +72,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="Explanation"
-        android:textOff="🔍"
-        android:textOn="🔍"
+        android:textOff="@string/PRIORITY_CURIOSITY"
+        android:textOn="@string/PRIORITY_CURIOSITY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tbStretch"

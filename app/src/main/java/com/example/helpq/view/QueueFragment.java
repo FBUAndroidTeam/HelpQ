@@ -87,6 +87,7 @@ public class QueueFragment extends Fragment {
 
     private void queryQuestionsWithPriority(final String priorityEmoji) {
         final ParseQuery<Question> questionQuery = new ParseQuery<Question>(Question.class);
+        questionQuery.whereEqualTo("isArchived", false);
         questionQuery.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> objects, ParseException e) {

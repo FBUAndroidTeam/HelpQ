@@ -26,7 +26,6 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText etInstructor;
     private EditText etFullName;
     private Button btnRegister;
-    private boolean validAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

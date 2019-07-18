@@ -120,6 +120,7 @@ public class CreateQuestionFragment extends DialogFragment {
                     Question newQuestion = new Question();
                     newQuestion.setText(etQuestion.getText().toString());
                     newQuestion.setAsker(ParseUser.getCurrentUser());
+                    newQuestion.setIsArchived(false);
                     newQuestion.setPriority(toggleSelected.getText().toString());
                     newQuestion.saveInBackground(new SaveCallback() {
                         @Override

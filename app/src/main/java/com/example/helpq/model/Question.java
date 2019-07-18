@@ -12,6 +12,7 @@ public class Question extends ParseObject {
     public static final String KEY_TEXT = "questionText";
     public static final String KEY_ASKER = "student";
     public static final String KEY_PRIORITY = "priorityEmoji";
+    public static final String KEY_ARCHIVED = "isArchived";
 
     //stretch keys
     private static final String KEY_ANSWER = "answerText";
@@ -39,6 +40,14 @@ public class Question extends ParseObject {
 
     public void setPriority(String priority) {
         put(KEY_PRIORITY, priority);
+    }
+
+    public boolean getIsArchived () {
+        return getBoolean(KEY_ARCHIVED);
+    }
+
+    public void setIsArchived (boolean archived) {
+        put(KEY_ARCHIVED, archived);
     }
 
 
