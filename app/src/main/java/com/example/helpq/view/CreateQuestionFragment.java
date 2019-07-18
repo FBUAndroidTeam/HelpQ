@@ -91,6 +91,8 @@ public class CreateQuestionFragment extends DialogFragment {
                     tbExplanation.setChecked(false);
                     tbStretch.setChecked(false);
                     togglePrioritySelected = tbBlocker;
+                } else {
+                    togglePrioritySelected = null;
                 }
             }
         });
@@ -101,6 +103,8 @@ public class CreateQuestionFragment extends DialogFragment {
                     tbBlocker.setChecked(false);
                     tbExplanation.setChecked(false);
                     togglePrioritySelected = tbStretch;
+                } else {
+                    togglePrioritySelected = null;
                 }
             }
         });
@@ -111,6 +115,8 @@ public class CreateQuestionFragment extends DialogFragment {
                     tbBlocker.setChecked(false);
                     tbStretch.setChecked(false);
                     togglePrioritySelected = tbExplanation;
+                } else {
+                    togglePrioritySelected = null;
                 }
             }
         });
@@ -124,6 +130,8 @@ public class CreateQuestionFragment extends DialogFragment {
                 if (isChecked) {
                     tbWritten.setChecked(false);
                     toggleHelpSelected = tbInPerson;
+                } else {
+                    toggleHelpSelected = null;
                 }
             }
         });
@@ -133,6 +141,8 @@ public class CreateQuestionFragment extends DialogFragment {
                 if (isChecked) {
                     tbInPerson.setChecked(false);
                     toggleHelpSelected = tbWritten;
+                } else {
+                    toggleHelpSelected = null;
                 }
             }
         });
