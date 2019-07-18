@@ -40,10 +40,11 @@ public class LoginActivity extends AppCompatActivity {
         btnSubmit();
         startRegistrationActivity();
 
-        //ensures user from last session has been logged out since no logout button
-        //has been implemented
-        if(ParseUser.getCurrentUser() != null) {
-            ParseUser.logOut();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            // do stuff with the user
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
         }
 
     }
