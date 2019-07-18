@@ -48,9 +48,28 @@ public class RegistrationActivity extends AppCompatActivity {
 
     //starts registration process
     private void register() {
-        ParseUser newUser = new ParseUser();
         final String username = etNewUsername.getText().toString();
         final String password = etNewPassword.getText().toString();
+
+        if(username.matches("")) {
+            Toast.makeText(RegistrationActivity.this,
+                    "Please enter a username.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+        else if(password.matches("")) {
+            Toast.makeText(RegistrationActivity.this,
+                    "Please enter a password",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+        else if((etFullName.getText().toString()).matches("")) {
+            Toast.makeText(RegistrationActivity.this,
+                    "Please enter your full name",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+        ParseUser newUser = new ParseUser();
         newUser.setUsername(username);
         newUser.setPassword(password);
         newUser.put("fullName", etFullName.getText().toString());
@@ -72,9 +91,6 @@ public class RegistrationActivity extends AppCompatActivity {
                     startActivity(new Intent(RegistrationActivity.this,
                             MainActivity.class));
                     finish(); // finishes login so user cannot press back button to go back to login
-                } else {
-                    Toast.makeText(RegistrationActivity.this,
-                            "Invalid username/password", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -97,7 +113,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         return;
                     } else if(i == objects.size() - 1) {
                         Toast.makeText(RegistrationActivity.this,
-                                "Invalid admin", Toast.LENGTH_LONG).show();
+                                "This instructor does not exist.", Toast.LENGTH_LONG).show();
                     }
                 }
             }
