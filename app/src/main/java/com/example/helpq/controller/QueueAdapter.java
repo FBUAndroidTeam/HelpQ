@@ -68,7 +68,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private TextView tvStudentName;
         private TextView tvPriorityEmoji;
         private TextView tvDescription;
-
+        private TextView tvDate;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -76,6 +76,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvStudentName = itemView.findViewById(R.id.tvStudentName);
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvDate = itemView.findViewById(R.id.tvDate);
 
             itemView.setOnTouchListener(new OnSwipeTouchListener(mContext) {
                 @Override
@@ -101,6 +102,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvStudentName.setText(name);
             tvPriorityEmoji.setText(question.getPriority());
             tvDescription.setText(question.getText());
+            tvDate.setText(question.getDate());
         }
     }
 
