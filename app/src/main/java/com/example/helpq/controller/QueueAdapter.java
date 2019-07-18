@@ -17,6 +17,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.Collections;
 import java.util.List;
 
 public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> {
@@ -57,6 +58,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     // Add a list of items -- change to type used
     public void addAll(List<Question> list) {
         mQuestions.addAll(list);
+        Collections.sort(mQuestions);
         notifyDataSetChanged();
     }
 

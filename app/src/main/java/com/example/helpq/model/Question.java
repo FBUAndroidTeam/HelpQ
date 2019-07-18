@@ -7,7 +7,7 @@ import com.parse.ParseUser;
 import java.util.Date;
 
 @ParseClassName("Question")
-public class Question extends ParseObject {
+public class Question extends ParseObject implements Comparable<Question>{
 
     public static final String KEY_TEXT = "questionText";
     public static final String KEY_ASKER = "student";
@@ -66,6 +66,14 @@ public class Question extends ParseObject {
 
     public void setAnsweredAt(Date date) {
         put(KEY_ANSWERED_AT, date);
+    }
+
+    // Compare questions by their priority.
+    @Override
+    public int compareTo(Question o) {
+        String priority1 = this.getPriority();
+        String priority2 = o.getPriority();
+        return (priority2.compareTo(priority1));
     }
 
 }
