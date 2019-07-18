@@ -44,12 +44,18 @@ public class AdminFragment extends Fragment {
                 switch (item.getItemId()) {
                     case R.id.action_view_queue:
                         setFragment(AdminQueueFragment.newInstance(),
-                                new String[]{AdminQueueFragment.TAG, AdminEnrolledFragment.TAG});
+                                new String[]{AdminQueueFragment.TAG, AdminEnrolledFragment.TAG,
+                                        AdminWorkshopFragment.TAG});
                         return true;
                     case R.id.action_view_enrolled:
                         setFragment(AdminEnrolledFragment.newInstance(),
-                                new String[]{AdminEnrolledFragment.TAG, AdminQueueFragment.TAG});
+                                new String[]{AdminEnrolledFragment.TAG, AdminQueueFragment.TAG,
+                                        AdminWorkshopFragment.TAG});
                         return true;
+                    case R.id.action_view_workshopCreations:
+                        setFragment(AdminWorkshopFragment.newInstance(),
+                                new String[]{AdminWorkshopFragment.TAG, AdminEnrolledFragment.TAG,
+                                        AdminQueueFragment.TAG});
                     default:
                         return true;
                 }

@@ -15,4 +15,11 @@
         android:icon="@drawable/ic_launcher_background"
         android:title="@string/admin_students_tab"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_view_workshopCreations"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="@string/workshops_tab"
+        app:showAsAction="always" />
 </menu>
