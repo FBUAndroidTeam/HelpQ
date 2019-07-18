@@ -23,12 +23,12 @@ public class MainActivity extends AppCompatActivity {
         if (user.getBoolean("isInstructor")) {
             fragmentManager
                     .beginTransaction()
-                    .add(R.id.flMainContainer, new AdminFragment(), AdminFragment.TAG)
+                    .add(R.id.flMainContainer, AdminFragment.newInstance(), AdminFragment.TAG)
                     .commit();
         } else {
             fragmentManager
                     .beginTransaction()
-                    .add(R.id.flMainContainer, new StudentFragment(), StudentFragment.TAG)
+                    .add(R.id.flMainContainer, StudentFragment.newInstance(), StudentFragment.TAG)
                     .commit();
         }
     }

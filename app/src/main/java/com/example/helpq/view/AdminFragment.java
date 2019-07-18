@@ -18,6 +18,10 @@ public class AdminFragment extends Fragment {
     public static final String TAG = "AdminFragment";
     private FragmentManager fragmentManager;
 
+    public static AdminFragment newInstance() {
+        return new AdminFragment();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -39,11 +43,11 @@ public class AdminFragment extends Fragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_view_queue:
-                        setFragment(new AdminQueueFragment(),
+                        setFragment(AdminQueueFragment.newInstance(),
                                 new String[]{AdminQueueFragment.TAG, AdminEnrolledFragment.TAG});
                         return true;
                     case R.id.action_view_enrolled:
-                        setFragment(new AdminEnrolledFragment(),
+                        setFragment(AdminEnrolledFragment.newInstance(),
                                 new String[]{AdminEnrolledFragment.TAG, AdminQueueFragment.TAG});
                         return true;
                     default:

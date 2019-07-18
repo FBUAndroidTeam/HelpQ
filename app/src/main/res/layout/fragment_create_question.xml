@@ -6,27 +6,29 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tvStudent"
-        android:layout_width="126dp"
-        android:layout_height="38dp"
+        android:id="@+id/tvEnterQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="Head"
+        android:text="Submit a question:"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/etQuestion"
-        android:layout_width="393dp"
-        android:layout_height="50dp"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
@@ -37,7 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvStudent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEnterQuestion"
         app:layout_constraintVertical_bias="0.0" />
 
     <ToggleButton

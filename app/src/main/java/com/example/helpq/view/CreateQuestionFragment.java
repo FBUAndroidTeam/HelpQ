@@ -12,7 +12,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -31,12 +30,6 @@ public class CreateQuestionFragment extends DialogFragment {
     private ToggleButton tbExplanation;
     private ToggleButton toggleSelected;
     private Button btnSubmit;
-    private TextView tvStudent;
-
-
-    public CreateQuestionFragment() {
-
-    }
 
     public static CreateQuestionFragment newInstance(String title) {
         CreateQuestionFragment frag = new CreateQuestionFragment();
@@ -62,9 +55,6 @@ public class CreateQuestionFragment extends DialogFragment {
         tbStretch = view.findViewById(R.id.tbStretch);
         etQuestion = (EditText) view.findViewById(R.id.etQuestion);
         btnSubmit = view.findViewById(R.id.btnSubmit);
-        tvStudent = view.findViewById(R.id.tvStudent);
-
-        tvStudent.setText(ParseUser.getCurrentUser().getString("fullName"));
 
         // Fetch arguments from bundle and set title
         String title = getArguments().getString("title", "New Question");

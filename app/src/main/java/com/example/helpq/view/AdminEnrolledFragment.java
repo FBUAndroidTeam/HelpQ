@@ -28,12 +28,14 @@ public class AdminEnrolledFragment extends Fragment {
     private EnrolledStudentsAdapter adapter;
     private List<String> mStudents;
 
+    public static AdminEnrolledFragment newInstance() {
+        return new AdminEnrolledFragment();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_admin_enrolled, container, false);
-
-
     }
 
     @Override
