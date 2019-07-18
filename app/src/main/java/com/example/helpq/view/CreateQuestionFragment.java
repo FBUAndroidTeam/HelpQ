@@ -33,11 +33,6 @@ public class CreateQuestionFragment extends DialogFragment {
     private Button btnSubmit;
     private TextView tvStudent;
 
-
-    public CreateQuestionFragment() {
-
-    }
-
     public static CreateQuestionFragment newInstance(String title) {
         CreateQuestionFragment frag = new CreateQuestionFragment();
         Bundle args = new Bundle();

@@ -18,6 +18,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.Collections;
 import java.util.List;
 
 public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> {
@@ -58,6 +59,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     // Add a list of items -- change to type used
     public void addAll(List<Question> list) {
         mQuestions.addAll(list);
+        Collections.sort(mQuestions);
         notifyDataSetChanged();
     }
 
@@ -84,7 +86,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private TextView tvStudentName;
         private TextView tvPriorityEmoji;
         private TextView tvDescription;
-
+        private TextView tvDate;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -92,6 +94,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvStudentName = itemView.findViewById(R.id.tvStudentName);
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvDate = itemView.findViewById(R.id.tvDate);
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -137,6 +140,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvStudentName.setText(name);
             tvPriorityEmoji.setText(question.getPriority());
             tvDescription.setText(question.getText());
+            tvDate.setText(question.getDate());
         }
     }
 

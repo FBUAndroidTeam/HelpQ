@@ -4,10 +4,14 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 @ParseClassName("Question")
-public class Question extends ParseObject {
+public class Question extends ParseObject implements Comparable<Question>{
 
     public static final String KEY_TEXT = "questionText";
     public static final String KEY_ASKER = "student";
@@ -66,6 +70,36 @@ public class Question extends ParseObject {
 
     public void setAnsweredAt(Date date) {
         put(KEY_ANSWERED_AT, date);
+    }
+
+    // Get the date that this question is asked.
+    public String getDate() {
+        String strDate = "";
+
+        try {
+            DateFormat srcDf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+
+            // Parse the date string into Date object
+            Date date = srcDf.parse(srcDf.format(this.getCreatedAt().getTime()));
+            DateFormat destDf = new SimpleDateFormat("EEE, h:mm a");
+
+            // Format the date into another format
+            strDate = destDf.format(date);
+
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return strDate;
+    }
+
+    // Compare questions by their priority.
+    @Override
+    public int compareTo(Question o) {
+        String priority1 = this.getPriority();
+        String priority2 = o.getPriority();
+        return (priority2.compareTo(priority1));
     }
 
 }

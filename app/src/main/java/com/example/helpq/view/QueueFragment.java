@@ -1,5 +1,6 @@
 package com.example.helpq.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.QueueAdapter;
@@ -18,6 +20,7 @@ import com.example.helpq.model.Question;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,11 @@ public class QueueFragment extends Fragment {
     private List<Question> mQuestions;
     private QueueAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
+    private Button btLogout;
+
+    public static QueueFragment newInstance() {
+        return new QueueFragment();
+    }
 
     @Nullable
     @Override
@@ -48,6 +56,15 @@ public class QueueFragment extends Fragment {
         rvQuestions.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvQuestions.setLayoutManager(layoutManager);
+        btLogout = view.findViewById(R.id.btLogoutButt);
+        btLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser.logOut();
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
         queryQuestions();
         setupSwipeRefreshing(view);
@@ -55,7 +72,6 @@ public class QueueFragment extends Fragment {
 
     // Handle logic for Swipe to Refresh.
     private void setupSwipeRefreshing(@NonNull View view) {
-
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
 
         // Setup refresh listener which triggers new data loading
@@ -70,7 +86,6 @@ public class QueueFragment extends Fragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
     }
 
     // Refresh the queue, and load questions.
@@ -81,12 +96,6 @@ public class QueueFragment extends Fragment {
     }
 
     private void queryQuestions() {
-        queryQuestionsWithPriority(getString(R.string.PRIORITY_BLOCKING));
-        queryQuestionsWithPriority(getString(R.string.PRIORITY_STRETCH));
-        queryQuestionsWithPriority(getString(R.string.PRIORITY_CURIOSITY));
-    }
-
-    private void queryQuestionsWithPriority(final String priorityEmoji) {
         final ParseQuery<Question> questionQuery = new ParseQuery<Question>(Question.class);
         questionQuery.whereEqualTo("isArchived", false);
         questionQuery.findInBackground(new FindCallback<Question>() {
@@ -97,14 +106,7 @@ public class QueueFragment extends Fragment {
                     e.printStackTrace();
                     return;
                 }
-                for (int i = 0; i < objects.size(); i++) {
-                    Question q = objects.get(i);
-                    if (q.getPriority().equals(priorityEmoji)) {
-                        mQuestions.add(q);
-                        Log.d(TAG, q.getPriority() + ": " + q.getText() + " " + priorityEmoji);
-                        adapter.notifyDataSetChanged();
-                    }
-                }
+                adapter.addAll(objects);
             }
         });
     }
