@@ -89,7 +89,8 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, ParseException e) {
                 if (e == null) {
                     Log.d(TAG, "Login successful");
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this,
+                            MainActivity.class));
                     finish(); // finishes login so user cannot press back button to go back to login
                 } else {
                     Toast.makeText(LoginActivity.this, "Invalid username/password",
@@ -102,6 +103,18 @@ public class LoginActivity extends AppCompatActivity {
     //checks backend if such user exists
     private void queryValidUsers(final String username, final String password,
                                  final boolean isAdmin) {
+        if(username.equals("")){
+            Toast.makeText(LoginActivity.this,
+                    "Please enter a username.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(password.equals("")){
+            Toast.makeText(LoginActivity.this,
+                    "Please enter a password.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("isInstructor", isAdmin);
         query.findInBackground(new FindCallback<ParseUser>() {
@@ -117,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
                 Toast.makeText(LoginActivity.this,
-                        "Incorrect username/password or login button",
+                        "The user does not exist.",
                         Toast.LENGTH_LONG).show();
 
             }

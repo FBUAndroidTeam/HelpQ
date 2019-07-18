@@ -17,6 +17,7 @@ public class Question extends ParseObject implements Comparable<Question>{
     public static final String KEY_ASKER = "student";
     public static final String KEY_PRIORITY = "priorityEmoji";
     public static final String KEY_ARCHIVED = "isArchived";
+    public static final String KEY_HELP_TYPE = "helpType";
 
     //stretch keys
     private static final String KEY_ANSWER = "answerText";
@@ -54,7 +55,6 @@ public class Question extends ParseObject implements Comparable<Question>{
         put(KEY_ARCHIVED, archived);
     }
 
-
     //stretch getters/setters
     public String getAnswer() {
         return getString(KEY_ANSWER);
@@ -70,6 +70,14 @@ public class Question extends ParseObject implements Comparable<Question>{
 
     public void setAnsweredAt(Date date) {
         put(KEY_ANSWERED_AT, date);
+    }
+
+    public String getHelpType() {
+        return getString(KEY_HELP_TYPE);
+    }
+
+    public void setHelpType(String helpType) {
+        put(KEY_HELP_TYPE, helpType);
     }
 
     // Get the date that this question is asked.
