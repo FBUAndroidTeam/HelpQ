@@ -11,16 +11,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.example.helpq.R;
 import com.example.helpq.model.Workshop;
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.List;
 
 public class StudentWorkshopAdapter extends
@@ -75,7 +70,8 @@ public class StudentWorkshopAdapter extends
             Boolean isSignedUp = false;
             for(int i = 0; i < attendeesArr.length(); i++) {
                 try {
-                    if((ParseUser.getCurrentUser().getObjectId()).equals(attendeesArr.getJSONObject(i).getString("objectId"))) {
+                    if((ParseUser.getCurrentUser().getObjectId()).
+                            equals(attendeesArr.getJSONObject(i).getString("objectId"))) {
                         isSignedUp = true;
                         break;
                     }
