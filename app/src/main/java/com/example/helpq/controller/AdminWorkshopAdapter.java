@@ -61,8 +61,9 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
             int attendees = workshop.getAttendees().length();
             if (attendees == 1) {
                 tvAttendees.setText(attendees + " attendee");
+            } else {
+                tvAttendees.setText(attendees + " attendees");
             }
-            tvAttendees.setText(attendees + " attendees");
         }
     }
 }

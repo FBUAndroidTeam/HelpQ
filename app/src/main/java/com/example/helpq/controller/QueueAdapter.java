@@ -63,7 +63,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    //archives question
     private void archiveQuestion(int adapterPosition) {
         Question question = mQuestions.get(adapterPosition);
         question.setIsArchived(true);

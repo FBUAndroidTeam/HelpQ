@@ -23,6 +23,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class QueueFragment extends Fragment {
@@ -98,7 +99,8 @@ public class QueueFragment extends Fragment {
     private void queryQuestions() {
         final ParseQuery<Question> questionQuery = new ParseQuery<Question>(Question.class);
         questionQuery.whereEqualTo(Question.KEY_ARCHIVED, false)
-                .include(Question.KEY_ASKER);
+                .include(Question.KEY_ASKER)
+                .whereNotEqualTo("isAdmin", true);
         questionQuery.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> objects, ParseException e) {
@@ -107,7 +109,16 @@ public class QueueFragment extends Fragment {
                     e.printStackTrace();
                     return;
                 }
-                adapter.addAll(objects);
+                for(Question question : objects) {
+                    ParseUser asker = question.getAsker(); // who asked the question
+                    String user = ParseUser.getCurrentUser().getUsername(); // user of who is currently logged in
+                    String userAdmin = asker.getString("adminName"); // admin of asker
+                    if (user.equals(userAdmin)) {
+                        mQuestions.add(question);
+                    }
+                }
+                Collections.sort(mQuestions);
+                adapter.notifyDataSetChanged();
             }
         });
     }
