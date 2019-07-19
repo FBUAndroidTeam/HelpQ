@@ -102,7 +102,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 @Override
                 public boolean onLongClick(View v) {
                     ParseUser currentUser = ParseUser.getCurrentUser();
-                    if (currentUser.getBoolean("isInstructor") ||
+                    if (currentUser.getBoolean("isAdmin") ||
                             currentUser.getString("fullName")
                                     .equals(tvStudentName.getText().toString())) {
                         showFilterPopup(v);
@@ -115,7 +115,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         // Displays anchored popup menu based on view selected
         private void showFilterPopup(View v) {
             PopupMenu popup = new PopupMenu(mContext, v);
-            popup.inflate(R.menu.popup_filters);
+            popup.inflate(R.menu.menu_popup_admin);
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {

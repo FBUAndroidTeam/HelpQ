@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         ParseUser user = ParseUser.getCurrentUser();
 
-        if (user.getBoolean("isInstructor")) {
+        if (user.getBoolean("isAdmin")) {
             fragmentManager
                     .beginTransaction()
                     .add(R.id.flMainContainer, AdminFragment.newInstance(), AdminFragment.TAG)
