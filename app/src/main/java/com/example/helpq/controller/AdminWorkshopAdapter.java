@@ -40,6 +40,12 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
         return mWorkshops.size();
     }
 
+    // Clean all elements of the recycler
+    public void clear() {
+        mWorkshops.clear();
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvTitle;
         private TextView tvStartTime;

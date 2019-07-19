@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,6 +29,8 @@ public class StudentWorkshopFragment extends Fragment {
     private RecyclerView rvWorkshops;
     private StudentWorkshopAdapter adapter;
     private List<Workshop> mWorkshops;
+    private SwipeRefreshLayout swipeContainer;
+
 
     public static StudentWorkshopFragment newInstance() {
         return new StudentWorkshopFragment();
@@ -52,7 +55,34 @@ public class StudentWorkshopFragment extends Fragment {
         rvWorkshops.setLayoutManager(new LinearLayoutManager(getContext()));
 
         queryWorkshops();
+        setupSwipeRefreshing(view);
     }
+
+    // Handle logic for Swipe to Refresh.
+    private void setupSwipeRefreshing(@NonNull View view) {
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchQueueAsync();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
+    // Refresh the queue, and load workshops.
+    protected void fetchQueueAsync() {
+        adapter.clear();
+        queryWorkshops();
+        swipeContainer.setRefreshing(false);
+    }
+
 
     private void queryWorkshops() {
         ParseQuery<Workshop> workshopQuery = ParseQuery.getQuery("Workshop");

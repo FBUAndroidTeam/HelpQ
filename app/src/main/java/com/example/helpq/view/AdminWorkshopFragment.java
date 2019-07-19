@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,6 +30,7 @@ public class AdminWorkshopFragment extends Fragment {
     private List<Workshop> mWorkshops;
     private AdminWorkshopAdapter adapter;
     private FloatingActionButton fabAddWorkshop;
+    private SwipeRefreshLayout swipeContainer;
 
     public static AdminWorkshopFragment newInstance() {
         return new AdminWorkshopFragment();
@@ -48,7 +50,6 @@ public class AdminWorkshopFragment extends Fragment {
         rvAdminWorkshops.setAdapter(adapter);
         rvAdminWorkshops.setLayoutManager(new LinearLayoutManager(getContext()));
         fabAddWorkshop = view.findViewById(R.id.fabAddWorkshop);
-        queryWorkshops();
         fabAddWorkshop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +59,33 @@ public class AdminWorkshopFragment extends Fragment {
                 CreateWorkshopFragment.show(fm, "fragment_create_workshop");
             }
         });
+        queryWorkshops();
+        setupSwipeRefreshing(view);
+    }
 
+    // Handle logic for Swipe to Refresh.
+    private void setupSwipeRefreshing(@NonNull View view) {
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchQueueAsync();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
+    // Refresh the queue, and load workshops.
+    protected void fetchQueueAsync() {
+        adapter.clear();
+        queryWorkshops();
+        swipeContainer.setRefreshing(false);
     }
 
     private void queryWorkshops() {
