@@ -111,7 +111,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private TextView tvPriorityEmoji;
         private TextView tvHelpEmoji;
         private TextView tvDescription;
-        private TextView tvDate;
+        private TextView tvStartTime;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -120,7 +120,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
             tvHelpEmoji = itemView.findViewById(R.id.tvHelpEmoji);
             tvDescription = itemView.findViewById(R.id.tvDescription);
-            tvDate = itemView.findViewById(R.id.tvDate);
+            tvStartTime = itemView.findViewById(R.id.tvStartTime);
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -181,7 +181,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvStudentName.setText(question.getAsker().getString(Question.KEY_FULL_NAME));
             tvPriorityEmoji.setText(question.getPriority());
             tvDescription.setText(question.getText());
-            tvDate.setText(question.getRelativeTimeAgo());
+            tvStartTime.setText(question.getRelativeTimeAgo());
 
             String helpType = question.getHelpType();
             if (helpType.equals(mContext.getResources().getString(R.string.in_person))) {
