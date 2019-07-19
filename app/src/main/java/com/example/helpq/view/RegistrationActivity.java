@@ -73,7 +73,7 @@ public class RegistrationActivity extends AppCompatActivity {
         newUser.setUsername(username);
         newUser.setPassword(password);
         newUser.put("fullName", etFullName.getText().toString());
-        if(!etAdmin.getText().toString().equals("")) { //student is attempting to register
+        if(!etAdmin.getText().toString().isEmpty()) { //student is attempting to register
             queryAdmin(etAdmin.getText().toString(), newUser, username, password);
         } else { //admin is attempting to register
             newUser.put("isAdmin", true);

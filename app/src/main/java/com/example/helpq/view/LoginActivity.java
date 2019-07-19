@@ -103,13 +103,13 @@ public class LoginActivity extends AppCompatActivity {
     //checks backend if such user exists
     private void queryValidUsers(final String username, final String password,
                                  final boolean isAdmin) {
-        if(username.equals("")){
+        if(username.isEmpty()){
             Toast.makeText(LoginActivity.this,
                     "Please enter a username.",
                     Toast.LENGTH_LONG).show();
             return;
         }
-        if(password.equals("")){
+        if(password.isEmpty()){
             Toast.makeText(LoginActivity.this,
                     "Please enter a password.",
                     Toast.LENGTH_LONG).show();

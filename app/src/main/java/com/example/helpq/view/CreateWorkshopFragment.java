@@ -73,7 +73,8 @@ public class CreateWorkshopFragment extends DialogFragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!etTitle.getText().equals("") && !etLocation.getText().equals("")) {
+                if(!etTitle.getText().toString().isEmpty() &&
+                        !etLocation.getText().toString().isEmpty()) {
                     createWorkshop();
                 } else {
                     Toast.makeText(getContext(), "Please enter a title and/or location",
@@ -95,7 +96,9 @@ public class CreateWorkshopFragment extends DialogFragment {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
-                        Toast.makeText(getContext(), "Workshop created", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),
+                                "Workshop created",
+                                Toast.LENGTH_LONG).show();
                         dismiss();
                     } else {
                         Log.d(TAG, "Create workshop failed");

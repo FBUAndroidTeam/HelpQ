@@ -65,7 +65,8 @@ public class AdminFragment extends Fragment {
         navigationView.setSelectedItemId(R.id.action_view_queue);
     }
 
-    // Show/add the given fragment with tag stored in tags[0], and hide fragments with all other tags.
+    // Show/add the given fragment with tag stored in tags[0],
+    // and hide fragments with all other tags.
     public void setFragment(Fragment fragment, String[] tags) {
 
         if (fragmentManager.findFragmentByTag(tags[0]) != null) {
