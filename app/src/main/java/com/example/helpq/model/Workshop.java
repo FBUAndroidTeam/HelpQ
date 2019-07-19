@@ -6,7 +6,11 @@ import com.parse.ParseUser;
 
 import org.json.JSONArray;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 @ParseClassName("Workshop")
 public class Workshop extends ParseObject {
@@ -54,6 +58,27 @@ public class Workshop extends ParseObject {
 
     public void setCreator(ParseUser creator) {
         put(KEY_CREATOR, creator);
+    }
+
+    public String getDate() {
+        String strDate = "";
+
+        try {
+            DateFormat srcDf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+
+            // Parse the date string into Date object
+            Date date = srcDf.parse(srcDf.format(this.getStartTime().getTime()));
+            DateFormat destDf = new SimpleDateFormat("EEE, h:mm a");
+
+            // Format the date into another format
+            strDate = destDf.format(date);
+
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return strDate;
     }
 
 }

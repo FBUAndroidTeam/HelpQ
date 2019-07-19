@@ -56,9 +56,13 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
 
         public void bind(Workshop workshop) {
             tvTitle.setText(workshop.getTitle());
-            tvStartTime.setText(workshop.getStartTime().toString());
-            tvLocation.setText(workshop.getLocation());
-            //tvAttendees.setText(workshop.getAttendees().length());
+            tvStartTime.setText("When: " + workshop.getDate());
+            tvLocation.setText("Where: " + workshop.getLocation());
+            int attendees = workshop.getAttendees().length();
+            if (attendees == 1) {
+                tvAttendees.setText(attendees + " attendee");
+            }
+            tvAttendees.setText(attendees + " attendees");
         }
     }
 }
