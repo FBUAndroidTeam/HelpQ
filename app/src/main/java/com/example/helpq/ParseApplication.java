@@ -3,6 +3,7 @@ package com.example.helpq;
 import android.app.Application;
 
 import com.example.helpq.model.Question;
+import com.example.helpq.model.Workshop;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -11,6 +12,7 @@ public class ParseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         ParseObject.registerSubclass(Question.class);
+        ParseObject.registerSubclass(Workshop.class);
         Parse.Configuration configuration = new Parse.Configuration.Builder(this)
                 .applicationId("help-q-id-secretsss")
                 .clientKey("fbu-cass-julie-loni-keyy")
