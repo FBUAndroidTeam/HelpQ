@@ -70,9 +70,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     // Answers this question
     private void answerQuestion(int adapterPosition) {
         Question question = mQuestions.get(adapterPosition);
-
-        // TODO - write code for instructor to answer this question
-
         AnswerQuestionFragment fragment = AnswerQuestionFragment.newInstance(question);
         FragmentManager manager = ((MainActivity) mContext).getSupportFragmentManager();
         fragment.show(manager, CreateQuestionFragment.TAG);
