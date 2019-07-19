@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.helpq.R;
+import com.example.helpq.model.User;
 import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         ParseUser user = ParseUser.getCurrentUser();
 
-        if (user.getBoolean("isAdmin")) {
+        if (User.isAdmin(user)) {
             fragmentManager
                     .beginTransaction()
                     .add(R.id.flMainContainer, AdminFragment.newInstance(), AdminFragment.TAG)

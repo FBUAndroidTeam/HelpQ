@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.User;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
 
@@ -62,7 +63,7 @@ public class AnswerQuestionFragment extends DialogFragment {
         // Show soft keyboard automatically and request focus to text
         etAnswer.requestFocus();
 
-        String studentName = mQuestion.getAsker().getString("fullName");
+        String studentName = User.getFullName(mQuestion.getAsker());
         tvStudent.setText(studentName + "'s question:");
         tvDescription.setText(mQuestion.getText());
         submitAnswer();
