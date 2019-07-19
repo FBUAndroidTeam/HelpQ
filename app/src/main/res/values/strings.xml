@@ -9,4 +9,5 @@
     <string name="EMOJI_IN_PERSON">👥</string>
     <string name="EMOJI_WRITTEN">📝</string>
     <string name="in_person">in-person</string>
+    <string name="written">written</string>
 </resources>

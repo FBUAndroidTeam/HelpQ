@@ -26,8 +26,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     private static final String TAG = "QueueAdapter";
     private Context mContext;
     private List<Question> mQuestions;
-    private final String mInPerson = "in-person";
-    private final String mWritten = "written";
 
     // Constructor
     public QueueAdapter(Context context, List<Question> questions) {
@@ -147,9 +145,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvDate.setText(question.getDate());
 
             String helpType = question.getHelpType();
-            if (helpType.equals(mInPerson)) {
+            if (helpType.equals(mContext.getResources().getString(R.string.in_person))) {
                 tvHelpEmoji.setText(R.string.EMOJI_IN_PERSON);
-            } else if (helpType.equals(mWritten)) {
+            } else if (helpType.equals(mContext.getResources().getString(R.string.written))) {
                 tvHelpEmoji.setText(R.string.EMOJI_WRITTEN);
             }
         }

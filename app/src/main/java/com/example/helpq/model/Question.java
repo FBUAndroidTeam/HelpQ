@@ -1,5 +1,7 @@
 package com.example.helpq.model;
 
+import android.text.format.DateUtils;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -100,6 +102,19 @@ public class Question extends ParseObject implements Comparable<Question>{
         }
 
         return strDate;
+    }
+
+    // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
+    public String getRelativeTimeAgo() {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+        sf.setLenient(true);
+
+        String relativeDate = "";
+        long dateMillis = this.getCreatedAt().getTime();
+        relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+
+        return relativeDate;
     }
 
     // Compare questions by their priority.
