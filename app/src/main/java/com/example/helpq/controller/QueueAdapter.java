@@ -85,6 +85,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         // Layout fields of item_question
         private TextView tvStudentName;
         private TextView tvPriorityEmoji;
+        private TextView tvHelpEmoji;
         private TextView tvDescription;
         private TextView tvDate;
 
@@ -93,6 +94,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
             tvStudentName = itemView.findViewById(R.id.tvStudentName);
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
+            tvHelpEmoji = itemView.findViewById(R.id.tvHelpEmoji);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvDate = itemView.findViewById(R.id.tvStartTime);
 
@@ -100,7 +102,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 @Override
                 public boolean onLongClick(View v) {
                     ParseUser currentUser = ParseUser.getCurrentUser();
-                    if(currentUser.getBoolean("isInstructor") ||
+                    if (currentUser.getBoolean("isAdmin") ||
                             currentUser.getString("fullName")
                                     .equals(tvStudentName.getText().toString())) {
                         showFilterPopup(v);
@@ -113,7 +115,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         // Displays anchored popup menu based on view selected
         private void showFilterPopup(View v) {
             PopupMenu popup = new PopupMenu(mContext, v);
-            popup.inflate(R.menu.popup_filters);
+            popup.inflate(R.menu.menu_popup_admin);
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
@@ -131,16 +133,17 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
         // Bind the view elements to the Question.
         public void bind(Question question) {
-            String name = null;
-            try {
-                name = question.getAsker().fetchIfNeeded().getString("fullName");
-            } catch (com.parse.ParseException e) {
-                e.printStackTrace();
-            }
-            tvStudentName.setText(name);
+            tvStudentName.setText(question.getAsker().getString(Question.KEY_FULL_NAME));
             tvPriorityEmoji.setText(question.getPriority());
             tvDescription.setText(question.getText());
-            tvDate.setText(question.getDate());
+            tvDate.setText(question.getRelativeTimeAgo());
+
+            String helpType = question.getHelpType();
+            if (helpType.equals(mContext.getResources().getString(R.string.in_person))) {
+                tvHelpEmoji.setText(R.string.EMOJI_IN_PERSON);
+            } else if (helpType.equals(mContext.getResources().getString(R.string.written))) {
+                tvHelpEmoji.setText(R.string.EMOJI_WRITTEN);
+            }
         }
     }
 

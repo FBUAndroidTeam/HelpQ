@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("isInstructor", isAdmin);
+        query.whereEqualTo("isAdmin", isAdmin);
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {

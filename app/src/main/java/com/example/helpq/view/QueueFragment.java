@@ -97,7 +97,8 @@ public class QueueFragment extends Fragment {
 
     private void queryQuestions() {
         final ParseQuery<Question> questionQuery = new ParseQuery<Question>(Question.class);
-        questionQuery.whereEqualTo("isArchived", false);
+        questionQuery.whereEqualTo(Question.KEY_ARCHIVED, false)
+                .include(Question.KEY_ASKER);
         questionQuery.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> objects, ParseException e) {

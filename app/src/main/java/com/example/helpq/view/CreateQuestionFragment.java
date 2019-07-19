@@ -25,10 +25,18 @@ public class CreateQuestionFragment extends DialogFragment {
 
     private static final String TAG = "CreateQuestionFragment";
     private EditText etQuestion;
+
+    // ToggleButtons for priority selection
     private ToggleButton tbBlocker;
     private ToggleButton tbStretch;
     private ToggleButton tbExplanation;
-    private ToggleButton toggleSelected;
+    private ToggleButton togglePrioritySelected;
+
+    // ToggleButtons for Help type selection
+    private ToggleButton tbInPerson;
+    private ToggleButton tbWritten;
+    private ToggleButton toggleHelpSelected;
+
     private Button btnSubmit;
 
     public static CreateQuestionFragment newInstance(String title) {
@@ -50,9 +58,14 @@ public class CreateQuestionFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         tbBlocker = view.findViewById(R.id.tbBlocker);
         tbExplanation = view.findViewById(R.id.tbExplanation);
         tbStretch = view.findViewById(R.id.tbStretch);
+
+        tbInPerson = view.findViewById(R.id.tbInPerson);
+        tbWritten = view.findViewById(R.id.tbWritten);
+
         etQuestion = (EditText) view.findViewById(R.id.etQuestion);
         btnSubmit = view.findViewById(R.id.btnSubmit);
 
@@ -64,71 +77,110 @@ public class CreateQuestionFragment extends DialogFragment {
         getDialog()
                 .getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        toggleButtons();
+        togglePriorityButtons();
+        toggleHelpButtons();
         submitQuestion();
     }
 
-    // ensures only one toggle button is selected
-    private void toggleButtons() {
+    // Ensures only one toggle button for priority is selected
+    private void togglePriorityButtons() {
         tbBlocker.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
+                if (isChecked) {
                     tbExplanation.setChecked(false);
                     tbStretch.setChecked(false);
-                    toggleSelected = tbBlocker;
+                    togglePrioritySelected = tbBlocker;
+                } else {
+                    togglePrioritySelected = null;
                 }
             }
         });
         tbStretch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
+                if (isChecked) {
                     tbBlocker.setChecked(false);
                     tbExplanation.setChecked(false);
-                    toggleSelected = tbStretch;
+                    togglePrioritySelected = tbStretch;
+                } else {
+                    togglePrioritySelected = null;
                 }
             }
         });
         tbExplanation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
+                if (isChecked) {
                     tbBlocker.setChecked(false);
                     tbStretch.setChecked(false);
-                    toggleSelected = tbExplanation;
+                    togglePrioritySelected = tbExplanation;
+                } else {
+                    togglePrioritySelected = null;
                 }
             }
         });
     }
 
-    //method that deals with submitting question to parse
+    // Ensures only one toggle button for help type is selected
+    private void toggleHelpButtons() {
+        tbInPerson.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    tbWritten.setChecked(false);
+                    toggleHelpSelected = tbInPerson;
+                } else {
+                    toggleHelpSelected = null;
+                }
+            }
+        });
+        tbWritten.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    tbInPerson.setChecked(false);
+                    toggleHelpSelected = tbWritten;
+                } else {
+                    toggleHelpSelected = null;
+                }
+            }
+        });
+    }
+
+    // Method that deals with submitting question to parse
     private void submitQuestion() {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if((etQuestion.getText().toString()).matches("")) {
+                if ((etQuestion.getText().toString()).matches("")) {
                     Toast.makeText(getContext(),
                             "Please enter a question.",
                             Toast.LENGTH_LONG).show();
                     return;
                 }
-                else if(toggleSelected == null) {
+                else if (togglePrioritySelected == null) {
                     Toast.makeText(getContext(),
                             "Please select type of priority.",
                             Toast.LENGTH_LONG).show();
                     return;
+                }
+                else if (toggleHelpSelected == null) {
+                    Toast.makeText(getContext(),
+                            "Please select type of help.",
+                            Toast.LENGTH_LONG).show();
                 }
                 else {
                     Question newQuestion = new Question();
                     newQuestion.setText(etQuestion.getText().toString());
                     newQuestion.setAsker(ParseUser.getCurrentUser());
                     newQuestion.setIsArchived(false);
-                    newQuestion.setPriority(toggleSelected.getText().toString());
+                    newQuestion.setPriority(togglePrioritySelected.getText().toString());
+                    newQuestion.setHelpType(toggleHelpSelected.getText().toString());
                     newQuestion.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            if(e == null) {
+                            if (e == null) {
                                 Log.d(TAG, "Question created successfully");
                                 dismiss();
                             } else {
@@ -141,7 +193,4 @@ public class CreateQuestionFragment extends DialogFragment {
             }
         });
     }
-
-
-
 }
