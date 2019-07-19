@@ -23,7 +23,7 @@ import com.parse.SaveCallback;
 
 public class CreateQuestionFragment extends DialogFragment {
 
-    private static final String TAG = "CreateQuestionFragment";
+    public static final String TAG = "CreateQuestionFragment";
     private EditText etQuestion;
 
     // ToggleButtons for priority selection
@@ -158,19 +158,16 @@ public class CreateQuestionFragment extends DialogFragment {
                             "Please enter a question.",
                             Toast.LENGTH_LONG).show();
                     return;
-                }
-                else if (togglePrioritySelected == null) {
+                } else if (togglePrioritySelected == null) {
                     Toast.makeText(getContext(),
                             "Please select type of priority.",
                             Toast.LENGTH_LONG).show();
                     return;
-                }
-                else if (toggleHelpSelected == null) {
+                } else if (toggleHelpSelected == null) {
                     Toast.makeText(getContext(),
                             "Please select type of help.",
                             Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     Question newQuestion = new Question();
                     newQuestion.setText(etQuestion.getText().toString());
                     newQuestion.setAsker(ParseUser.getCurrentUser());
