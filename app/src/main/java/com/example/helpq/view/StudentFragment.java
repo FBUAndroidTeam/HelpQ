@@ -44,9 +44,13 @@ public class StudentFragment extends Fragment {
                 switch (item.getItemId()) {
                     case R.id.action_view_queue:
                         setFragment(StudentQueueFragment.newInstance(),
-                                new String[]{StudentQueueFragment.TAG});
+                                new String[]{StudentQueueFragment.TAG,
+                                        StudentWorkshopFragment.TAG});
                         return true;
                     case R.id.action_view_workshops:
+                        setFragment(StudentWorkshopFragment.newInstance(),
+                                new String[]{StudentWorkshopFragment.TAG,
+                                        StudentQueueFragment.TAG});
                         return true;
                     default:
                         return true;
