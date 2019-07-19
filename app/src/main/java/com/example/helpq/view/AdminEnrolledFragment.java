@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.EnrolledStudentsAdapter;
+import com.example.helpq.model.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -65,7 +66,7 @@ public class AdminEnrolledFragment extends Fragment {
                     return;
                 }
                 for(int i = 0; i < objects.size(); i++) {
-                    String name = objects.get(i).getString("fullName");
+                    String name = User.getFullName(objects.get(i));
                     mStudents.add(name);
                     adapter.notifyDataSetChanged();
                     Log.d(TAG, name + ParseUser.getCurrentUser());

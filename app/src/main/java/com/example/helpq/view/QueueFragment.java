@@ -17,6 +17,7 @@ import android.widget.Button;
 import com.example.helpq.R;
 import com.example.helpq.controller.QueueAdapter;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -100,7 +101,7 @@ public class QueueFragment extends Fragment {
         final ParseQuery<Question> questionQuery = new ParseQuery<Question>(Question.class);
         questionQuery.whereEqualTo(Question.KEY_ARCHIVED, false)
                 .include(Question.KEY_ASKER)
-                .whereNotEqualTo("isAdmin", true);
+                .whereNotEqualTo(User.KEY_IS_ADMIN, true);
         questionQuery.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> objects, ParseException e) {

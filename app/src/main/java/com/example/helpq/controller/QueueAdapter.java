@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.User;
 import com.example.helpq.view.AnswerQuestionFragment;
 import com.example.helpq.view.CreateQuestionFragment;
 import com.example.helpq.view.MainActivity;
@@ -116,7 +117,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     ParseUser currentUser = ParseUser.getCurrentUser();
                     if (currentUser.getBoolean("isAdmin")) {
                         showAdminPopup(v);
-                    } else if (currentUser.getString("fullName")
+                    } else if (User.getFullName(currentUser)
                             .equals(tvStudentName.getText().toString())) {
                         showStudentPopup(v);
                     }

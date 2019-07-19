@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.helpq.R;
+import com.example.helpq.model.User;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -72,7 +73,7 @@ public class RegistrationActivity extends AppCompatActivity {
         ParseUser newUser = new ParseUser();
         newUser.setUsername(username);
         newUser.setPassword(password);
-        newUser.put("fullName", etFullName.getText().toString());
+        User.setFullName(etFullName.getText().toString(), newUser);
         if(!etAdmin.getText().toString().isEmpty()) { //student is attempting to register
             queryAdmin(etAdmin.getText().toString(), newUser, username, password);
         } else { //admin is attempting to register
