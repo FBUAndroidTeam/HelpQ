@@ -23,7 +23,7 @@ import com.parse.SaveCallback;
 
 public class CreateQuestionFragment extends DialogFragment {
 
-    private static final String TAG = "CreateQuestionFragment";
+    public static final String TAG = "CreateQuestionFragment";
     private EditText etQuestion;
 
     // ToggleButtons for priority selection
