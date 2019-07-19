@@ -109,11 +109,11 @@ public class QueueFragment extends Fragment {
                     e.printStackTrace();
                     return;
                 }
-                for(Question question : objects) {
+                for (Question question : objects) {
                     ParseUser asker = question.getAsker(); // who asked the question
                     String currUser = ParseUser.getCurrentUser().getUsername(); // user of who is currently logged in
                     String currUserAdmin = "";
-                    if(!ParseUser.getCurrentUser().getBoolean("isAdmin")) {
+                    if (!ParseUser.getCurrentUser().getBoolean("isAdmin")) {
                         currUserAdmin = ParseUser.getCurrentUser().getString("adminName");
                     }
                     String askerAdmin = asker.getString("adminName"); // admin of asker

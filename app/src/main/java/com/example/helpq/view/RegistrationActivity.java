@@ -51,19 +51,19 @@ public class RegistrationActivity extends AppCompatActivity {
         final String username = etNewUsername.getText().toString();
         final String password = etNewPassword.getText().toString();
 
-        if(username.matches("")) {
+        if (username.isEmpty()) {
             Toast.makeText(RegistrationActivity.this,
                     "Please enter a username.",
                     Toast.LENGTH_LONG).show();
             return;
         }
-        else if(password.matches("")) {
+        else if (password.isEmpty()) {
             Toast.makeText(RegistrationActivity.this,
                     "Please enter a password",
                     Toast.LENGTH_LONG).show();
             return;
         }
-        else if((etFullName.getText().toString()).matches("")) {
+        else if (etFullName.getText().toString().isEmpty()) {
             Toast.makeText(RegistrationActivity.this,
                     "Please enter your full name",
                     Toast.LENGTH_LONG).show();

@@ -153,7 +153,7 @@ public class CreateQuestionFragment extends DialogFragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ((etQuestion.getText().toString()).matches("")) {
+                if (etQuestion.getText().toString().isEmpty()) {
                     Toast.makeText(getContext(),
                             "Please enter a question.",
                             Toast.LENGTH_LONG).show();
