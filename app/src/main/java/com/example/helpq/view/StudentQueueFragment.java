@@ -44,9 +44,9 @@ public class StudentQueueFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getFragmentManager();
-                CreateQuestionFragment CreateQuestionFragment =
-                        com.example.helpq.view.CreateQuestionFragment.newInstance("Some Title");
-                CreateQuestionFragment.show(fm, "fragment_create_question");
+                CreateQuestionFragment createQuestionFragment =
+                        CreateQuestionFragment.newInstance("Some Title");
+                createQuestionFragment.show(fm, CreateQuestionFragment.TAG);
             }
         });
         return view;
