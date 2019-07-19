@@ -118,12 +118,20 @@ public class Question extends ParseObject implements Comparable<Question>{
         return relativeDate;
     }
 
-    // Compare questions by their priority.
+    // Compare questions first by priority, then by date.
     @Override
     public int compareTo(Question o) {
         String priority1 = this.getPriority();
         String priority2 = o.getPriority();
-        return (priority2.compareTo(priority1));
+        int comparePriority = priority2.compareTo(priority1);
+        if (comparePriority != 0) {
+            return comparePriority;
+        }
+        else {
+            Date date1 = this.getCreatedAt();
+            Date date2 = o.getCreatedAt();
+            return date1.compareTo(date2);
+        }
     }
 
 }
