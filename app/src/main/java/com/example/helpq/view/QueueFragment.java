@@ -117,10 +117,10 @@ public class QueueFragment extends Fragment {
                     String currUser = ParseUser.getCurrentUser().getUsername();
                     String currUserAdmin = "";
                     if (!ParseUser.getCurrentUser().getBoolean("isAdmin")) {
-                        currUserAdmin = ParseUser.getCurrentUser().getString("adminName");
+                        currUserAdmin = User.getAdminName(ParseUser.getCurrentUser());
                     }
                     // admin of asker
-                    String askerAdmin = asker.getString("adminName");
+                    String askerAdmin = User.getAdminName(asker);
                     if (currUser.equals(askerAdmin) || askerAdmin.equals(currUserAdmin)) {
                         mQuestions.add(question);
                     }

@@ -109,7 +109,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     ParseUser user = objects.get(i);
                     if(user.getUsername().equals(admin)){
                         newUser.put("isAdmin", false);
-                        newUser.put("adminName", etAdmin.getText().toString());
+                        User.setAdminName(etAdmin.getText().toString(), newUser);
                         signUp(newUser, username, password);
                         return;
                     } else if(i == objects.size() - 1) {
