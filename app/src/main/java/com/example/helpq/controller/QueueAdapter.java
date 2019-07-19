@@ -73,18 +73,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         AnswerQuestionFragment fragment = AnswerQuestionFragment.newInstance(question);
         FragmentManager manager = ((MainActivity) mContext).getSupportFragmentManager();
         fragment.show(manager, CreateQuestionFragment.TAG);
-
-        question.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    //Toast.makeText(mContext, "Question answered", Toast.LENGTH_LONG).show();
-                } else {
-                    Log.d(TAG, "Failed to answer question");
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     // Archives this question
