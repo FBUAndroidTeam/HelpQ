@@ -52,6 +52,12 @@ public class Workshop extends ParseObject {
         put(KEY_ATTENDEES, attendees);
     }
 
+
+
+    public void setAttendee(ParseUser attendee) {
+        add(KEY_ATTENDEES, attendee);
+    }
+
     public ParseUser getCreator() {
         return getParseUser(KEY_CREATOR);
     }

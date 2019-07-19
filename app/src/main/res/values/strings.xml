@@ -10,4 +10,6 @@
     <string name="EMOJI_WRITTEN">📝</string>
     <string name="in_person">in-person</string>
     <string name="written">written</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="signed_up">SIGNED UP</string>
 </resources>
