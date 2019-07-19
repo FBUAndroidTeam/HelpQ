@@ -116,7 +116,7 @@ public class QueueFragment extends Fragment {
                     // user of who is currently logged in
                     String currUser = ParseUser.getCurrentUser().getUsername();
                     String currUserAdmin = "";
-                    if (!ParseUser.getCurrentUser().getBoolean("isAdmin")) {
+                    if (!User.isAdmin(ParseUser.getCurrentUser())) {
                         currUserAdmin = User.getAdminName(ParseUser.getCurrentUser());
                     }
                     // admin of asker

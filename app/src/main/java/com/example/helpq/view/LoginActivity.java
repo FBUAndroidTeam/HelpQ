@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.helpq.R;
+import com.example.helpq.model.User;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -116,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("isAdmin", isAdmin);
+        query.whereEqualTo(User.KEY_IS_ADMIN, isAdmin);
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {

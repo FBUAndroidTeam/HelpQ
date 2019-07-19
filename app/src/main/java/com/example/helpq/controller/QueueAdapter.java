@@ -115,7 +115,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 @Override
                 public boolean onLongClick(View v) {
                     ParseUser currentUser = ParseUser.getCurrentUser();
-                    if (currentUser.getBoolean("isAdmin")) {
+                    if (User.isAdmin(currentUser)) {
                         showAdminPopup(v);
                     } else if (User.getFullName(currentUser)
                             .equals(tvStudentName.getText().toString())) {

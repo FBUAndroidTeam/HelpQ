@@ -13,6 +13,11 @@ public class User {
         return user.getBoolean(KEY_IS_ADMIN);
     }
 
+    // Set whether or not the user is an admin.
+    public static void setIsAdmin(boolean isAdmin, ParseUser user) {
+        user.put(KEY_IS_ADMIN, isAdmin);
+    }
+
     // Returns the user's full name.
     public static String getFullName(ParseUser user) {
         return user.getString(KEY_FULL_NAME);
