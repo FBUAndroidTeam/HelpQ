@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.StudentWorkshopAdapter;
@@ -17,6 +18,7 @@ import com.example.helpq.model.Workshop;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,7 @@ public class StudentWorkshopFragment extends Fragment {
 
     private void queryWorkshops() {
         ParseQuery<Workshop> workshopQuery = ParseQuery.getQuery("Workshop");
+        workshopQuery.include("creator");
         workshopQuery.findInBackground(new FindCallback<Workshop>() {
             @Override
             public void done(List<Workshop> objects, ParseException e) {
@@ -62,9 +65,16 @@ public class StudentWorkshopFragment extends Fragment {
                     e.printStackTrace();
                     return;
                 }
-                mWorkshops.addAll(objects);
-                adapter.notifyDataSetChanged();
-                Log.d(TAG, "adapter notified");
+                for(int i = 0; i < objects.size(); i++) {
+                    String name = objects.get(i).getCreator().getUsername();
+                    ParseUser user = ParseUser.getCurrentUser();
+                    String name2 = user.getString("adminName");
+                    if(name.equals(name2)) {
+                        mWorkshops.add(objects.get(i));
+                        adapter.notifyDataSetChanged();
+                        Log.d(TAG, "adapter notified");
+                    }
+                }
             }
         });
     }

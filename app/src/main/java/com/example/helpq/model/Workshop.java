@@ -2,6 +2,7 @@ package com.example.helpq.model;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import org.json.JSONArray;
 
@@ -17,6 +18,7 @@ public class Workshop extends ParseObject {
     public static final String KEY_START_TIME = "startTime";
     public static final String KEY_LOCATION = "location";
     public static final String KEY_ATTENDEES = "attendees";
+    public static final String KEY_CREATOR = "creator";
 
     public String getTitle() {
         return getString(KEY_TITLE);
@@ -50,9 +52,23 @@ public class Workshop extends ParseObject {
         put(KEY_ATTENDEES, attendees);
     }
 
-    // Get the date that the workshop will be held at.
+
+
+    public void setAttendee(ParseUser attendee) {
+        add(KEY_ATTENDEES, attendee);
+    }
+
+    public ParseUser getCreator() {
+        return getParseUser(KEY_CREATOR);
+    }
+
+    public void setCreator(ParseUser creator) {
+        put(KEY_CREATOR, creator);
+    }
+
     public String getDate() {
         String strDate = "";
+
         try {
             DateFormat srcDf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
@@ -62,10 +78,13 @@ public class Workshop extends ParseObject {
 
             // Format the date into another format
             strDate = destDf.format(date);
+
         }
         catch (ParseException e) {
             e.printStackTrace();
         }
+
         return strDate;
     }
+
 }

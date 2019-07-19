@@ -96,7 +96,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
             tvHelpEmoji = itemView.findViewById(R.id.tvHelpEmoji);
             tvDescription = itemView.findViewById(R.id.tvDescription);
-            tvDate = itemView.findViewById(R.id.tvDate);
+            tvDate = itemView.findViewById(R.id.tvStartTime);
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
