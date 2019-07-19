@@ -20,6 +20,7 @@ public class Question extends ParseObject implements Comparable<Question>{
     public static final String KEY_PRIORITY = "priorityEmoji";
     public static final String KEY_ARCHIVED = "isArchived";
     public static final String KEY_HELP_TYPE = "helpType";
+    public static final String KEY_FULL_NAME = "fullName";
 
     //stretch keys
     private static final String KEY_ANSWER = "answerText";

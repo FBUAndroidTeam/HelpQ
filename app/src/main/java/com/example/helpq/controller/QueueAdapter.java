@@ -133,13 +133,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
         // Bind the view elements to the Question.
         public void bind(Question question) {
-            String name = null;
-            try {
-                name = question.getAsker().fetchIfNeeded().getString("fullName");
-            } catch (com.parse.ParseException e) {
-                e.printStackTrace();
-            }
-            tvStudentName.setText(name);
+            tvStudentName.setText(question.getAsker().getString(Question.KEY_FULL_NAME));
             tvPriorityEmoji.setText(question.getPriority());
             tvDescription.setText(question.getText());
             tvDate.setText(question.getDate());
