@@ -25,7 +25,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private EditText etNewUsername;
     private EditText etNewPassword;
-    private EditText etInstructor;
+    private EditText etAdmin;
     private EditText etFullName;
     private Button btnRegister;
 
@@ -33,7 +33,7 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
-        etInstructor = findViewById(R.id.etInstructor);
+        etAdmin = findViewById(R.id.etAdmin);
         etNewPassword = findViewById(R.id.etNewPassword);
         etNewUsername = findViewById(R.id.etNewUsername);
         etFullName = findViewById(R.id.etFullName);
@@ -73,10 +73,10 @@ public class RegistrationActivity extends AppCompatActivity {
         newUser.setUsername(username);
         newUser.setPassword(password);
         newUser.put("fullName", etFullName.getText().toString());
-        if(!etInstructor.getText().toString().equals("")) { //student is attempting to register
-            queryInstructor(etInstructor.getText().toString(), newUser, username, password);
+        if(!etAdmin.getText().toString().equals("")) { //student is attempting to register
+            queryAdmin(etAdmin.getText().toString(), newUser, username, password);
         } else { //admin is attempting to register
-            newUser.put("isInstructor", true);
+            newUser.put("isAdmin", true);
             signUp(newUser, username, password);
         }
     }
@@ -96,24 +96,24 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-    //queries backend to see if inputted instructor is valid
-    private void queryInstructor(final String instructor, final ParseUser newUser,
+    //queries backend to see if inputted admin is valid
+    private void queryAdmin(final String admin, final ParseUser newUser,
                                  final String username, final String password) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("isInstructor", true);
+        query.whereEqualTo("isAdmin", true);
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
                 for(int i = 0; i < objects.size(); i++){
                     ParseUser user = objects.get(i);
-                    if(user.getUsername().equals(instructor)){
-                        newUser.put("isInstructor", false);
-                        newUser.put("instructorName", etInstructor.getText().toString());
+                    if(user.getUsername().equals(admin)){
+                        newUser.put("isAdmin", false);
+                        newUser.put("adminName", etAdmin.getText().toString());
                         signUp(newUser, username, password);
                         return;
                     } else if(i == objects.size() - 1) {
                         Toast.makeText(RegistrationActivity.this,
-                                "This instructor does not exist.", Toast.LENGTH_LONG).show();
+                                "This admin does not exist.", Toast.LENGTH_LONG).show();
                     }
                 }
             }
