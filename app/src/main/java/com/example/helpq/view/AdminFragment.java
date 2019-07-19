@@ -56,6 +56,7 @@ public class AdminFragment extends Fragment {
                         setFragment(AdminWorkshopFragment.newInstance(),
                                 new String[]{AdminWorkshopFragment.TAG, AdminEnrolledFragment.TAG,
                                         AdminQueueFragment.TAG});
+                        return true;
                     default:
                         return true;
                 }
