@@ -111,9 +111,13 @@ public class QueueFragment extends Fragment {
                 }
                 for(Question question : objects) {
                     ParseUser asker = question.getAsker(); // who asked the question
-                    String user = ParseUser.getCurrentUser().getUsername(); // user of who is currently logged in
-                    String userAdmin = asker.getString("adminName"); // admin of asker
-                    if (user.equals(userAdmin)) {
+                    String currUser = ParseUser.getCurrentUser().getUsername(); // user of who is currently logged in
+                    String currUserAdmin = "";
+                    if(!ParseUser.getCurrentUser().getBoolean("isAdmin")) {
+                        currUserAdmin = ParseUser.getCurrentUser().getString("adminName");
+                    }
+                    String askerAdmin = asker.getString("adminName"); // admin of asker
+                    if (currUser.equals(askerAdmin) || askerAdmin.equals(currUserAdmin)) {
                         mQuestions.add(question);
                     }
                 }

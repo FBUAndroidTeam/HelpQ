@@ -90,18 +90,23 @@ public class CreateWorkshopFragment extends DialogFragment {
         workshop.setCreator(ParseUser.getCurrentUser());
         workshop.setTitle(etTitle.getText().toString());
         workshop.setStartTime(extractDate());
-        workshop.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(e == null) {
-                    Toast.makeText(getContext(), "Workshop created", Toast.LENGTH_LONG).show();
-                    dismiss();
-                } else {
-                    Log.d(TAG, "Create workshop failed");
-                    e.printStackTrace();
+        if(new Date(System.currentTimeMillis()).before(workshop.getStartTime())) {
+            workshop.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Toast.makeText(getContext(), "Workshop created", Toast.LENGTH_LONG).show();
+                        dismiss();
+                    } else {
+                        Log.d(TAG, "Create workshop failed");
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            Toast.makeText(getContext(), "ERROR: This date has already passed",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     private Date extractDate() {
