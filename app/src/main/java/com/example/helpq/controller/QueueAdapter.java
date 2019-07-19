@@ -136,7 +136,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvStudentName.setText(question.getAsker().getString(Question.KEY_FULL_NAME));
             tvPriorityEmoji.setText(question.getPriority());
             tvDescription.setText(question.getText());
-            tvDate.setText(question.getDate());
+            tvDate.setText(question.getRelativeTimeAgo());
 
             String helpType = question.getHelpType();
             if (helpType.equals(mContext.getResources().getString(R.string.in_person))) {
