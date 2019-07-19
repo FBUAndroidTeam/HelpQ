@@ -6,4 +6,7 @@
     <string name="PRIORITY_BLOCKING">🛑</string>
     <string name="PRIORITY_STRETCH">🚀</string>
     <string name="PRIORITY_CURIOSITY">🔍</string>
+    <string name="EMOJI_IN_PERSON">👥</string>
+    <string name="EMOJI_WRITTEN">📝</string>
+    <string name="in_person">in-person</string>
 </resources>

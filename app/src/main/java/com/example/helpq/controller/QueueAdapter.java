@@ -26,6 +26,8 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     private static final String TAG = "QueueAdapter";
     private Context mContext;
     private List<Question> mQuestions;
+    private final String mInPerson = "in-person";
+    private final String mWritten = "written";
 
     // Constructor
     public QueueAdapter(Context context, List<Question> questions) {
@@ -85,6 +87,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         // Layout fields of item_question
         private TextView tvStudentName;
         private TextView tvPriorityEmoji;
+        private TextView tvHelpEmoji;
         private TextView tvDescription;
         private TextView tvDate;
 
@@ -93,6 +96,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
             tvStudentName = itemView.findViewById(R.id.tvStudentName);
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
+            tvHelpEmoji = itemView.findViewById(R.id.tvHelpEmoji);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvDate = itemView.findViewById(R.id.tvDate);
 
@@ -100,7 +104,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 @Override
                 public boolean onLongClick(View v) {
                     ParseUser currentUser = ParseUser.getCurrentUser();
-                    if(currentUser.getBoolean("isInstructor") ||
+                    if (currentUser.getBoolean("isInstructor") ||
                             currentUser.getString("fullName")
                                     .equals(tvStudentName.getText().toString())) {
                         showFilterPopup(v);
@@ -141,6 +145,13 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvPriorityEmoji.setText(question.getPriority());
             tvDescription.setText(question.getText());
             tvDate.setText(question.getDate());
+
+            String helpType = question.getHelpType();
+            if (helpType.equals(mInPerson)) {
+                tvHelpEmoji.setText(R.string.EMOJI_IN_PERSON);
+            } else if (helpType.equals(mWritten)) {
+                tvHelpEmoji.setText(R.string.EMOJI_WRITTEN);
+            }
         }
     }
 
