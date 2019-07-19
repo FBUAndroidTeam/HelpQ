@@ -71,9 +71,15 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     // Answers this question
     private void answerQuestion(int adapterPosition) {
         Question question = mQuestions.get(adapterPosition);
-        AnswerQuestionFragment fragment = AnswerQuestionFragment.newInstance(question);
-        FragmentManager manager = ((MainActivity) mContext).getSupportFragmentManager();
-        fragment.show(manager, CreateQuestionFragment.TAG);
+        if (question.getHelpType()
+                .equals(mContext.getResources().getString(R.string.written))) {
+            AnswerQuestionFragment fragment = AnswerQuestionFragment.newInstance(question);
+            FragmentManager manager = ((MainActivity) mContext).getSupportFragmentManager();
+            fragment.show(manager, CreateQuestionFragment.TAG);
+        } else {
+            Toast.makeText(mContext, "The student requested in-person help!",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     // Archives this question

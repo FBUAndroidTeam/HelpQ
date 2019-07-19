@@ -82,6 +82,7 @@ public class AnswerQuestionFragment extends DialogFragment {
                 } else {
                     mQuestion.setAnswer(etAnswer.getText().toString());
                     mQuestion.setAnsweredAt(new Date(System.currentTimeMillis()));
+                    mQuestion.setIsArchived(true);
                     mQuestion.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
