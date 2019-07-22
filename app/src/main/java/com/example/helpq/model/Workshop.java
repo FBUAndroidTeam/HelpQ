@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -52,10 +53,14 @@ public class Workshop extends ParseObject {
         put(KEY_ATTENDEES, attendees);
     }
 
-
-
     public void setAttendee(ParseUser attendee) {
         add(KEY_ATTENDEES, attendee);
+    }
+
+    public void unsignUp(ParseUser parseUser) {
+        ArrayList<ParseUser> arrToDelete = new ArrayList<ParseUser>();
+        arrToDelete.add(parseUser);
+        removeAll(KEY_ATTENDEES, arrToDelete);
     }
 
     public ParseUser getCreator() {
@@ -86,5 +91,4 @@ public class Workshop extends ParseObject {
 
         return strDate;
     }
-
 }

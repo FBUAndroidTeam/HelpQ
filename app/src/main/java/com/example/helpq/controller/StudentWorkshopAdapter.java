@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.example.helpq.R;
 import com.example.helpq.model.Workshop;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -70,7 +71,7 @@ public class StudentWorkshopAdapter extends
             btnSignUp = itemView.findViewById(R.id.btnSignUp);
         }
 
-        private void buttonText(final Workshop workshop) {
+        private String buttonText(final Workshop workshop) {
             //checks to see if user is signed up, will set button text accordingly
             JSONArray attendeesArr = workshop.getAttendees();
             Boolean isSignedUp = false;
@@ -87,8 +88,10 @@ public class StudentWorkshopAdapter extends
             }
             if(isSignedUp) {
                 btnSignUp.setText(R.string.signed_up);
+                return "SIGNED UP";
             } else {
                 btnSignUp.setText(R.string.sign_up);
+                return "SIGN UP";
             }
         }
 
@@ -96,32 +99,29 @@ public class StudentWorkshopAdapter extends
             tvWorkshopName.setText(workshop.getTitle());
             tvWorkshopDate.setText(workshop.getDate());
             tvWorkshopLocation.setText(workshop.getLocation());
-            JSONArray attendees = workshop.getAttendees();
+            final JSONArray attendees = workshop.getAttendees();
             if(attendees.length() == 1) {
                 tvWorkshopAttendanceCount.setText(attendees.length() + " attendee");
             } else {
                 tvWorkshopAttendanceCount.setText(attendees.length() + " attendees");
             }
 
-            buttonText(workshop);
-
-            btnSignUp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    workshop.setAttendee(ParseUser.getCurrentUser());
-                    workshop.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e != null) {
-                                Log.e(TAG, "error while saving to parse");
-                                e.printStackTrace();
-                                return;
-                            }
-                            Log.d(TAG, "Success!");
-                        }
-                    });
-                }
-            });
+            if(buttonText(workshop).equals("SIGNED UP")) {
+                btnSignUp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        workshop.unsignUp(ParseUser.getCurrentUser());
+                    }
+                });
+            } else {
+                btnSignUp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        workshop.setAttendee(ParseUser.getCurrentUser());
+                    }
+                });
+            }
+            workshop.saveInBackground();
         }
     }
 }
