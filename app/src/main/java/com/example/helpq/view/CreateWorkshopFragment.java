@@ -16,6 +16,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.helpq.R;
+import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Workshop;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -34,6 +35,9 @@ public class CreateWorkshopFragment extends DialogFragment {
     private EditText etLocation;
     private CalendarView cvDate;
     private Button btnSubmit;
+    private int mMonth;
+    private int mYear;
+    private int mDay;
 
     public static CreateWorkshopFragment newInstance(String title) {
         CreateWorkshopFragment frag = new CreateWorkshopFragment();
@@ -70,6 +74,15 @@ public class CreateWorkshopFragment extends DialogFragment {
                 .getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
+        cvDate.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                mMonth = month;
+                mDay = dayOfMonth;
+                mYear = year;
+            }
+        });
+
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,15 +103,20 @@ public class CreateWorkshopFragment extends DialogFragment {
         workshop.setLocation(etLocation.getText().toString());
         workshop.setCreator(ParseUser.getCurrentUser());
         workshop.setTitle(etTitle.getText().toString());
-        workshop.setStartTime(extractDate());
-        if(new Date(System.currentTimeMillis()).before(workshop.getStartTime())) {
+        workshop.setStartTime(new Date(mYear - 1900, mMonth, mDay,
+                tpTime.getCurrentHour(), tpTime.getCurrentMinute()));
+        Date currTime = new Date(System.currentTimeMillis());
+        if(currTime.compareTo(workshop.getStartTime()) < 0) {
             workshop.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
+                        DialogDismissListener listener =
+                                (DialogDismissListener) getTargetFragment();
                         Toast.makeText(getContext(),
                                 "Workshop created",
                                 Toast.LENGTH_LONG).show();
+                        listener.onDismiss();
                         dismiss();
                     } else {
                         Log.d(TAG, "Create workshop failed");
@@ -112,13 +130,4 @@ public class CreateWorkshopFragment extends DialogFragment {
         }
     }
 
-    private Date extractDate() {
-        Date calenderDate = new Date(cvDate.getDate());
-        int year = calenderDate.getYear();
-        int month = calenderDate.getMonth();
-        int day = calenderDate.getDate();
-        int hour = tpTime.getCurrentHour();
-        int min = tpTime.getCurrentMinute();
-        return new Date(year, month, day, hour, min, 0);
-    }
 }

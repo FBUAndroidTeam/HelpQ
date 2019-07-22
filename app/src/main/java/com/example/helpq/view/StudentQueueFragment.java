@@ -16,6 +16,7 @@ public class StudentQueueFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "StudentQueueFragment";
     private FragmentManager fragmentManager;
+    private QueueFragment queueFragment;
 
     public static StudentQueueFragment newInstance() {
         return new StudentQueueFragment();
@@ -32,11 +33,11 @@ public class StudentQueueFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_student_queue, parent, false);
-
+        queueFragment = new QueueFragment();
         fragmentManager = getFragmentManager();
         fragmentManager
                 .beginTransaction()
-                .add(R.id.flStudentQueueContainer, new QueueFragment(), QueueFragment.TAG)
+                .add(R.id.flStudentQueueContainer, queueFragment, QueueFragment.TAG)
                 .commit();
 
         fabCreateQuestion = view.findViewById(R.id.fabCreateQuestion);
@@ -46,11 +47,10 @@ public class StudentQueueFragment extends Fragment {
                 FragmentManager fm = getFragmentManager();
                 CreateQuestionFragment createQuestionFragment =
                         CreateQuestionFragment.newInstance("Some Title");
+                createQuestionFragment.setTargetFragment(queueFragment, 300);
                 createQuestionFragment.show(fm, CreateQuestionFragment.TAG);
             }
         });
         return view;
     }
-
-
 }

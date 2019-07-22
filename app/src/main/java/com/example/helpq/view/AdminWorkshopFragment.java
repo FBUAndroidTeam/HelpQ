@@ -16,21 +16,24 @@ import android.view.ViewGroup;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.AdminWorkshopAdapter;
+import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Workshop;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminWorkshopFragment extends Fragment {
+public class AdminWorkshopFragment extends Fragment implements DialogDismissListener {
     public static final String TAG = "AdminWorkshopFragment";
     private RecyclerView rvAdminWorkshops;
     private List<Workshop> mWorkshops;
     private AdminWorkshopAdapter adapter;
     private FloatingActionButton fabAddWorkshop;
     private SwipeRefreshLayout swipeContainer;
+    private FragmentManager fm;
 
     public static AdminWorkshopFragment newInstance() {
         return new AdminWorkshopFragment();
@@ -49,13 +52,17 @@ public class AdminWorkshopFragment extends Fragment {
         rvAdminWorkshops.setAdapter(adapter);
         rvAdminWorkshops.setLayoutManager(new LinearLayoutManager(getContext()));
         fabAddWorkshop = view.findViewById(R.id.fabAddWorkshop);
+        fm = getFragmentManager();
         fabAddWorkshop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getFragmentManager();
-                CreateWorkshopFragment CreateWorkshopFragment =
+                CreateWorkshopFragment createWorkshopFragment =
                         com.example.helpq.view.CreateWorkshopFragment.newInstance("Some Title");
-                CreateWorkshopFragment.show(fm, "fragment_create_workshop");
+                createWorkshopFragment.setTargetFragment(AdminWorkshopFragment.this,
+                        300);
+                createWorkshopFragment.show(fm, createWorkshopFragment.TAG);
+
             }
         });
         queryWorkshops();
@@ -89,6 +96,7 @@ public class AdminWorkshopFragment extends Fragment {
 
     private void queryWorkshops() {
         ParseQuery<Workshop> query = ParseQuery.getQuery("Workshop");
+        query.whereEqualTo("creator", ParseUser.getCurrentUser());
         query.findInBackground(new FindCallback<Workshop>() {
             @Override
             public void done(List<Workshop> objects, ParseException e) {
@@ -101,5 +109,10 @@ public class AdminWorkshopFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onDismiss() {
+        fetchQueueAsync();
     }
 }

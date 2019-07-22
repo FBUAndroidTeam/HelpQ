@@ -16,6 +16,7 @@ import android.widget.Button;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.QueueAdapter;
+import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
 import com.parse.FindCallback;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class QueueFragment extends Fragment {
+public class QueueFragment extends Fragment implements DialogDismissListener {
 
     public static final String TAG = "QueueFragment";
     private RecyclerView rvQuestions;
@@ -129,6 +130,11 @@ public class QueueFragment extends Fragment {
                 mAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public void onDismiss() {
+        fetchQueueAsync();
     }
 }
 
