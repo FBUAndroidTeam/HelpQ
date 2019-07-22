@@ -73,7 +73,7 @@ public class StudentWorkshopAdapter extends
             btnSignUp = itemView.findViewById(R.id.btnSignUp);
         }
 
-        private String buttonText(final Workshop workshop) {
+        private boolean buttonText(final Workshop workshop) {
             //checks to see if user is signed up, will set button text accordingly
             JSONArray attendeesArr = workshop.getAttendees();
             Boolean isSignedUp = false;
@@ -90,19 +90,18 @@ public class StudentWorkshopAdapter extends
             }
             if(isSignedUp) {
                 btnSignUp.setText(R.string.signed_up);
-                return "SIGNED UP";
             } else {
                 btnSignUp.setText(R.string.sign_up);
-                return "SIGN UP";
             }
+            return isSignedUp;
         }
 
         private void setAttendeeText(Workshop workshop) {
             final JSONArray attendees = workshop.getAttendees();
             if(attendees.length() == 1) {
-                tvWorkshopAttendanceCount.setText(attendees.length() + " attendee");
+                tvWorkshopAttendanceCount.setText(attendees.length() + R.string.attendee);
             } else {
-                tvWorkshopAttendanceCount.setText(attendees.length() + " attendees");
+                tvWorkshopAttendanceCount.setText(attendees.length() + R.string.attendees);
             }
         }
 
@@ -112,33 +111,30 @@ public class StudentWorkshopAdapter extends
             tvWorkshopLocation.setText(workshop.getLocation());
             setAttendeeText(workshop);
 
-            if(buttonText(workshop).equals("SIGNED UP")) {
-                btnSignUp.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+
+            btnSignUp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (buttonText(workshop)) {
+
                         workshop.unsignUp(ParseUser.getCurrentUser());
                         workshop.saveInBackground();
                         buttonText(workshop);
                         setAttendeeText(workshop);
                         Toast.makeText(mContext,
-                                "You have unenrolled from the workshop.",
+                                R.string.unenrolled,
                                 Toast.LENGTH_LONG).show();
-                    }
-                });
-            } else {
-                btnSignUp.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                    } else {
                         workshop.setAttendee(ParseUser.getCurrentUser());
                         workshop.saveInBackground();
                         buttonText(workshop);
                         setAttendeeText(workshop);
                         Toast.makeText(mContext,
-                                "You have enrolled for the workshop.",
+                                R.string.enrolled,
                                 Toast.LENGTH_LONG).show();
                     }
-                });
-            }
+                }
+            });
         }
     }
 }

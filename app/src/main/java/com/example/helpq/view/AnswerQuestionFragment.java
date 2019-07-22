@@ -76,7 +76,7 @@ public class AnswerQuestionFragment extends DialogFragment {
             public void onClick(View v) {
                 if ((etAnswer.getText().toString().isEmpty())) {
                     Toast.makeText(getContext(),
-                            "Please enter an answer.",
+                            R.string.edge_case_answer,
                             Toast.LENGTH_LONG).show();
                     return;
                 } else {
@@ -87,7 +87,7 @@ public class AnswerQuestionFragment extends DialogFragment {
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
-                                Toast.makeText(getContext(), "Question answered",
+                                Toast.makeText(getContext(), R.string.success_question_answered,
                                         Toast.LENGTH_LONG).show();
                                 Log.d(TAG, "Answer submitted successfully");
                                 dismiss();

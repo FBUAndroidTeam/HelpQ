@@ -54,19 +54,19 @@ public class RegistrationActivity extends AppCompatActivity {
 
         if (username.isEmpty()) {
             Toast.makeText(RegistrationActivity.this,
-                    "Please enter a username.",
+                    R.string.edge_case_empty_username,
                     Toast.LENGTH_LONG).show();
             return;
         }
         else if (password.isEmpty()) {
             Toast.makeText(RegistrationActivity.this,
-                    "Please enter a password",
+                    R.string.edge_case_empty_password,
                     Toast.LENGTH_LONG).show();
             return;
         }
         else if (etFullName.getText().toString().isEmpty()) {
             Toast.makeText(RegistrationActivity.this,
-                    "Please enter your full name",
+                    R.string.edge_case_empty_name,
                     Toast.LENGTH_LONG).show();
             return;
         }
@@ -114,7 +114,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         return;
                     } else if(i == objects.size() - 1) {
                         Toast.makeText(RegistrationActivity.this,
-                                "This admin does not exist.", Toast.LENGTH_LONG).show();
+                                R.string.edge_case_invalid_admin, Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -131,7 +131,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     login(username, password);
                 } else {
                     Toast.makeText(RegistrationActivity.this,
-                            "username already taken", Toast.LENGTH_LONG).show();
+                            R.string.edge_case_invalid_username, Toast.LENGTH_LONG).show();
                     Log.d(TAG, "Signup failed");
                     e.printStackTrace();
                 }
