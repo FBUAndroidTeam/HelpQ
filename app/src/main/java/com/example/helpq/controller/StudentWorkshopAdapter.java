@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.helpq.R;
 import com.example.helpq.model.Workshop;
 import com.parse.Parse;
@@ -95,22 +97,32 @@ public class StudentWorkshopAdapter extends
             }
         }
 
-        public void bind(final Workshop workshop) {
-            tvWorkshopName.setText(workshop.getTitle());
-            tvWorkshopDate.setText(workshop.getDate());
-            tvWorkshopLocation.setText(workshop.getLocation());
+        private void setAttendeeText(Workshop workshop) {
             final JSONArray attendees = workshop.getAttendees();
             if(attendees.length() == 1) {
                 tvWorkshopAttendanceCount.setText(attendees.length() + " attendee");
             } else {
                 tvWorkshopAttendanceCount.setText(attendees.length() + " attendees");
             }
+        }
+
+        public void bind(final Workshop workshop) {
+            tvWorkshopName.setText(workshop.getTitle());
+            tvWorkshopDate.setText(workshop.getDate());
+            tvWorkshopLocation.setText(workshop.getLocation());
+            setAttendeeText(workshop);
 
             if(buttonText(workshop).equals("SIGNED UP")) {
                 btnSignUp.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         workshop.unsignUp(ParseUser.getCurrentUser());
+                        workshop.saveInBackground();
+                        buttonText(workshop);
+                        setAttendeeText(workshop);
+                        Toast.makeText(mContext,
+                                "You have unenrolled from the workshop.",
+                                Toast.LENGTH_LONG).show();
                     }
                 });
             } else {
@@ -118,10 +130,15 @@ public class StudentWorkshopAdapter extends
                     @Override
                     public void onClick(View v) {
                         workshop.setAttendee(ParseUser.getCurrentUser());
+                        workshop.saveInBackground();
+                        buttonText(workshop);
+                        setAttendeeText(workshop);
+                        Toast.makeText(mContext,
+                                "You have enrolled for the workshop.",
+                                Toast.LENGTH_LONG).show();
                     }
                 });
             }
-            workshop.saveInBackground();
         }
     }
 }
