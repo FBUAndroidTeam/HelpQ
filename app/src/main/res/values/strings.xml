@@ -14,4 +14,26 @@
     <string name="written">written</string>
     <string name="sign_up">SIGN UP</string>
     <string name="signed_up">SIGNED UP</string>
+    <string name="enrolled">You have enrolled for the workshop.</string>
+    <string name="unenrolled">You have unenrolled for the workshop.</string>
+    <string name="attendee"> attendee</string>
+    <string name="attendees"> attendees</string>
+    <string name="request_in_person">The student requested in-person help!</string>
+    <string name="archive_question">Question archived</string>
+    <string name="edge_case_answer">Please enter an answer.</string>
+    <string name="success_question_answered">Question answered</string>
+    <string name="edge_case_enter_question">Please enter a question.</string>
+    <string name="edge_case_enter_priority">Please select type of priority.</string>
+    <string name="edge_case_enter_type_of_help">Please select type of help.</string>
+    <string name="edge_case_enter_location">Please enter a title and/or location.</string>
+    <string name="success_create_workshop">Workshop created.</string>
+    <string name="edge_case_wrong_date_workshop">This date has already passed.</string>
+    <string name="edge_case_empty_username">Please enter a username.</string>
+    <string name="edge_case_empty_password">Please enter a password.</string>
+    <string name="edge_case_invalid_user">The user does not exist.</string>
+    <string name="error_with_query">error with query</string>
+    <string name="edge_case_empty_name">Please enter your full name.</string>
+    <string name="edge_case_invalid_admin">This admin does not exist.</string>
+    <string name="edge_case_invalid_username">This user already exists.</string>
+
 </resources>

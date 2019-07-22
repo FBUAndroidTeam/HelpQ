@@ -77,7 +77,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             FragmentManager manager = ((MainActivity) mContext).getSupportFragmentManager();
             fragment.show(manager, CreateQuestionFragment.TAG);
         } else {
-            Toast.makeText(mContext, "The student requested in-person help!",
+            Toast.makeText(mContext, R.string.request_in_person,
                     Toast.LENGTH_LONG).show();
         }
     }
@@ -90,7 +90,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             @Override
             public void done(ParseException e) {
                 if(e == null) {
-                    Toast.makeText(mContext, "Question archived", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, R.string.archive_question, Toast.LENGTH_LONG).show();
                 } else {
                     Log.d(TAG, "Failed to archive question");
                     e.printStackTrace();
