@@ -103,7 +103,7 @@ public class CreateWorkshopFragment extends DialogFragment {
         workshop.setLocation(etLocation.getText().toString());
         workshop.setCreator(ParseUser.getCurrentUser());
         workshop.setTitle(etTitle.getText().toString());
-        workshop.setStartTime(new Date(mYear - 1900, mMonth, mDay,
+        workshop.setStartTime(new Date(mYear - 1900, mMonth, mDay, //make 1900 constant, look into calender.set
                 tpTime.getCurrentHour(), tpTime.getCurrentMinute()));
         Date currTime = new Date(System.currentTimeMillis());
         if(currTime.compareTo(workshop.getStartTime()) < 0) {

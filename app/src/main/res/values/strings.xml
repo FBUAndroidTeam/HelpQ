@@ -12,4 +12,9 @@
     <string name="written">written</string>
     <string name="sign_up">SIGN UP</string>
     <string name="signed_up">SIGNED UP</string>
+    <string name="select_admin">Please select an admin</string>
+    <string name="username_taken">username already taken</string>
+    <string name="password_enter">Please enter a password</string>
+    <string name="username_enter">Please enter a username</string>
+    <string name="full_name_enter">Please enter your full name</string>
 </resources>
