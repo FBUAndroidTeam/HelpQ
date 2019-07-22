@@ -1,12 +1,6 @@
 package com.example.helpq.view;
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
@@ -24,18 +18,6 @@ public class StudentBoardFragment extends StudentInboxFragment {
 
     public static StudentBoardFragment newInstance() {
         return new StudentBoardFragment();
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
     }
 
     // Query for messages intended for all students
@@ -57,15 +39,12 @@ public class StudentBoardFragment extends StudentInboxFragment {
                 }
 
                 for (Question question : objects) {
-
-                    Log.d(TAG, "Inside For loop!!!!");
                     // Admin of current user
                     String userAdmin = User.getAdminName(ParseUser.getCurrentUser());
 
                     // Admin of asker
                     String askerAdmin = User.getAdminName(question.getAsker());
                     if (askerAdmin.equals(userAdmin)) {
-                        Log.d(TAG, "Adding question!!!!!!!!");
                         mMessages.add(question);
                     }
                 }
