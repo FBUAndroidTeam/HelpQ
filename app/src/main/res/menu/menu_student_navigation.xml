@@ -20,6 +20,13 @@
         android:id="@+id/action_view_inbox"
         android:enabled="true"
         android:icon="@drawable/ic_launcher_background"
-        android:title="@string/admin_inbox_tab"
+        android:title="@string/student_inbox_tab"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_view_board"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="@string/student_board_tab"
         app:showAsAction="always" />
 </menu>

@@ -47,17 +47,27 @@ public class StudentFragment extends Fragment {
                         setFragment(StudentQueueFragment.newInstance(),
                                 new String[]{StudentQueueFragment.TAG,
                                         StudentWorkshopFragment.TAG,
-                                        StudentInboxFragment.TAG});
+                                        StudentInboxFragment.TAG,
+                                        StudentBoardFragment.TAG,});
                         return true;
                     case R.id.action_view_workshops:
                         setFragment(StudentWorkshopFragment.newInstance(),
                                 new String[]{StudentWorkshopFragment.TAG,
                                         StudentQueueFragment.TAG,
-                                        StudentInboxFragment.TAG});
+                                        StudentInboxFragment.TAG,
+                                        StudentBoardFragment.TAG,});
                         return true;
                     case R.id.action_view_inbox:
                         setFragment(StudentInboxFragment.newInstance(),
                                 new String[]{StudentInboxFragment.TAG,
+                                        StudentWorkshopFragment.TAG,
+                                        StudentQueueFragment.TAG,
+                                        StudentBoardFragment.TAG,});
+                        return true;
+                    case R.id.action_view_board:
+                        setFragment(StudentBoardFragment.newInstance(),
+                                new String[]{StudentBoardFragment.TAG,
+                                        StudentInboxFragment.TAG,
                                         StudentWorkshopFragment.TAG,
                                         StudentQueueFragment.TAG});
                         return true;
