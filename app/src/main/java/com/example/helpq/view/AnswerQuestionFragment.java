@@ -56,7 +56,7 @@ public class AnswerQuestionFragment extends DialogFragment {
         mQuestion = getArguments().getParcelable("Question");
 
         tvStudent = view.findViewById(R.id.tvStudent);
-        tvDescription = view.findViewById(R.id.tvDescription);
+        tvDescription = view.findViewById(R.id.tvQuestion);
         etAnswer = view.findViewById(R.id.etAnswer);
         btnSubmit = view.findViewById(R.id.btnSubmit);
 

@@ -21,6 +21,7 @@ public class Question extends ParseObject implements Comparable<Question>{
     public static final String KEY_ARCHIVED = "isArchived";
     public static final String KEY_HELP_TYPE = "helpType";
     public static final String KEY_FULL_NAME = "fullName";
+    public static final String KEY_CREATED_AT = "createdAt";
 
     //stretch keys
     private static final String KEY_ANSWER = "answerText";
