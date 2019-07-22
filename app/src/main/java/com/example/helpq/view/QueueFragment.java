@@ -66,6 +66,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                 ParseUser.logOut();
                 Intent intent = new Intent(getContext(), LoginActivity.class);
                 startActivity(intent);
+                ((MainActivity) getActivity()).finish();
             }
         });
 
