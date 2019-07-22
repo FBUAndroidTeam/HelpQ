@@ -11,13 +11,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.example.helpq.R;
 import com.example.helpq.model.Workshop;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
 import org.json.JSONArray;
-
+import org.json.JSONException;
 import java.util.List;
 
 public class StudentWorkshopAdapter extends
@@ -49,6 +47,12 @@ public class StudentWorkshopAdapter extends
         return mWorkshops.size();
     }
 
+    // Clean all elements of the recycler
+    public void clear() {
+        mWorkshops.clear();
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvWorkshopName;
@@ -66,12 +70,40 @@ public class StudentWorkshopAdapter extends
             btnSignUp = itemView.findViewById(R.id.btnSignUp);
         }
 
+        private void buttonText(final Workshop workshop) {
+            //checks to see if user is signed up, will set button text accordingly
+            JSONArray attendeesArr = workshop.getAttendees();
+            Boolean isSignedUp = false;
+            for(int i = 0; i < attendeesArr.length(); i++) {
+                try {
+                    if((ParseUser.getCurrentUser().getObjectId()).
+                            equals(attendeesArr.getJSONObject(i).getString("objectId"))) {
+                        isSignedUp = true;
+                        break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(isSignedUp) {
+                btnSignUp.setText(R.string.signed_up);
+            } else {
+                btnSignUp.setText(R.string.sign_up);
+            }
+        }
+
         public void bind(final Workshop workshop) {
             tvWorkshopName.setText(workshop.getTitle());
             tvWorkshopDate.setText(workshop.getDate());
             tvWorkshopLocation.setText(workshop.getLocation());
             JSONArray attendees = workshop.getAttendees();
-            tvWorkshopAttendanceCount.setText(attendees.length() + " attendees");
+            if(attendees.length() == 1) {
+                tvWorkshopAttendanceCount.setText(attendees.length() + " attendee");
+            } else {
+                tvWorkshopAttendanceCount.setText(attendees.length() + " attendees");
+            }
+
+            buttonText(workshop);
 
             btnSignUp.setOnClickListener(new View.OnClickListener() {
                 @Override

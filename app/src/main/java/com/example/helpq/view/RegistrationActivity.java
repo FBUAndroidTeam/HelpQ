@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.helpq.R;
+import com.example.helpq.model.User;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -51,19 +52,19 @@ public class RegistrationActivity extends AppCompatActivity {
         final String username = etNewUsername.getText().toString();
         final String password = etNewPassword.getText().toString();
 
-        if(username.matches("")) {
+        if (username.isEmpty()) {
             Toast.makeText(RegistrationActivity.this,
                     "Please enter a username.",
                     Toast.LENGTH_LONG).show();
             return;
         }
-        else if(password.matches("")) {
+        else if (password.isEmpty()) {
             Toast.makeText(RegistrationActivity.this,
                     "Please enter a password",
                     Toast.LENGTH_LONG).show();
             return;
         }
-        else if((etFullName.getText().toString()).matches("")) {
+        else if (etFullName.getText().toString().isEmpty()) {
             Toast.makeText(RegistrationActivity.this,
                     "Please enter your full name",
                     Toast.LENGTH_LONG).show();
@@ -72,11 +73,11 @@ public class RegistrationActivity extends AppCompatActivity {
         ParseUser newUser = new ParseUser();
         newUser.setUsername(username);
         newUser.setPassword(password);
-        newUser.put("fullName", etFullName.getText().toString());
-        if(!etAdmin.getText().toString().equals("")) { //student is attempting to register
+        User.setFullName(etFullName.getText().toString(), newUser);
+        if(!etAdmin.getText().toString().isEmpty()) { //student is attempting to register
             queryAdmin(etAdmin.getText().toString(), newUser, username, password);
         } else { //admin is attempting to register
-            newUser.put("isAdmin", true);
+            User.setIsAdmin(true, newUser);
             signUp(newUser, username, password);
         }
     }
@@ -100,15 +101,15 @@ public class RegistrationActivity extends AppCompatActivity {
     private void queryAdmin(final String admin, final ParseUser newUser,
                                  final String username, final String password) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("isAdmin", true);
+        query.whereEqualTo(User.KEY_IS_ADMIN, true);
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
                 for(int i = 0; i < objects.size(); i++){
                     ParseUser user = objects.get(i);
                     if(user.getUsername().equals(admin)){
-                        newUser.put("isAdmin", false);
-                        newUser.put("adminName", etAdmin.getText().toString());
+                        User.setIsAdmin(false, newUser);
+                        User.setAdminName(etAdmin.getText().toString(), newUser);
                         signUp(newUser, username, password);
                         return;
                     } else if(i == objects.size() - 1) {

@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.helpq.R;
+import com.example.helpq.model.User;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -103,20 +104,20 @@ public class LoginActivity extends AppCompatActivity {
     //checks backend if such user exists
     private void queryValidUsers(final String username, final String password,
                                  final boolean isAdmin) {
-        if(username.equals("")){
+        if(username.isEmpty()){
             Toast.makeText(LoginActivity.this,
                     "Please enter a username.",
                     Toast.LENGTH_LONG).show();
             return;
         }
-        if(password.equals("")){
+        if(password.isEmpty()){
             Toast.makeText(LoginActivity.this,
                     "Please enter a password.",
                     Toast.LENGTH_LONG).show();
             return;
         }
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("isAdmin", isAdmin);
+        query.whereEqualTo(User.KEY_IS_ADMIN, isAdmin);
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {

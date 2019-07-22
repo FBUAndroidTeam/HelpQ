@@ -112,7 +112,9 @@ public class CreateWorkshopFragment extends DialogFragment {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
-                        Toast.makeText(getContext(), "Workshop created", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),
+                                "Workshop created",
+                                Toast.LENGTH_LONG).show();
                         dismiss();
                     } else {
                         Log.d(TAG, "Create workshop failed");

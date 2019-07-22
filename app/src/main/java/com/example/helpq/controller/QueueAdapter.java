@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.User;
 import com.example.helpq.view.AnswerQuestionFragment;
 import com.example.helpq.view.CreateQuestionFragment;
 import com.example.helpq.view.MainActivity;
@@ -70,21 +71,15 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     // Answers this question
     private void answerQuestion(int adapterPosition) {
         Question question = mQuestions.get(adapterPosition);
-        AnswerQuestionFragment fragment = AnswerQuestionFragment.newInstance(question);
-        FragmentManager manager = ((MainActivity) mContext).getSupportFragmentManager();
-        fragment.show(manager, CreateQuestionFragment.TAG);
-
-        question.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    //Toast.makeText(mContext, "Question answered", Toast.LENGTH_LONG).show();
-                } else {
-                    Log.d(TAG, "Failed to answer question");
-                    e.printStackTrace();
-                }
-            }
-        });
+        if (question.getHelpType()
+                .equals(mContext.getResources().getString(R.string.written))) {
+            AnswerQuestionFragment fragment = AnswerQuestionFragment.newInstance(question);
+            FragmentManager manager = ((MainActivity) mContext).getSupportFragmentManager();
+            fragment.show(manager, CreateQuestionFragment.TAG);
+        } else {
+            Toast.makeText(mContext, "The student requested in-person help!",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     // Archives this question
@@ -126,9 +121,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 @Override
                 public boolean onLongClick(View v) {
                     ParseUser currentUser = ParseUser.getCurrentUser();
-                    if (currentUser.getBoolean("isAdmin")) {
+                    if (User.isAdmin(currentUser)) {
                         showAdminPopup(v);
-                    } else if (currentUser.getString("fullName")
+                    } else if (User.getFullName(currentUser)
                             .equals(tvStudentName.getText().toString())) {
                         showStudentPopup(v);
                     }

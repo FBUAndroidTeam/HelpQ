@@ -15,8 +15,11 @@ import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.User;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
+
+import java.util.Date;
 
 public class AnswerQuestionFragment extends DialogFragment {
 
@@ -60,7 +63,7 @@ public class AnswerQuestionFragment extends DialogFragment {
         // Show soft keyboard automatically and request focus to text
         etAnswer.requestFocus();
 
-        String studentName = mQuestion.getAsker().getString("fullName");
+        String studentName = User.getFullName(mQuestion.getAsker());
         tvStudent.setText(studentName + "'s question:");
         tvDescription.setText(mQuestion.getText());
         submitAnswer();
@@ -71,17 +74,21 @@ public class AnswerQuestionFragment extends DialogFragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ((etAnswer.getText().toString()).matches("")) {
+                if ((etAnswer.getText().toString().isEmpty())) {
                     Toast.makeText(getContext(),
                             "Please enter an answer.",
                             Toast.LENGTH_LONG).show();
                     return;
                 } else {
                     mQuestion.setAnswer(etAnswer.getText().toString());
+                    mQuestion.setAnsweredAt(new Date(System.currentTimeMillis()));
+                    mQuestion.setIsArchived(true);
                     mQuestion.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
+                                Toast.makeText(getContext(), "Question answered",
+                                        Toast.LENGTH_LONG).show();
                                 Log.d(TAG, "Answer submitted successfully");
                                 dismiss();
                             } else {
