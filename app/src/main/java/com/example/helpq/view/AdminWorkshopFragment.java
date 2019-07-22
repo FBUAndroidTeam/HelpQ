@@ -19,6 +19,7 @@ import com.example.helpq.model.Workshop;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,7 @@ public class AdminWorkshopFragment extends Fragment {
 
     private void queryWorkshops() {
         ParseQuery<Workshop> query = ParseQuery.getQuery("Workshop");
+        query.whereEqualTo("creator", ParseUser.getCurrentUser());
         query.findInBackground(new FindCallback<Workshop>() {
             @Override
             public void done(List<Workshop> objects, ParseException e) {
