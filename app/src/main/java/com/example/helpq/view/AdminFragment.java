@@ -38,7 +38,8 @@ public class AdminFragment extends Fragment {
                 (BottomNavigationView) view.findViewById(R.id.top_navigation);
 
         // Set top menu to navigate between "Queue" and "Students" tabs
-        navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        navigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {

@@ -38,18 +38,27 @@ public class StudentFragment extends Fragment {
                 (BottomNavigationView) view.findViewById(R.id.top_navigation);
 
         // Set top menu to navigate between "Queue" and "Students" tabs
-        navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        navigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_view_queue:
                         setFragment(StudentQueueFragment.newInstance(),
                                 new String[]{StudentQueueFragment.TAG,
-                                        StudentWorkshopFragment.TAG});
+                                        StudentWorkshopFragment.TAG,
+                                        StudentInboxFragment.TAG});
                         return true;
                     case R.id.action_view_workshops:
                         setFragment(StudentWorkshopFragment.newInstance(),
                                 new String[]{StudentWorkshopFragment.TAG,
+                                        StudentQueueFragment.TAG,
+                                        StudentInboxFragment.TAG});
+                        return true;
+                    case R.id.action_view_inbox:
+                        setFragment(StudentInboxFragment.newInstance(),
+                                new String[]{StudentInboxFragment.TAG,
+                                        StudentWorkshopFragment.TAG,
                                         StudentQueueFragment.TAG});
                         return true;
                     default:
