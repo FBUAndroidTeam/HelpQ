@@ -32,8 +32,8 @@ public class QueueFragment extends Fragment {
     public static final String TAG = "QueueFragment";
     private RecyclerView rvQuestions;
     private List<Question> mQuestions;
-    private QueueAdapter adapter;
-    private SwipeRefreshLayout swipeContainer;
+    private QueueAdapter mAdapter;
+    private SwipeRefreshLayout mSwipeContainer;
     private Button btLogout;
 
     public static QueueFragment newInstance() {
@@ -53,9 +53,9 @@ public class QueueFragment extends Fragment {
 
         // Create data source, adapter, and layout manager
         mQuestions = new ArrayList<>();
-        adapter = new QueueAdapter(getContext(), mQuestions);
+        mAdapter = new QueueAdapter(getContext(), mQuestions);
         rvQuestions = view.findViewById(R.id.rvQuestions);
-        rvQuestions.setAdapter(adapter);
+        rvQuestions.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvQuestions.setLayoutManager(layoutManager);
         btLogout = view.findViewById(R.id.btLogoutButt);
@@ -74,17 +74,17 @@ public class QueueFragment extends Fragment {
 
     // Handle logic for Swipe to Refresh.
     private void setupSwipeRefreshing(@NonNull View view) {
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        mSwipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
 
         // Setup refresh listener which triggers new data loading
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 fetchQueueAsync();
             }
         });
         // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+        mSwipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
@@ -92,9 +92,9 @@ public class QueueFragment extends Fragment {
 
     // Refresh the queue, and load questions.
     protected void fetchQueueAsync() {
-        adapter.clear();
+        mAdapter.clear();
         queryQuestions();
-        swipeContainer.setRefreshing(false);
+        mSwipeContainer.setRefreshing(false);
     }
 
     private void queryQuestions() {
@@ -126,7 +126,7 @@ public class QueueFragment extends Fragment {
                     }
                 }
                 Collections.sort(mQuestions);
-                adapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();
             }
         });
     }
