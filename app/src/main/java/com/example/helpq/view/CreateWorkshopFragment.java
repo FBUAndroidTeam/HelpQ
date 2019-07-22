@@ -16,6 +16,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.helpq.R;
+import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Workshop;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -37,7 +38,6 @@ public class CreateWorkshopFragment extends DialogFragment {
     private int mMonth;
     private int mYear;
     private int mDay;
-    private Date selectedDate;
 
     public static CreateWorkshopFragment newInstance(String title) {
         CreateWorkshopFragment frag = new CreateWorkshopFragment();
@@ -80,7 +80,6 @@ public class CreateWorkshopFragment extends DialogFragment {
                 mMonth = month;
                 mDay = dayOfMonth;
                 mYear = year;
-                selectedDate = new Date(year, month, dayOfMonth);
             }
         });
 
@@ -112,9 +111,12 @@ public class CreateWorkshopFragment extends DialogFragment {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
+                        DialogDismissListener listener =
+                                (DialogDismissListener) getTargetFragment();
                         Toast.makeText(getContext(),
                                 "Workshop created",
                                 Toast.LENGTH_LONG).show();
+                        listener.onDismiss();
                         dismiss();
                     } else {
                         Log.d(TAG, "Create workshop failed");
@@ -127,6 +129,5 @@ public class CreateWorkshopFragment extends DialogFragment {
                     Toast.LENGTH_LONG).show();
         }
     }
-
 
 }

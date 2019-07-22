@@ -16,6 +16,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.helpq.R;
+import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Question;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -79,7 +80,7 @@ public class CreateQuestionFragment extends DialogFragment {
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         togglePriorityButtons();
         toggleHelpButtons();
-        submitQuestion();
+        validQuestionCheck();
     }
 
     // Ensures only one toggle button for priority is selected
@@ -148,8 +149,7 @@ public class CreateQuestionFragment extends DialogFragment {
         });
     }
 
-    // Method that deals with submitting question to parse
-    private void submitQuestion() {
+    private void validQuestionCheck() {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,24 +168,31 @@ public class CreateQuestionFragment extends DialogFragment {
                             "Please select type of help.",
                             Toast.LENGTH_LONG).show();
                 } else {
-                    Question newQuestion = new Question();
-                    newQuestion.setText(etQuestion.getText().toString());
-                    newQuestion.setAsker(ParseUser.getCurrentUser());
-                    newQuestion.setIsArchived(false);
-                    newQuestion.setPriority(togglePrioritySelected.getText().toString());
-                    newQuestion.setHelpType(toggleHelpSelected.getText().toString());
-                    newQuestion.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                Log.d(TAG, "Question created successfully");
-                                dismiss();
-                            } else {
-                                Log.d(TAG, "Question failed to create");
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                    submitQuestion();
+                }
+            }
+        });
+    }
+
+    // Method that deals with submitting question to parse
+    private void submitQuestion() {
+        Question newQuestion = new Question();
+        newQuestion.setText(etQuestion.getText().toString());
+        newQuestion.setAsker(ParseUser.getCurrentUser());
+        newQuestion.setIsArchived(false);
+        newQuestion.setPriority(togglePrioritySelected.getText().toString());
+        newQuestion.setHelpType(toggleHelpSelected.getText().toString());
+        newQuestion.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    DialogDismissListener listener = (DialogDismissListener) getTargetFragment();
+                    Log.d(TAG, "Question created successfully");
+                    listener.onDismiss();
+                    dismiss();
+                } else {
+                    Log.d(TAG, "Question failed to create");
+                    e.printStackTrace();
                 }
             }
         });
