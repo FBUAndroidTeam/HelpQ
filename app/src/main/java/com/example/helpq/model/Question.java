@@ -15,17 +15,18 @@ import java.util.Locale;
 @ParseClassName("Question")
 public class Question extends ParseObject implements Comparable<Question>{
 
-    public static final String KEY_TEXT = "questionText";
+    private static final String KEY_TEXT = "questionText";
+    private static final String KEY_PRIORITY = "priorityEmoji";
     public static final String KEY_ASKER = "student";
-    public static final String KEY_PRIORITY = "priorityEmoji";
     public static final String KEY_ARCHIVED = "isArchived";
     public static final String KEY_HELP_TYPE = "helpType";
     public static final String KEY_FULL_NAME = "fullName";
     public static final String KEY_CREATED_AT = "createdAt";
 
-    //stretch keys
+    // Stretch keys
     private static final String KEY_ANSWER = "answerText";
-    private static final String KEY_ANSWERED_AT = "answeredAt";
+    public static final String KEY_ANSWERED_AT = "answeredAt";
+    public static final String KEY_IS_PRIVATE = "isPrivate";
 
     public String getText() {
         return getString(KEY_TEXT);
@@ -59,7 +60,7 @@ public class Question extends ParseObject implements Comparable<Question>{
         put(KEY_ARCHIVED, archived);
     }
 
-    //stretch getters/setters
+    // Stretch getters/setters
     public String getAnswer() {
         return getString(KEY_ANSWER);
     }
@@ -84,6 +85,14 @@ public class Question extends ParseObject implements Comparable<Question>{
         put(KEY_HELP_TYPE, helpType);
     }
 
+    public boolean isPrivate() {
+       return getBoolean(KEY_IS_PRIVATE);
+    }
+
+    public void setIsPrivate(boolean isPrivate) {
+        put(KEY_IS_PRIVATE, isPrivate);
+    }
+
     // Get the date that this question is asked.
     public String getDate() {
         String strDate = "";
@@ -106,13 +115,20 @@ public class Question extends ParseObject implements Comparable<Question>{
         return strDate;
     }
 
+    public String getCreatedTimeAgo() {
+        return getRelativeTimeAgo(this.getCreatedAt().getTime());
+    }
+
+    public String getAnsweredTimeAgo() {
+        return getRelativeTimeAgo(this.getAnsweredAt().getTime());
+    }
+
     // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
-    public String getRelativeTimeAgo() {
+    public String getRelativeTimeAgo(long dateMillis) {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         sf.setLenient(true);
 
         String relativeDate = "";
-        long dateMillis = this.getCreatedAt().getTime();
         relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
                 System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
 

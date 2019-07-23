@@ -1,9 +1,9 @@
 package com.example.helpq.view;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
@@ -30,6 +31,7 @@ public class AnswerQuestionFragment extends DialogFragment {
     private TextView tvStudent;
     private TextView tvDescription;
     private EditText etAnswer;
+    private ToggleButton tbPrivate;
     private Button btnSubmit;
 
     public static AnswerQuestionFragment newInstance(Question question) {
@@ -59,6 +61,7 @@ public class AnswerQuestionFragment extends DialogFragment {
         tvDescription = view.findViewById(R.id.tvQuestion);
         etAnswer = view.findViewById(R.id.etAnswer);
         btnSubmit = view.findViewById(R.id.btnSubmit);
+        tbPrivate = view.findViewById(R.id.tbPrivate);
 
         // Show soft keyboard automatically and request focus to text
         etAnswer.requestFocus();
@@ -83,6 +86,7 @@ public class AnswerQuestionFragment extends DialogFragment {
                     mQuestion.setAnswer(etAnswer.getText().toString());
                     mQuestion.setAnsweredAt(new Date(System.currentTimeMillis()));
                     mQuestion.setIsArchived(true);
+                    mQuestion.setIsPrivate(tbPrivate.isChecked());
                     mQuestion.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {

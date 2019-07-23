@@ -1,9 +1,9 @@
 package com.example.helpq.controller;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.RecyclerView;
+import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -115,7 +115,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
             tvHelpEmoji = itemView.findViewById(R.id.tvHelpEmoji);
             tvDescription = itemView.findViewById(R.id.tvQuestion);
-            tvStartTime = itemView.findViewById(R.id.tvStartTime);
+            tvStartTime = itemView.findViewById(R.id.tvAnswerTime);
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -176,7 +176,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvStudentName.setText(question.getAsker().getString(Question.KEY_FULL_NAME));
             tvPriorityEmoji.setText(question.getPriority());
             tvDescription.setText(question.getText());
-            tvStartTime.setText(question.getRelativeTimeAgo());
+            tvStartTime.setText(question.getCreatedTimeAgo());
 
             String helpType = question.getHelpType();
             if (helpType.equals(mContext.getResources().getString(R.string.in_person))) {
