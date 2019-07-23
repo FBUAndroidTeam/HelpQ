@@ -31,7 +31,6 @@ public class StudentWorkshopFragment extends Fragment {
     private List<Workshop> mWorkshops;
     private SwipeRefreshLayout swipeContainer;
 
-
     public static StudentWorkshopFragment newInstance() {
         return new StudentWorkshopFragment();
     }
@@ -82,8 +81,7 @@ public class StudentWorkshopFragment extends Fragment {
         queryWorkshops();
         swipeContainer.setRefreshing(false);
     }
-
-
+    
     private void queryWorkshops() {
         ParseQuery<Workshop> workshopQuery = ParseQuery.getQuery("Workshop");
         workshopQuery.include("creator");
