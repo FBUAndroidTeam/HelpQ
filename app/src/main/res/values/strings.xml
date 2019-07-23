@@ -30,7 +30,7 @@
     <string name="edge_case_wrong_date_workshop">This date has already passed.</string>
     <string name="edge_case_empty_username">Please enter a username.</string>
     <string name="edge_case_empty_password">Please enter a password.</string>
-    <string name="edge_case_invalid_user">The user does not exist.</string>
+    <string name="edge_case_invalid_user">Incorrect username or password.</string>
     <string name="error_with_query">error with query</string>
     <string name="edge_case_empty_name">Please enter your full name.</string>
     <string name="edge_case_invalid_admin">This admin does not exist.</string>
