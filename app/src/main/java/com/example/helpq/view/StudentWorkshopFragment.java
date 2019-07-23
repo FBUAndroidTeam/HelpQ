@@ -81,7 +81,7 @@ public class StudentWorkshopFragment extends Fragment {
         queryWorkshops();
         swipeContainer.setRefreshing(false);
     }
-    
+
     private void queryWorkshops() {
         ParseQuery<Workshop> workshopQuery = ParseQuery.getQuery("Workshop");
         workshopQuery.include("creator");
