@@ -99,9 +99,11 @@ public class StudentWorkshopAdapter extends
         private void setAttendeeText(Workshop workshop) {
             final JSONArray attendees = workshop.getAttendees();
             if(attendees.length() == 1) {
-                tvWorkshopAttendanceCount.setText(attendees.length() + R.string.attendee);
+                tvWorkshopAttendanceCount.setText(attendees.length() + " " +
+                        mContext.getResources().getString(R.string.attendee));
             } else {
-                tvWorkshopAttendanceCount.setText(attendees.length() + R.string.attendees);
+                tvWorkshopAttendanceCount.setText(attendees.length() + " " +
+                        mContext.getResources().getString(R.string.attendees));
             }
         }
 
@@ -109,6 +111,7 @@ public class StudentWorkshopAdapter extends
             tvWorkshopName.setText(workshop.getTitle());
             tvWorkshopDate.setText(workshop.getDate());
             tvWorkshopLocation.setText(workshop.getLocation());
+            boolean signedUp = buttonText(workshop);
             setAttendeeText(workshop);
 
 
