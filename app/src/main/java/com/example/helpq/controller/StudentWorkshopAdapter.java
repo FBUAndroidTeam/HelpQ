@@ -1,9 +1,9 @@
 package com.example.helpq.controller;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +13,8 @@ import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Workshop;
-import com.parse.Parse;
-import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import java.util.List;

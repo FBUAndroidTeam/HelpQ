@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "275992052008",
+    "firebase_url": "https://helpq-588c8.firebaseio.com",
+    "project_id": "helpq-588c8",
+    "storage_bucket": "helpq-588c8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275992052008:android:ad260515f11ffac6",
+        "android_client_info": {
+          "package_name": "com.example.helpq"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "275992052008-21l95kj5620pj204gjabaed1ogr38p0n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRwuf01NiEhBMIidEr3_rdp41pN1WaTrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "275992052008-21l95kj5620pj204gjabaed1ogr38p0n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
