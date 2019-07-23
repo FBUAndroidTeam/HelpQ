@@ -15,17 +15,18 @@ import java.util.Locale;
 @ParseClassName("Question")
 public class Question extends ParseObject implements Comparable<Question>{
 
-    public static final String KEY_TEXT = "questionText";
+    private static final String KEY_TEXT = "questionText";
+    private static final String KEY_PRIORITY = "priorityEmoji";
     public static final String KEY_ASKER = "student";
-    public static final String KEY_PRIORITY = "priorityEmoji";
     public static final String KEY_ARCHIVED = "isArchived";
     public static final String KEY_HELP_TYPE = "helpType";
     public static final String KEY_FULL_NAME = "fullName";
     public static final String KEY_CREATED_AT = "createdAt";
 
-    //stretch keys
+    // Stretch keys
     private static final String KEY_ANSWER = "answerText";
     private static final String KEY_ANSWERED_AT = "answeredAt";
+    public static final String KEY_IS_PUBLIC = "isPublic";
 
     public String getText() {
         return getString(KEY_TEXT);
@@ -59,7 +60,7 @@ public class Question extends ParseObject implements Comparable<Question>{
         put(KEY_ARCHIVED, archived);
     }
 
-    //stretch getters/setters
+    // Stretch getters/setters
     public String getAnswer() {
         return getString(KEY_ANSWER);
     }
@@ -82,6 +83,14 @@ public class Question extends ParseObject implements Comparable<Question>{
 
     public void setHelpType(String helpType) {
         put(KEY_HELP_TYPE, helpType);
+    }
+
+    public boolean isPublic() {
+       return getBoolean(KEY_IS_PUBLIC);
+    }
+
+    public void setIsPublic(boolean isPublic) {
+        put(KEY_IS_PUBLIC, isPublic);
     }
 
     // Get the date that this question is asked.

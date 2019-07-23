@@ -2,7 +2,6 @@ package com.example.helpq.view;
 
 import android.util.Log;
 
-import com.example.helpq.R;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
 import com.parse.FindCallback;
@@ -20,13 +19,12 @@ public class StudentBoardFragment extends StudentInboxFragment {
         return new StudentBoardFragment();
     }
 
-    // Query for messages intended for all students
+    // Query for public messages intended for all students
     protected void queryMessages() {
         final ParseQuery<Question> messageQuery = new ParseQuery<Question>(Question.class);
         messageQuery.include(Question.KEY_ASKER)
-                .whereEqualTo(Question.KEY_HELP_TYPE,
-                        getContext().getResources().getString(R.string.written))
                 .whereEqualTo(Question.KEY_ARCHIVED, true)
+                .whereEqualTo(Question.KEY_IS_PUBLIC, true)
                 .orderByDescending(Question.KEY_CREATED_AT);
 
         messageQuery.findInBackground(new FindCallback<Question>() {
