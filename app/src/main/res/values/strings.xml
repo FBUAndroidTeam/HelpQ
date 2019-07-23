@@ -37,4 +37,5 @@
     <string name="edge_case_invalid_username">This user already exists.</string>
     <string name="select_admin">Please select an admin</string>
     <string name="username_taken">username already taken</string>
+    <string name="profile_tab">Profile</string>
 </resources>
