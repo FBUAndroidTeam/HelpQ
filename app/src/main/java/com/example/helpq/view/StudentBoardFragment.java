@@ -42,10 +42,10 @@ public class StudentBoardFragment extends StudentInboxFragment {
                 for (Question question : objects) {
                     // Admin of current user
                     String userAdmin = User.getAdminName(ParseUser.getCurrentUser());
-
                     // Admin of asker
                     String askerAdmin = User.getAdminName(question.getAsker());
-                    if (askerAdmin.equals(userAdmin)) {
+
+                    if (askerAdmin.equals(userAdmin) && question.getAnswer() != null) {
                         mMessages.add(question);
                     }
                 }

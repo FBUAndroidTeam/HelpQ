@@ -71,7 +71,12 @@ public class StudentInboxFragment extends Fragment {
                     e.printStackTrace();
                     return;
                 }
-                mAdapter.addAll(objects);
+                for (Question question : objects) {
+                    if (question.getAnswer() != null) {
+                        mMessages.add(question);
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
             }
         });
     }
