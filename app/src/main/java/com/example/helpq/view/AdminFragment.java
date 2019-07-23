@@ -19,7 +19,6 @@ public class AdminFragment extends Fragment {
     public static final String TAG = "AdminFragment";
     private FragmentPagerAdapter mAdapterViewPager;
 
-
     public static AdminFragment newInstance() {
         return new AdminFragment();
     }

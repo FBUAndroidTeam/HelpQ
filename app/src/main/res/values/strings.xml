@@ -3,8 +3,8 @@
     <string name="queue_tab">Queue</string>
     <string name="enrolled_tab">Students</string>
     <string name="workshops_tab">Workshops</string>
-    <string name="student_inbox_tab">Inbox</string>
-    <string name="student_board_tab">Board</string>
+    <string name="inbox_tab">Inbox</string>
+    <string name="board_tab">Board</string>
     <string name="PRIORITY_BLOCKING">🛑</string>
     <string name="PRIORITY_STRETCH">🚀</string>
     <string name="PRIORITY_CURIOSITY">🔍</string>

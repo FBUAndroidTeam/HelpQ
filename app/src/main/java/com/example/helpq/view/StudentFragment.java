@@ -1,13 +1,14 @@
 package com.example.helpq.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,7 +17,7 @@ import com.example.helpq.R;
 public class StudentFragment extends Fragment {
 
     public static final String TAG = "StudentFragment";
-    private FragmentManager fragmentManager;
+    private FragmentPagerAdapter mAdapterViewPager;
 
     public static StudentFragment newInstance() {
         return new StudentFragment();
@@ -32,78 +33,59 @@ public class StudentFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        fragmentManager = getFragmentManager();
-        BottomNavigationView navigationView =
-                (BottomNavigationView) view.findViewById(R.id.top_navigation);
-
-        // Set top menu to navigate between "Queue" and "Students" tabs
-        navigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_view_queue:
-                        setFragment(StudentQueueFragment.newInstance(),
-                                new String[]{StudentQueueFragment.TAG,
-                                        StudentWorkshopFragment.TAG,
-                                        StudentInboxFragment.TAG,
-                                        StudentBoardFragment.TAG,});
-                        return true;
-                    case R.id.action_view_workshops:
-                        setFragment(StudentWorkshopFragment.newInstance(),
-                                new String[]{StudentWorkshopFragment.TAG,
-                                        StudentQueueFragment.TAG,
-                                        StudentInboxFragment.TAG,
-                                        StudentBoardFragment.TAG,});
-                        return true;
-                    case R.id.action_view_inbox:
-                        setFragment(StudentInboxFragment.newInstance(),
-                                new String[]{StudentInboxFragment.TAG,
-                                        StudentWorkshopFragment.TAG,
-                                        StudentQueueFragment.TAG,
-                                        StudentBoardFragment.TAG,});
-                        return true;
-                    case R.id.action_view_board:
-                        setFragment(StudentBoardFragment.newInstance(),
-                                new String[]{StudentBoardFragment.TAG,
-                                        StudentInboxFragment.TAG,
-                                        StudentWorkshopFragment.TAG,
-                                        StudentQueueFragment.TAG});
-                        return true;
-                    default:
-                        return true;
-                }
-            }
-        });
-        navigationView.setSelectedItemId(R.id.action_view_queue);
+        ViewPager vpPager = (ViewPager) view.findViewById(R.id.vpPager);
+        mAdapterViewPager = new StudentPagerAdapter(getFragmentManager(), getContext());
+        vpPager.setAdapter(mAdapterViewPager);
     }
 
-    // Show/add the given fragment with tag stored in tags[0], and hide fragments
-    // with all other tags.
-    public void setFragment(Fragment fragment, String[] tags) {
+    public static class StudentPagerAdapter extends FragmentPagerAdapter {
 
-        if (fragmentManager.findFragmentByTag(tags[0]) != null) {
-            // if the fragment exists, show it.
-            fragmentManager
-                    .beginTransaction()
-                    .show(fragmentManager.findFragmentByTag(tags[0]))
-                    .commit();
-        } else {
-            // if the fragment does not exist, add it to fragment manager.
-            fragmentManager
-                    .beginTransaction()
-                    .add(R.id.flStudentContainer, fragment, tags[0])
-                    .commit();
+        // Number of pages
+        private static int NUM_ITEMS = 4;
+        private Context mContext;
+
+        public StudentPagerAdapter(FragmentManager fm, Context context) {
+            super(fm);
+            mContext = context;
         }
 
-        for (int i = 1; i < tags.length; i++) {
-            if(fragmentManager.findFragmentByTag(tags[i]) != null) {
-                //if the other fragment is visible, hide it.
-                fragmentManager
-                        .beginTransaction()
-                        .hide(fragmentManager.findFragmentByTag(tags[i]))
-                        .commit();
+        // Returns total number of pages
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
+
+        // Returns the fragment to display for that page
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return StudentQueueFragment.newInstance();
+                case 1:
+                    return StudentWorkshopFragment.newInstance();
+                case 2:
+                    return StudentInboxFragment.newInstance();
+                case 3:
+                    return StudentBoardFragment.newInstance();
+                default:
+                    return null;
+            }
+        }
+
+        // Returns the page title for the top indicator
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return mContext.getResources().getString(R.string.queue_tab);
+                case 1:
+                    return mContext.getResources().getString(R.string.workshops_tab);
+                case 2:
+                    return mContext.getResources().getString(R.string.inbox_tab);
+                case 3:
+                    return mContext.getResources().getString(R.string.board_tab);
+                default:
+                    return null;
             }
         }
     }
