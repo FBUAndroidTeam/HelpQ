@@ -120,7 +120,8 @@ public class Question extends ParseObject implements Comparable<Question>{
     }
 
     public String getAnsweredTimeAgo() {
-        return getRelativeTimeAgo(this.getAnsweredAt().getTime());
+        //Date date = this.getAnsweredAt();
+        return getRelativeTimeAgo(this.getCreatedAt().getTime());
     }
 
     // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
