@@ -35,5 +35,6 @@
     <string name="edge_case_empty_name">Please enter your full name.</string>
     <string name="edge_case_invalid_admin">This admin does not exist.</string>
     <string name="edge_case_invalid_username">This user already exists.</string>
-
+    <string name="select_admin">Please select an admin</string>
+    <string name="username_taken">username already taken</string>
 </resources>

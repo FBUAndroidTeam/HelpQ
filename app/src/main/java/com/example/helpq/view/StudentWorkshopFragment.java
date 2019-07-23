@@ -22,6 +22,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class StudentWorkshopFragment extends Fragment {
@@ -85,6 +86,8 @@ public class StudentWorkshopFragment extends Fragment {
     private void queryWorkshops() {
         ParseQuery<Workshop> workshopQuery = ParseQuery.getQuery("Workshop");
         workshopQuery.include("creator");
+        workshopQuery.addAscendingOrder("startTime");
+        workshopQuery.whereGreaterThan("startTime", new Date(System.currentTimeMillis()));
         workshopQuery.findInBackground(new FindCallback<Workshop>() {
             @Override
             public void done(List<Workshop> objects, ParseException e) {

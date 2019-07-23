@@ -25,6 +25,9 @@ import com.parse.SaveCallback;
 public class CreateQuestionFragment extends DialogFragment {
 
     public static final String TAG = "CreateQuestionFragment";
+    private static final String KEY_TITLE = "title";
+    private static final String DEFAULT_TITLE = "New Question";
+
     private EditText etQuestion;
 
     // ToggleButtons for priority selection
@@ -43,7 +46,7 @@ public class CreateQuestionFragment extends DialogFragment {
     public static CreateQuestionFragment newInstance(String title) {
         CreateQuestionFragment frag = new CreateQuestionFragment();
         Bundle args = new Bundle();
-        args.putString("title", title);
+        args.putString(KEY_TITLE, title);
         frag.setArguments(args);
         return frag;
     }
@@ -71,7 +74,7 @@ public class CreateQuestionFragment extends DialogFragment {
         btnSubmit = view.findViewById(R.id.btnSubmit);
 
         // Fetch arguments from bundle and set title
-        String title = getArguments().getString("title", "New Question");
+        String title = getArguments().getString(KEY_TITLE, DEFAULT_TITLE);
         getDialog().setTitle(title);
         // Show soft keyboard automatically and request focus to text
         etQuestion.requestFocus();
