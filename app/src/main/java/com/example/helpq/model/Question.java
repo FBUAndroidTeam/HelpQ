@@ -25,7 +25,7 @@ public class Question extends ParseObject implements Comparable<Question>{
 
     // Stretch keys
     private static final String KEY_ANSWER = "answerText";
-    private static final String KEY_ANSWERED_AT = "answeredAt";
+    public static final String KEY_ANSWERED_AT = "answeredAt";
     public static final String KEY_IS_PRIVATE = "isPrivate";
 
     public String getText() {
@@ -115,13 +115,20 @@ public class Question extends ParseObject implements Comparable<Question>{
         return strDate;
     }
 
+    public String getCreatedTimeAgo() {
+        return getRelativeTimeAgo(this.getCreatedAt().getTime());
+    }
+
+    public String getAnsweredTimeAgo() {
+        return getRelativeTimeAgo(this.getAnsweredAt().getTime());
+    }
+
     // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
-    public String getRelativeTimeAgo() {
+    public String getRelativeTimeAgo(long dateMillis) {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         sf.setLenient(true);
 
         String relativeDate = "";
-        long dateMillis = this.getCreatedAt().getTime();
         relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
                 System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
 

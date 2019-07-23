@@ -56,7 +56,7 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
             super(itemView);
             tvAttendees = itemView.findViewById(R.id.tvAttendees);
             tvLocation = itemView.findViewById(R.id.tvLocation);
-            tvStartTime = itemView.findViewById(R.id.tvStartTime);
+            tvStartTime = itemView.findViewById(R.id.tvAnswerTime);
             tvTitle = itemView.findViewById(R.id.tvTitle);
         }
 

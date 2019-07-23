@@ -61,7 +61,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         // Layout fields of item_message
         private TextView tvQuestion;
         private TextView tvPriorityEmoji;
-        private TextView tvStartTime;
+        private TextView tvAnswerTime;
         private TextView tvAdminName;
         private TextView tvAnswer;
 
@@ -69,7 +69,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             super(itemView);
             tvQuestion = itemView.findViewById(R.id.tvQuestion);
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
-            tvStartTime = itemView.findViewById(R.id.tvStartTime);
+            tvAnswerTime = itemView.findViewById(R.id.tvAnswerTime);
             tvAdminName = itemView.findViewById(R.id.tvAdminName);
             tvAnswer = itemView.findViewById(R.id.tvAnswer);
         }
@@ -78,7 +78,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         public void bind(Question message) {
             tvPriorityEmoji.setText(message.getPriority());
             tvQuestion.setText(message.getText());
-            tvStartTime.setText(message.getRelativeTimeAgo());
+            tvAnswerTime.setText(message.getAnsweredTimeAgo());
             tvAdminName.setText(User.getAdminName(ParseUser.getCurrentUser()) + "'s answer");
             tvAnswer.setText(message.getAnswer());
         }

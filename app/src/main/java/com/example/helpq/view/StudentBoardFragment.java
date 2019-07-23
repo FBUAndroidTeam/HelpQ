@@ -28,7 +28,7 @@ public class StudentBoardFragment extends StudentInboxFragment {
                 .whereEqualTo(Question.KEY_IS_PRIVATE, false)
                 .whereEqualTo(Question.KEY_HELP_TYPE,
                         getContext().getResources().getString(R.string.written))
-                .orderByDescending(Question.KEY_CREATED_AT);
+                .orderByDescending(Question.KEY_ANSWERED_AT);
 
         messageQuery.findInBackground(new FindCallback<Question>() {
             @Override
