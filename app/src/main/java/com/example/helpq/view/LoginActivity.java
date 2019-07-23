@@ -34,6 +34,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Allow user to persist between app restarts
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            // do stuff with the user
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         etPassword = findViewById(R.id.etPassword);
         etUsername = findViewById(R.id.etUsername);
         btnAdmin = findViewById(R.id.btnAdmin);
@@ -41,14 +50,6 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
         btnSubmit();
         startRegistrationActivity();
-
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser != null) {
-            // do stuff with the user
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
-
     }
 
     //launches registration page for new users
@@ -94,9 +95,6 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(LoginActivity.this,
                             MainActivity.class));
                     finish(); // finishes login so user cannot press back button to go back to login
-                } else {
-                    Toast.makeText(LoginActivity.this, "Invalid username/password",
-                            Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -107,13 +105,13 @@ public class LoginActivity extends AppCompatActivity {
                                  final boolean isAdmin) {
         if(username.isEmpty()){
             Toast.makeText(LoginActivity.this,
-                    "Please enter a username.",
+                    R.string.edge_case_empty_username,
                     Toast.LENGTH_LONG).show();
             return;
         }
         if(password.isEmpty()){
             Toast.makeText(LoginActivity.this,
-                    "Please enter a password.",
+                    R.string.edge_case_empty_password,
                     Toast.LENGTH_LONG).show();
             return;
         }
@@ -132,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
                 Toast.makeText(LoginActivity.this,
-                        "The user does not exist.",
+                        R.string.edge_case_invalid_user,
                         Toast.LENGTH_LONG).show();
 
             }

@@ -158,17 +158,17 @@ public class CreateQuestionFragment extends DialogFragment {
             public void onClick(View v) {
                 if (etQuestion.getText().toString().isEmpty()) {
                     Toast.makeText(getContext(),
-                            "Please enter a question.", //put texts of toasts in string.xml
+                            R.string.edge_case_enter_question,
                             Toast.LENGTH_LONG).show();
                     return;
                 } else if (togglePrioritySelected == null) {
                     Toast.makeText(getContext(),
-                            "Please select type of priority.",
+                            R.string.edge_case_enter_priority,
                             Toast.LENGTH_LONG).show();
                     return;
                 } else if (toggleHelpSelected == null) {
                     Toast.makeText(getContext(),
-                            "Please select type of help.",
+                            R.string.edge_case_enter_type_of_help,
                             Toast.LENGTH_LONG).show();
                 } else {
                     submitQuestion();

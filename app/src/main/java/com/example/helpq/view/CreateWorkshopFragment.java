@@ -90,7 +90,7 @@ public class CreateWorkshopFragment extends DialogFragment {
                         !etLocation.getText().toString().isEmpty()) {
                     createWorkshop();
                 } else {
-                    Toast.makeText(getContext(), "Please enter a title and/or location",
+                    Toast.makeText(getContext(), R.string.edge_case_enter_location,
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -114,7 +114,7 @@ public class CreateWorkshopFragment extends DialogFragment {
                         DialogDismissListener listener =
                                 (DialogDismissListener) getTargetFragment();
                         Toast.makeText(getContext(),
-                                "Workshop created",
+                                R.string.success_create_workshop,
                                 Toast.LENGTH_LONG).show();
                         listener.onDismiss();
                         dismiss();
@@ -125,7 +125,7 @@ public class CreateWorkshopFragment extends DialogFragment {
                 }
             });
         } else {
-            Toast.makeText(getContext(), "ERROR: This date has already passed",
+            Toast.makeText(getContext(), R.string.edge_case_wrong_date_workshop,
                     Toast.LENGTH_LONG).show();
         }
     }

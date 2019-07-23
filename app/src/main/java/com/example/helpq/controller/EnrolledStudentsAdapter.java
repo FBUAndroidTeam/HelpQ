@@ -47,7 +47,6 @@ public class EnrolledStudentsAdapter extends
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvEnrolledStudent = itemView.findViewById(R.id.tvEnrolledStudent);
-//            tvEnrolledStudent.setText("hello world");
         }
 
         public void bind(String student) {

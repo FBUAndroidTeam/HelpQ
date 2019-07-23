@@ -45,7 +45,6 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
         return inflater.inflate(R.layout.fragment_admin_workshop, parent, false);
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         rvAdminWorkshops = view.findViewById(R.id.rvAdminWorkshops);

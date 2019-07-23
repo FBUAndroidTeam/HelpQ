@@ -81,15 +81,15 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
         final String username = etNewUsername.getText().toString();
         final String password = etNewPassword.getText().toString();
         if (username.isEmpty()) {
-            Toast.makeText(getContext(), R.string.username_enter, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.edge_case_empty_username, Toast.LENGTH_LONG).show();
             return;
         }
         else if (password.isEmpty()) {
-            Toast.makeText(getContext(), R.string.password_enter, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.edge_case_empty_password, Toast.LENGTH_LONG).show();
             return;
         }
         else if (etFullName.getText().toString().isEmpty()) {
-            Toast.makeText(getContext(), R.string.full_name_enter,
+            Toast.makeText(getContext(), R.string.edge_case_empty_name,
                     Toast.LENGTH_LONG).show();
             return;
         } else {
