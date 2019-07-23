@@ -66,7 +66,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/tvStartTime"
+        android:id="@+id/tvAnswerTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -95,6 +95,6 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvStartTime"
+        app:layout_constraintTop_toBottomOf="@+id/tvAnswerTime"
         app:layout_constraintVertical_bias="0.0" />
 </android.support.constraint.ConstraintLayout>

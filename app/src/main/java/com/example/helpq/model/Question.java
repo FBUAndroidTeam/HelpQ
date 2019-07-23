@@ -25,8 +25,8 @@ public class Question extends ParseObject implements Comparable<Question>{
 
     // Stretch keys
     private static final String KEY_ANSWER = "answerText";
-    private static final String KEY_ANSWERED_AT = "answeredAt";
-    public static final String KEY_IS_PUBLIC = "isPublic";
+    public static final String KEY_ANSWERED_AT = "answeredAt";
+    public static final String KEY_IS_PRIVATE = "isPrivate";
 
     public String getText() {
         return getString(KEY_TEXT);
@@ -85,12 +85,12 @@ public class Question extends ParseObject implements Comparable<Question>{
         put(KEY_HELP_TYPE, helpType);
     }
 
-    public boolean isPublic() {
-       return getBoolean(KEY_IS_PUBLIC);
+    public boolean isPrivate() {
+       return getBoolean(KEY_IS_PRIVATE);
     }
 
-    public void setIsPublic(boolean isPublic) {
-        put(KEY_IS_PUBLIC, isPublic);
+    public void setIsPrivate(boolean isPrivate) {
+        put(KEY_IS_PRIVATE, isPrivate);
     }
 
     // Get the date that this question is asked.
@@ -115,13 +115,20 @@ public class Question extends ParseObject implements Comparable<Question>{
         return strDate;
     }
 
+    public String getCreatedTimeAgo() {
+        return getRelativeTimeAgo(this.getCreatedAt().getTime());
+    }
+
+    public String getAnsweredTimeAgo() {
+        return getRelativeTimeAgo(this.getAnsweredAt().getTime());
+    }
+
     // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
-    public String getRelativeTimeAgo() {
+    public String getRelativeTimeAgo(long dateMillis) {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         sf.setLenient(true);
 
         String relativeDate = "";
-        long dateMillis = this.getCreatedAt().getTime();
         relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
                 System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
 
