@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.helpq.R;
-import com.example.helpq.model.User;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -25,8 +24,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText etUsername;
     private EditText etPassword;
-    private Button btnAdmin;
-    private Button btnStudent;
+    private Button btnLogin;
     private Button btnRegister;
 
     @Override
@@ -45,8 +43,7 @@ public class LoginActivity extends AppCompatActivity {
 
         etPassword = findViewById(R.id.etPassword);
         etUsername = findViewById(R.id.etUsername);
-        btnAdmin = findViewById(R.id.btnAdmin);
-        btnStudent = findViewById(R.id.btnStudent);
+        btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
         btnSubmit();
         startRegistrationActivity();
@@ -66,21 +63,12 @@ public class LoginActivity extends AppCompatActivity {
 
     //handles onclick listeners for login
     private void btnSubmit() {
-        btnStudent.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String username = etUsername.getText().toString();
                 final String password = etPassword.getText().toString();
-                queryValidUsers(username, password, false);
-            }
-        });
-
-        btnAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String username = etUsername.getText().toString();
-                final String password = etPassword.getText().toString();
-                queryValidUsers(username, password, true);
+                queryValidUsers(username, password);
             }
         });
     }
@@ -101,8 +89,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //checks backend if such user exists
-    private void queryValidUsers(final String username, final String password,
-                                 final boolean isAdmin) {
+    private void queryValidUsers(final String username, final String password) {
         if(username.isEmpty()){
             Toast.makeText(LoginActivity.this,
                     R.string.edge_case_empty_username,
@@ -116,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo(User.KEY_IS_ADMIN, isAdmin);
+        query.whereEqualTo("username", username);
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {

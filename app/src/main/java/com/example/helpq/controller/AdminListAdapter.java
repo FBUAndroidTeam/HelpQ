@@ -22,6 +22,7 @@ public class AdminListAdapter extends RecyclerView.Adapter<AdminListAdapter.View
     private Context mContext;
     private List<ParseUser> mAdmins;
     private int selected;
+    private RadioButton lastSelected;
 
     public AdminListAdapter(Context context, List<ParseUser> admins) {
         mAdmins = admins;
@@ -62,7 +63,11 @@ public class AdminListAdapter extends RecyclerView.Adapter<AdminListAdapter.View
             rbSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(lastSelected != null) {
+                        lastSelected.setChecked(false);
+                    }
                     selected = getAdapterPosition();
+                    lastSelected = rbSelect;
                 }
             });
         }
