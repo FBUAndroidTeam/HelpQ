@@ -26,8 +26,8 @@ public class StudentInboxFragment extends Fragment {
 
     public static final String TAG = "StudentInboxFragment";
     private RecyclerView rvMessages;
-    private List<Question> mMessages;
-    private InboxAdapter mAdapter;
+    protected List<Question> mMessages;
+    protected InboxAdapter mAdapter;
 
     public static StudentInboxFragment newInstance() {
         return new StudentInboxFragment();
@@ -54,7 +54,8 @@ public class StudentInboxFragment extends Fragment {
         queryMessages();
     }
 
-    private void queryMessages() {
+    // Query for messages intended for this student (the current user)
+    protected void queryMessages() {
         final ParseQuery<Question> messageQuery = new ParseQuery<Question>(Question.class);
         messageQuery.include(Question.KEY_ASKER)
                 .whereEqualTo(Question.KEY_ASKER, ParseUser.getCurrentUser())
