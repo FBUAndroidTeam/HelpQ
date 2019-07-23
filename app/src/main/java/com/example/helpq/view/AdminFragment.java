@@ -1,5 +1,6 @@
 package com.example.helpq.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,7 +35,7 @@ public class AdminFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ViewPager vpPager = (ViewPager) view.findViewById(R.id.vpPager);
-        mAdapterViewPager = new AdminPagerAdapter(getFragmentManager());
+        mAdapterViewPager = new AdminPagerAdapter(getFragmentManager(), getContext());
         vpPager.setAdapter(mAdapterViewPager);
     }
 
@@ -42,9 +43,11 @@ public class AdminFragment extends Fragment {
 
         // Number of pages
         private static int NUM_ITEMS = 3;
+        private Context mContext;
 
-        public AdminPagerAdapter(FragmentManager fm) {
+        public AdminPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
+            mContext = context;
         }
 
         // Returns total number of pages
@@ -71,9 +74,16 @@ public class AdminFragment extends Fragment {
         // Returns the page title for the top indicator
         @Override
         public CharSequence getPageTitle(int position) {
-            return "Page " + position;
+            switch (position) {
+                case 0:
+                    return mContext.getResources().getString(R.string.queue_tab);
+                case 1:
+                    return mContext.getResources().getString(R.string.enrolled_tab);
+                case 2:
+                    return mContext.getResources().getString(R.string.workshops_tab);
+                default:
+                    return null;
+            }
         }
-
     }
-
 }
