@@ -3,11 +3,11 @@ package com.example.helpq.view;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,7 +16,8 @@ import com.example.helpq.R;
 public class AdminFragment extends Fragment {
 
     public static final String TAG = "AdminFragment";
-    private FragmentManager fragmentManager;
+    private FragmentPagerAdapter mAdapterViewPager;
+
 
     public static AdminFragment newInstance() {
         return new AdminFragment();
@@ -32,66 +33,47 @@ public class AdminFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        fragmentManager = getFragmentManager();
-        BottomNavigationView navigationView =
-                (BottomNavigationView) view.findViewById(R.id.top_navigation);
-
-        // Set top menu to navigate between "Queue" and "Students" tabs
-        navigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_view_queue:
-                        setFragment(AdminQueueFragment.newInstance(),
-                                new String[]{AdminQueueFragment.TAG, AdminEnrolledFragment.TAG,
-                                        AdminWorkshopFragment.TAG});
-                        return true;
-                    case R.id.action_view_enrolled:
-                        setFragment(AdminEnrolledFragment.newInstance(),
-                                new String[]{AdminEnrolledFragment.TAG, AdminQueueFragment.TAG,
-                                        AdminWorkshopFragment.TAG});
-                        return true;
-                    case R.id.action_view_workshopCreations:
-                        setFragment(AdminWorkshopFragment.newInstance(),
-                                new String[]{AdminWorkshopFragment.TAG, AdminEnrolledFragment.TAG,
-                                        AdminQueueFragment.TAG});
-                        return true;
-                    default:
-                        return true;
-                }
-            }
-        });
-        navigationView.setSelectedItemId(R.id.action_view_queue);
+        ViewPager vpPager = (ViewPager) view.findViewById(R.id.vpPager);
+        mAdapterViewPager = new AdminPagerAdapter(getFragmentManager());
+        vpPager.setAdapter(mAdapterViewPager);
     }
 
-    // Show/add the given fragment with tag stored in tags[0],
-    // and hide fragments with all other tags.
-    public void setFragment(Fragment fragment, String[] tags) {
+    public static class AdminPagerAdapter extends FragmentPagerAdapter {
 
-        if (fragmentManager.findFragmentByTag(tags[0]) != null) {
-            // if the fragment exists, show it.
-            fragmentManager
-                    .beginTransaction()
-                    .show(fragmentManager.findFragmentByTag(tags[0]))
-                    .commit();
-        } else {
-            // if the fragment does not exist, add it to fragment manager.
-            fragmentManager
-                    .beginTransaction()
-                    .add(R.id.flAdminContainer, fragment, tags[0])
-                    .commit();
+        // Number of pages
+        private static int NUM_ITEMS = 3;
+
+        public AdminPagerAdapter(FragmentManager fm) {
+            super(fm);
         }
 
-        for (int i = 1; i < tags.length; i++) {
-            if(fragmentManager.findFragmentByTag(tags[i]) != null) {
-                //if the other fragment is visible, hide it.
-                fragmentManager
-                        .beginTransaction()
-                        .hide(fragmentManager.findFragmentByTag(tags[i]))
-                        .commit();
+        // Returns total number of pages
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
+
+        // Returns the fragment to display for that page
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return AdminQueueFragment.newInstance();
+                case 1:
+                    return AdminEnrolledFragment.newInstance();
+                case 2:
+                    return AdminWorkshopFragment.newInstance();
+                default:
+                    return null;
             }
         }
+
+        // Returns the page title for the top indicator
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return "Page " + position;
+        }
+
     }
+
 }
