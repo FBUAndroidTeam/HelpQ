@@ -40,8 +40,7 @@ public class AdminFragment extends Fragment {
 
     public static class AdminPagerAdapter extends FragmentPagerAdapter {
 
-        // Number of pages
-        private static int NUM_ITEMS = 3;
+        private static int NUM_ITEMS = 3; // Number of pages
         private Context mContext;
 
         public AdminPagerAdapter(FragmentManager fm, Context context) {

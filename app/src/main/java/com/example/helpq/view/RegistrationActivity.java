@@ -9,16 +9,16 @@ import com.example.helpq.R;
 public class RegistrationActivity extends AppCompatActivity {
 
     private static final String TAG = "RegistrationActivity";
-    private FragmentManager fragmentManager;
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
-        fragmentManager = getSupportFragmentManager();
-        fragmentManager
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentManager
                 .beginTransaction()
-                .add(R.id.flRegistrationContainer, RegistrationFragment.newInstance(),
+                .replace(R.id.flRegistrationContainer, RegistrationFragment.newInstance(),
                         RegistrationFragment.TAG)
                 .commit();
     }

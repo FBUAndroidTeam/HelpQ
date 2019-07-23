@@ -40,8 +40,7 @@ public class StudentFragment extends Fragment {
 
     public static class StudentPagerAdapter extends FragmentPagerAdapter {
 
-        // Number of pages
-        private static int NUM_ITEMS = 4;
+        private static int NUM_ITEMS = 4; // Number of pages
         private Context mContext;
 
         public StudentPagerAdapter(FragmentManager fm, Context context) {

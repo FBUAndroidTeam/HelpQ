@@ -10,26 +10,26 @@ import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FragmentManager fragmentManager;
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragmentManager = getSupportFragmentManager();
+        mFragmentManager = getSupportFragmentManager();
 
         ParseUser user = ParseUser.getCurrentUser();
 
         if (User.isAdmin(user)) {
-            fragmentManager
+            mFragmentManager
                     .beginTransaction()
-                    .add(R.id.flMainContainer, AdminFragment.newInstance(), AdminFragment.TAG)
+                    .replace(R.id.flMainContainer, AdminFragment.newInstance(), AdminFragment.TAG)
                     .commit();
         } else {
-            fragmentManager
+            mFragmentManager
                     .beginTransaction()
-                    .add(R.id.flMainContainer, StudentFragment.newInstance(), StudentFragment.TAG)
+                    .replace(R.id.flMainContainer, StudentFragment.newInstance(), StudentFragment.TAG)
                     .commit();
         }
     }
