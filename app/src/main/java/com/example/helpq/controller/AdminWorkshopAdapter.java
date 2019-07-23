@@ -1,12 +1,13 @@
 package com.example.helpq.controller;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Workshop;
@@ -66,9 +67,11 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
             tvLocation.setText("Where: " + workshop.getLocation());
             int attendees = workshop.getAttendees().length();
             if (attendees == 1) {
-                tvAttendees.setText(attendees + R.string.attendee);
+                tvAttendees.setText(attendees + " " +
+                        mContext.getResources().getString(R.string.attendee));
             } else {
-                tvAttendees.setText(attendees + R.string.attendees);
+                tvAttendees.setText(attendees + " " +
+                        mContext.getResources().getString(R.string.attendees));
             }
         }
     }

@@ -105,7 +105,7 @@ public class CreateWorkshopFragment extends DialogFragment {
         workshop.setLocation(etLocation.getText().toString());
         workshop.setCreator(ParseUser.getCurrentUser());
         workshop.setTitle(etTitle.getText().toString());
-        workshop.setStartTime(getStartTime());
+        workshop.setStartTime(createStartTimeDate());
         Date currTime = new Date(System.currentTimeMillis());
         if(currTime.compareTo(workshop.getStartTime()) < 0) {
             workshop.saveInBackground(new SaveCallback() {
@@ -131,7 +131,8 @@ public class CreateWorkshopFragment extends DialogFragment {
         }
     }
 
-    private Date getStartTime() {
+
+    private Date createStartTimeDate() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, mYear);
         cal.set(Calendar.MONTH, mMonth);

@@ -1,9 +1,6 @@
 package com.example.helpq.controller;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +8,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.helpq.R;
 import com.example.helpq.model.Workshop;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+
 import java.util.List;
 
 public class StudentWorkshopAdapter extends
@@ -97,9 +98,11 @@ public class StudentWorkshopAdapter extends
         private void setAttendeeText(Workshop workshop) {
             final JSONArray attendees = workshop.getAttendees();
             if(attendees.length() == 1) {
-                tvWorkshopAttendanceCount.setText(attendees.length() + R.string.attendee);
+                tvWorkshopAttendanceCount.setText(attendees.length() + " " +
+                        mContext.getResources().getString(R.string.attendee));
             } else {
-                tvWorkshopAttendanceCount.setText(attendees.length() + R.string.attendees);
+                tvWorkshopAttendanceCount.setText(attendees.length() + " " +
+                        mContext.getResources().getString(R.string.attendees));
             }
         }
 
