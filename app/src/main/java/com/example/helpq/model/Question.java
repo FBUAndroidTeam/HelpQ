@@ -26,7 +26,7 @@ public class Question extends ParseObject implements Comparable<Question>{
     // Stretch keys
     private static final String KEY_ANSWER = "answerText";
     private static final String KEY_ANSWERED_AT = "answeredAt";
-    public static final String KEY_IS_PUBLIC = "isPublic";
+    public static final String KEY_IS_PRIVATE = "isPrivate";
 
     public String getText() {
         return getString(KEY_TEXT);
@@ -85,12 +85,12 @@ public class Question extends ParseObject implements Comparable<Question>{
         put(KEY_HELP_TYPE, helpType);
     }
 
-    public boolean isPublic() {
-       return getBoolean(KEY_IS_PUBLIC);
+    public boolean isPrivate() {
+       return getBoolean(KEY_IS_PRIVATE);
     }
 
-    public void setIsPublic(boolean isPublic) {
-        put(KEY_IS_PUBLIC, isPublic);
+    public void setIsPrivate(boolean isPrivate) {
+        put(KEY_IS_PRIVATE, isPrivate);
     }
 
     // Get the date that this question is asked.
