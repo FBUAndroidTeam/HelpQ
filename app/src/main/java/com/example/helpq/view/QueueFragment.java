@@ -1,6 +1,5 @@
 package com.example.helpq.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -67,7 +66,6 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvQuestions.setLayoutManager(layoutManager);
 
-        setupLogout(view);
         setupWaitTimeCalculation(view);
         queryQuestions();
         setupSwipeRefreshing(view);
@@ -117,20 +115,6 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                 tvBlockingWaitTime.setText(calculator.getBlockingWaitTime());
                 tvStretchWaitTime.setText(calculator.getStretchWaitTime());
                 tvCuriosityWaitTime.setText(calculator.getCuriosityWaitTime());
-            }
-        });
-    }
-
-    // Handle logic for logging out.
-    private void setupLogout(@NonNull View view) {
-        btLogout = view.findViewById(R.id.btLogoutButt);
-        btLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParseUser.logOut();
-                Intent intent = new Intent(getContext(), LoginActivity.class);
-                startActivity(intent);
-                ((MainActivity) getActivity()).finish();
             }
         });
     }

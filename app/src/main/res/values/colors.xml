@@ -6,4 +6,8 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorPeach">#FFEFD5</color>
     <color name="colorSalmon">#FFA07A</color>
+    <color name="colorBlue">#0094C6</color>
+    <color name="colorGray">#A1C6EA</color>
+    <color name="colorLilac">#7F99FF</color>
+    <color name="colorGreen">#BAF2BB</color>
 </resources>
