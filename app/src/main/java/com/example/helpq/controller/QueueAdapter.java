@@ -19,6 +19,7 @@ import com.example.helpq.model.User;
 import com.example.helpq.view.AnswerQuestionFragment;
 import com.example.helpq.view.CreateQuestionFragment;
 import com.example.helpq.view.MainActivity;
+import com.example.helpq.view.QueueFragment;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -32,11 +33,13 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     private static final String TAG = "QueueAdapter";
     private Context mContext;
     private List<Question> mQuestions;
+    private QueueFragment mQueueFragment;
 
     // Constructor
-    public QueueAdapter(Context context, List<Question> questions) {
-        this.mContext = context;
-        this.mQuestions = questions;
+    public QueueAdapter(Context context, List<Question> questions, QueueFragment fragment) {
+        mContext = context;
+        mQuestions = questions;
+        mQueueFragment = fragment;
     }
 
     @NonNull
@@ -75,6 +78,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         if (question.getHelpType()
                 .equals(mContext.getResources().getString(R.string.written))) {
             AnswerQuestionFragment fragment = AnswerQuestionFragment.newInstance(question);
+            fragment.setTargetFragment(mQueueFragment, 300);
             FragmentManager manager = ((MainActivity) mContext).getSupportFragmentManager();
             fragment.show(manager, CreateQuestionFragment.TAG);
         } else {
@@ -84,7 +88,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     }
 
     // Archives this question
-    private void archiveQuestion(int adapterPosition) {
+    private void archiveQuestion(final int adapterPosition) {
         Question question = mQuestions.get(adapterPosition);
         question.setIsArchived(true);
         question.setAnsweredAt(new Date(System.currentTimeMillis()));
@@ -93,12 +97,20 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             public void done(ParseException e) {
                 if(e == null) {
                     Toast.makeText(mContext, R.string.archive_question, Toast.LENGTH_LONG).show();
+                    removeAt(adapterPosition);
                 } else {
                     Log.d(TAG, "Failed to archive question");
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    // Removes question at this position
+    public void removeAt(int position) {
+        mQuestions.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, mQuestions.size());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
