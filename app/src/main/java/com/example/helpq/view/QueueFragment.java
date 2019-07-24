@@ -163,8 +163,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     private void queryQuestions() {
         final ParseQuery<Question> questionQuery = new ParseQuery<Question>(Question.class);
         questionQuery.whereEqualTo(Question.KEY_ARCHIVED, false)
-                .include(Question.KEY_ASKER)
-                .whereNotEqualTo(User.KEY_IS_ADMIN, true);
+                .include(Question.KEY_ASKER);
         questionQuery.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> objects, ParseException e) {
@@ -179,6 +178,8 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                     // user of who is currently logged in
                     String currUser = ParseUser.getCurrentUser().getUsername();
                     String currUserAdmin = "";
+                    String text = question.getText();
+                    String askerUsername = asker.getUsername();
                     if (!User.isAdmin(ParseUser.getCurrentUser())) {
                         currUserAdmin = User.getAdminName(ParseUser.getCurrentUser());
                     }

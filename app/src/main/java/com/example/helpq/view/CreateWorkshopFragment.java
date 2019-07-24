@@ -39,6 +39,7 @@ public class CreateWorkshopFragment extends DialogFragment {
     private int mMonth;
     private int mYear;
     private int mDay;
+    private boolean isCalendarClicked;
 
     public static CreateWorkshopFragment newInstance(String title) {
         CreateWorkshopFragment frag = new CreateWorkshopFragment();
@@ -65,6 +66,7 @@ public class CreateWorkshopFragment extends DialogFragment {
         etLocation = view.findViewById(R.id.etLocation);
         cvDate = view.findViewById(R.id.cvDate);
         btnSubmit = view.findViewById(R.id.btnSubmit);
+        isCalendarClicked = false;
 
         // Fetch arguments from bundle and set title
         String title = getArguments().getString("title", "New Workshop");
@@ -81,6 +83,7 @@ public class CreateWorkshopFragment extends DialogFragment {
                 mMonth = month;
                 mDay = dayOfMonth;
                 mYear = year;
+                isCalendarClicked = true;
             }
         });
 
@@ -105,6 +108,7 @@ public class CreateWorkshopFragment extends DialogFragment {
         workshop.setCreator(ParseUser.getCurrentUser());
         workshop.setTitle(etTitle.getText().toString());
         workshop.setStartTime(createStartTimeDate());
+
         Date currTime = new Date(System.currentTimeMillis());
         if(currTime.compareTo(workshop.getStartTime()) < 0) {
             workshop.saveInBackground(new SaveCallback() {
@@ -133,9 +137,11 @@ public class CreateWorkshopFragment extends DialogFragment {
 
     private Date createStartTimeDate() {
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, mYear);
-        cal.set(Calendar.MONTH, mMonth);
-        cal.set(Calendar.DAY_OF_MONTH, mDay);
+        if(isCalendarClicked) {
+            cal.set(Calendar.YEAR, mYear);
+            cal.set(Calendar.MONTH, mMonth);
+            cal.set(Calendar.DAY_OF_MONTH, mDay);
+        }
         cal.set(Calendar.HOUR_OF_DAY, tpTime.getCurrentHour());
         cal.set(Calendar.MINUTE, tpTime.getCurrentMinute());
         return cal.getTime();

@@ -35,7 +35,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         // Allow user to persist between app restarts
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
@@ -58,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(e == null) {
                     numUsers = objects.size();
                 } else {
-                    Log.d(TAG, "couldn't determin number of users");
+                    Log.d(TAG, "couldn't determine number of users");
                 }
             }
         });
