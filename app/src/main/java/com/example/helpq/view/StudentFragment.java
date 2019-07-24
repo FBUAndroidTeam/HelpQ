@@ -36,11 +36,12 @@ public class StudentFragment extends Fragment {
         ViewPager vpPager = (ViewPager) view.findViewById(R.id.vpPager);
         mAdapterViewPager = new StudentPagerAdapter(getFragmentManager(), getContext());
         vpPager.setAdapter(mAdapterViewPager);
+        vpPager.setCurrentItem(1);
     }
 
     public static class StudentPagerAdapter extends FragmentPagerAdapter {
 
-        private static int NUM_ITEMS = 4; // Number of pages
+        private static int NUM_ITEMS = 5; // Number of pages
         private Context mContext;
 
         public StudentPagerAdapter(FragmentManager fm, Context context) {
@@ -59,12 +60,14 @@ public class StudentFragment extends Fragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return StudentQueueFragment.newInstance();
+                    return StudentProfileFragment.newInstance();
                 case 1:
-                    return StudentWorkshopFragment.newInstance();
+                    return StudentQueueFragment.newInstance();
                 case 2:
-                    return StudentInboxFragment.newInstance();
+                    return StudentWorkshopFragment.newInstance();
                 case 3:
+                    return StudentInboxFragment.newInstance();
+                case 4:
                     return StudentBoardFragment.newInstance();
                 default:
                     return null;
@@ -76,12 +79,14 @@ public class StudentFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return mContext.getResources().getString(R.string.queue_tab);
+                    return mContext.getResources().getString(R.string.profile_tab);
                 case 1:
-                    return mContext.getResources().getString(R.string.workshops_tab);
+                    return mContext.getResources().getString(R.string.queue_tab);
                 case 2:
-                    return mContext.getResources().getString(R.string.inbox_tab);
+                    return mContext.getResources().getString(R.string.workshops_tab);
                 case 3:
+                    return mContext.getResources().getString(R.string.inbox_tab);
+                case 4:
                     return mContext.getResources().getString(R.string.board_tab);
                 default:
                     return null;

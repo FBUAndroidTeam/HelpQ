@@ -10,10 +10,16 @@
     <string name="PRIORITY_CURIOSITY">🔍</string>
     <string name="EMOJI_IN_PERSON">👥</string>
     <string name="EMOJI_WRITTEN">📝</string>
+    <string name="blocking_wait_time">🛑 Blocking:</string>
+    <string name="stretch_wait_time">🚀 Stretch:</string>
+    <string name="curiosity_wait_time">🔍 Curiosity:</string>
     <string name="in_person">in-person</string>
     <string name="written">written</string>
     <string name="sign_up">SIGN UP</string>
     <string name="signed_up">SIGNED UP</string>
+    <string name="format_hours">%d hr %d min</string>
+    <string name="format_minutes">%d min</string>
+    <string name="default_wait_time">no questions answered yet!</string>
     <string name="enrolled">You have enrolled for the workshop.</string>
     <string name="unenrolled">You have unenrolled for the workshop.</string>
     <string name="attendee"> attendee</string>
@@ -37,4 +43,7 @@
     <string name="edge_case_invalid_username">This user already exists.</string>
     <string name="select_admin">Please select an admin</string>
     <string name="username_taken">username already taken</string>
+    <string name="profile_tab">Profile</string>
+    <string name="facebook_app_id">347613129505173</string>
+    <string name="registration_complete">Registered and logged in successfully</string>
 </resources>
