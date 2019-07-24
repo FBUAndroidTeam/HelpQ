@@ -61,7 +61,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
 
         // Create data source, adapter, and layout manager
         mQuestions = new ArrayList<>();
-        mAdapter = new QueueAdapter(getContext(), mQuestions);
+        mAdapter = new QueueAdapter(getContext(), mQuestions, this);
         rvQuestions = view.findViewById(R.id.rvQuestions);
         rvQuestions.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -154,7 +154,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     }
 
     // Refresh the queue, and load questions.
-    protected void fetchQueueAsync() {
+    public void fetchQueueAsync() {
         mAdapter.clear();
         queryQuestions();
         mSwipeContainer.setRefreshing(false);
