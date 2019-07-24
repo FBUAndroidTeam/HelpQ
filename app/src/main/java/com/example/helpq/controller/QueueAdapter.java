@@ -24,6 +24,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> {
@@ -86,6 +87,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     private void archiveQuestion(int adapterPosition) {
         Question question = mQuestions.get(adapterPosition);
         question.setIsArchived(true);
+        question.setAnsweredAt(new Date(System.currentTimeMillis()));
         question.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
