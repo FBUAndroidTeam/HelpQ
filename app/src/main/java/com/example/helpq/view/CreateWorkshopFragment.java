@@ -24,6 +24,7 @@ import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class CreateWorkshopFragment extends DialogFragment {
@@ -103,8 +104,7 @@ public class CreateWorkshopFragment extends DialogFragment {
         workshop.setLocation(etLocation.getText().toString());
         workshop.setCreator(ParseUser.getCurrentUser());
         workshop.setTitle(etTitle.getText().toString());
-        workshop.setStartTime(new Date(mYear - 1900, mMonth, mDay, //make 1900 constant, look into calender.set
-                tpTime.getCurrentHour(), tpTime.getCurrentMinute()));
+        workshop.setStartTime(createStartTimeDate());
         Date currTime = new Date(System.currentTimeMillis());
         if(currTime.compareTo(workshop.getStartTime()) < 0) {
             workshop.saveInBackground(new SaveCallback() {
@@ -128,6 +128,17 @@ public class CreateWorkshopFragment extends DialogFragment {
             Toast.makeText(getContext(), R.string.edge_case_wrong_date_workshop,
                     Toast.LENGTH_LONG).show();
         }
+    }
+
+
+    private Date createStartTimeDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, mYear);
+        cal.set(Calendar.MONTH, mMonth);
+        cal.set(Calendar.DAY_OF_MONTH, mDay);
+        cal.set(Calendar.HOUR_OF_DAY, tpTime.getCurrentHour());
+        cal.set(Calendar.MINUTE, tpTime.getCurrentMinute());
+        return cal.getTime();
     }
 
 }

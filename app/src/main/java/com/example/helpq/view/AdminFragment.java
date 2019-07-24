@@ -36,11 +36,12 @@ public class AdminFragment extends Fragment {
         ViewPager vpPager = (ViewPager) view.findViewById(R.id.vpPager);
         mAdapterViewPager = new AdminPagerAdapter(getFragmentManager(), getContext());
         vpPager.setAdapter(mAdapterViewPager);
+        vpPager.setCurrentItem(1);
     }
 
     public static class AdminPagerAdapter extends FragmentPagerAdapter {
 
-        private static int NUM_ITEMS = 3; // Number of pages
+        private static int NUM_ITEMS = 4; // Number of pages
         private Context mContext;
 
         public AdminPagerAdapter(FragmentManager fm, Context context) {
@@ -59,10 +60,12 @@ public class AdminFragment extends Fragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return AdminQueueFragment.newInstance();
+                    return AdminProfileFragment.newInstance();
                 case 1:
-                    return AdminEnrolledFragment.newInstance();
+                    return AdminQueueFragment.newInstance();
                 case 2:
+                    return AdminEnrolledFragment.newInstance();
+                case 3:
                     return AdminWorkshopFragment.newInstance();
                 default:
                     return null;
@@ -74,10 +77,12 @@ public class AdminFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return mContext.getResources().getString(R.string.queue_tab);
+                    return mContext.getResources().getString(R.string.profile_tab);
                 case 1:
-                    return mContext.getResources().getString(R.string.enrolled_tab);
+                    return mContext.getResources().getString(R.string.queue_tab);
                 case 2:
+                    return mContext.getResources().getString(R.string.enrolled_tab);
+                case 3:
                     return mContext.getResources().getString(R.string.workshops_tab);
                 default:
                     return null;
