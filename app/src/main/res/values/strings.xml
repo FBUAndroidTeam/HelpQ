@@ -38,4 +38,6 @@
     <string name="select_admin">Please select an admin</string>
     <string name="username_taken">username already taken</string>
     <string name="profile_tab">Profile</string>
+    <string name="facebook_app_id">347613129505173</string>
+    <string name="registration_complete">Registered and logged in successfully</string>
 </resources>

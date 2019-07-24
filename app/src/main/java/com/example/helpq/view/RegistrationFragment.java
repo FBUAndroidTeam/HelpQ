@@ -18,10 +18,13 @@ import android.widget.Toast;
 import com.example.helpq.R;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.User;
-import com.parse.LogInCallback;
+import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
+import com.parse.SaveCallback;
+
+import java.util.List;
 
 public class RegistrationFragment extends Fragment implements DialogDismissListener {
 
@@ -30,7 +33,6 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
 
 
     private EditText etNewUsername;
-    private EditText etNewPassword;
     private TextView tvAdmin;
     private EditText etFullName;
     private Button btnRegister;
@@ -53,7 +55,6 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         tvAdmin = view.findViewById(R.id.tvAdmin);
-        etNewPassword = view.findViewById(R.id.etNewPassword);
         etNewUsername = view.findViewById(R.id.etNewUsername);
         etFullName = view.findViewById(R.id.etFullName);
         btnRegister = view.findViewById(R.id.btnRegister);
@@ -79,61 +80,53 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
     //checks to see if information user inputted is valid
     private void validRegistrationCheck() {
         final String username = etNewUsername.getText().toString();
-        final String password = etNewPassword.getText().toString();
         if (username.isEmpty()) {
             Toast.makeText(getContext(), R.string.edge_case_empty_username, Toast.LENGTH_LONG).show();
             return;
-        }
-        else if (password.isEmpty()) {
-            Toast.makeText(getContext(), R.string.edge_case_empty_password, Toast.LENGTH_LONG).show();
-            return;
-        }
-        else if (etFullName.getText().toString().isEmpty()) {
+        } else if (etFullName.getText().toString().isEmpty()) {
             Toast.makeText(getContext(), R.string.edge_case_empty_name,
                     Toast.LENGTH_LONG).show();
             return;
         } else {
-            register(username, password);
+            queryUsernameExists(username);
         }
     }
 
-    //starts registration process
-    private void register(final String username, final String password) {
-        ParseUser newUser = new ParseUser();
+    //completes registration process if new user from facebook login
+    private void completeRegister(ParseUser newUser, final String username) {
         newUser.setUsername(username);
-        newUser.setPassword(password);
         User.setFullName(etFullName.getText().toString(), newUser);
         User.setIsAdmin(false, newUser);
         User.setAdminName(adminUsername, newUser);
-        signUp(newUser, username, password);
-    }
-
-    //logs user in after signup
-    private void login(String username, String password) {
-        ParseUser.logInInBackground(username, password, new LogInCallback() {
+        newUser.saveInBackground(new SaveCallback() {
             @Override
-            public void done(ParseUser user, ParseException e) {
-                if (e == null) {
-                    Log.d(TAG, "Login successful");
-                    startActivity(new Intent(getContext(), MainActivity.class));
-                }
+            public void done(ParseException e) {
+                Toast.makeText(getContext(), R.string.registration_complete,
+                        Toast.LENGTH_LONG).show();
+                startActivity(new Intent(getContext(), MainActivity.class));
+                getActivity().finish();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .remove(RegistrationFragment.this)
+                        .commit();
             }
         });
     }
 
-    //officially signs up new user in backend
-    private void signUp(ParseUser newUser, final String username, final String password) {
-        newUser.signUpInBackground(new SignUpCallback() {
+    //checks to see if username is taken already or not
+    private void queryUsernameExists(final String username) {
+        ParseQuery<ParseUser> queryUsername = ParseUser.getQuery();
+        queryUsername.whereEqualTo("username", username);
+        queryUsername.findInBackground(new FindCallback<ParseUser>() {
             @Override
-            public void done(ParseException e) {
-                if(e == null) {
-                    Log.d(TAG,"Signup successful!");
-                    login(username, password);
-                } else {
-                    Toast.makeText(getContext(), R.string.username_taken,
-                            Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "Signup failed");
+            public void done(List<ParseUser> objects, ParseException e) {
+                if(e != null) {
+                    Log.d(TAG, "error querying for username");
                     e.printStackTrace();
+                } else if (objects.size() != 0){
+                    Toast.makeText(getContext(), R.string.username_taken, Toast.LENGTH_LONG).show();
+                } else {
+                    completeRegister(ParseUser.getCurrentUser(), username);
                 }
             }
         });
