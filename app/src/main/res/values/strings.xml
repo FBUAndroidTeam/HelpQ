@@ -10,6 +10,9 @@
     <string name="PRIORITY_CURIOSITY">🔍</string>
     <string name="EMOJI_IN_PERSON">👥</string>
     <string name="EMOJI_WRITTEN">📝</string>
+    <string name="blocking_wait_time">🛑 Blocking:</string>
+    <string name="stretch_wait_time">🚀 Stretch:</string>
+    <string name="curiosity_wait_time">🔍 Curiosity:</string>
     <string name="in_person">in-person</string>
     <string name="written">written</string>
     <string name="sign_up">SIGN UP</string>

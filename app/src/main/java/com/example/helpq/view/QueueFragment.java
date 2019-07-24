@@ -13,12 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.QueueAdapter;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
+import com.example.helpq.model.WaitTimeCalculator;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -36,6 +38,11 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     private QueueAdapter mAdapter;
     private SwipeRefreshLayout mSwipeContainer;
     private Button btLogout;
+
+    // Wait time calculation fields
+    private TextView tvBlockingWaitTime;
+    private TextView tvStretchWaitTime;
+    private TextView tvCuriosityWaitTime;
 
     public static QueueFragment newInstance() {
         return new QueueFragment();
@@ -59,6 +66,25 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         rvQuestions.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvQuestions.setLayoutManager(layoutManager);
+
+        setupLogout(view);
+        setupWaitTimeCalculation(view);
+        queryQuestions();
+        setupSwipeRefreshing(view);
+    }
+
+    private void setupWaitTimeCalculation(@NonNull View view) {
+        tvBlockingWaitTime = view.findViewById(R.id.tvBlockingWaitTime);
+        tvStretchWaitTime = view.findViewById(R.id.tvStretchWaitTime);
+        tvCuriosityWaitTime = view.findViewById(R.id.tvCuriosityWaitTime);
+        WaitTimeCalculator calculator = new WaitTimeCalculator(getContext());
+        tvBlockingWaitTime.setText(calculator.getBlockingWaitTime());
+        tvStretchWaitTime.setText(calculator.getStretchWaitTime());
+        tvCuriosityWaitTime.setText(calculator.getCuriosityWaitTime());
+    }
+
+    // Handle logic for logging out.
+    private void setupLogout(@NonNull View view) {
         btLogout = view.findViewById(R.id.btLogoutButt);
         btLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,9 +95,6 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                 ((MainActivity) getActivity()).finish();
             }
         });
-
-        queryQuestions();
-        setupSwipeRefreshing(view);
     }
 
     // Handle logic for Swipe to Refresh.
