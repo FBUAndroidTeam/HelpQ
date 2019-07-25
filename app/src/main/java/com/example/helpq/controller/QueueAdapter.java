@@ -143,7 +143,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvStartTime = itemView.findViewById(R.id.tvAnswerTime);
             ibDelete = itemView.findViewById(R.id.ibDelete);
             ibReply = itemView.findViewById(R.id.ibReply);
-
         }
 
         private void adminSlideMenu(View v) {
