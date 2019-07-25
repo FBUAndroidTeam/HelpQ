@@ -5,7 +5,6 @@ import android.content.Context;
 import com.example.helpq.R;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class WaitTimeCalculator {
@@ -31,12 +30,24 @@ public class WaitTimeCalculator {
         mCuriosityQuestions = new ArrayList<>();
 
         for (Question question : questions) {
-            addQuestion(question);
+            switch (question.getPriority()) {
+                case BLOCKING:
+                    mBlockingQuestions.add(question);
+                    break;
+                case STRETCH:
+                    mStretchQuestions.add(question);
+                    break;
+                case CURIOSITY:
+                    mCuriosityQuestions.add(question);
+                    break;
+                default:
+                    break;
+            }
         }
 
-        mBlockingTime = calculateWaitTime(mBlockingQuestions);
-        mStretchTime = calculateWaitTime(mStretchQuestions);
-        mCuriosityTime = calculateWaitTime(mCuriosityQuestions);
+        mBlockingTime = getWaitTime(mBlockingQuestions);
+        mStretchTime = getWaitTime(mStretchQuestions);
+        mCuriosityTime = getWaitTime(mCuriosityQuestions);
     }
 
     public String getBlockingWaitTime() {
@@ -54,41 +65,11 @@ public class WaitTimeCalculator {
                 + " " + mCuriosityTime;
     }
 
-    // Add question to one of three lists, based on priority.
-    private void addQuestion(Question question) {
-        switch (question.getPriority()) {
-            case BLOCKING:
-                mBlockingQuestions.add(question);
-                break;
-            case STRETCH:
-                mStretchQuestions.add(question);
-                break;
-            case CURIOSITY:
-                mCuriosityQuestions.add(question);
-                break;
-            default:
-                break;
-        }
-    }
-
-    // Calculate the average wait time over all questions.
-    private String calculateWaitTime(List<Question> questions) {
-        // Calculate total time to answer all questions
-        long totalTime = 0;
-        for (Question question : questions) {
-            Date asked = question.getCreatedAt();
-            Date answered = question.getAnsweredAt();
-            long diff = answered.getTime() - asked.getTime();
-            totalTime += diff;
-        }
-
-        // Average over the number of questions
-        int size = questions.size();
-        if (size == 0) {
+    private String getWaitTime(List<Question> questions) {
+        long averageTime = calculateWaitTime(questions);
+        if (averageTime == 0) {
             return mContext.getResources().getString(R.string.default_wait_time);
         }
-        long averageTime = (totalTime + (size / 2)) / size;
-
         // Convert the time to average time to hours and minutes
         long averageMinutes = averageTime / (60 * 1000) % 60;
         long averageHours = averageTime / (60 * 60 * 1000);
@@ -101,5 +82,25 @@ public class WaitTimeCalculator {
                     averageMinutes);
         }
         return time;
+    }
+
+    // Calculate the average wait time over all questions.
+    private long calculateWaitTime(List<Question> questions) {
+        // Calculate total time to answer all questions
+        long totalTime = 0;
+        for (Question question : questions) {
+            totalTime += question.getTimeDifference();
+        }
+
+        // Average over the number of questions
+        int size = questions.size();
+        if (size == 0) {
+            return 0;
+        }
+        return getRoundedQuotient(totalTime, size);
+    }
+
+    private long getRoundedQuotient(long dividend, int divisor) {
+        return (dividend + (divisor / 2)) / divisor;
     }
 }
