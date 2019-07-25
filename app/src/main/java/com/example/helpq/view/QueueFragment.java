@@ -71,6 +71,17 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         setupWaitTimeCalculation(view);
         queryQuestions();
         setupSwipeRefreshing(view);
+
+        mAdapter.setOnItemClickListener(new QueueAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                Log.d(TAG, "onItemClick position: " + position);
+            }
+            @Override
+            public void onItemLongClick(int position, View v) {
+                Log.d(TAG, "onItemLongClick position: " + position);
+            }
+        });
     }
 
     // Displays wait times above queue.

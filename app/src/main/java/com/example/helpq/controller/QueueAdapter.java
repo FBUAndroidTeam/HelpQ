@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
@@ -36,6 +37,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     private Context mContext;
     private List<Question> mQuestions;
     private QueueFragment mQueueFragment;
+    private static ClickListener mClickListener;
 
     // Constructor
     public QueueAdapter(Context context, List<Question> questions, QueueFragment fragment) {
@@ -67,7 +69,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    // Add a list of items -- change to type used
+    // Add a list of items
     public void addAll(List<Question> list) {
         mQuestions.addAll(list);
         Collections.sort(mQuestions);
@@ -115,7 +117,8 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         notifyItemRangeChanged(position, mQuestions.size());
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements
+            View.OnClickListener, View.OnLongClickListener {
 
         // Layout fields of item_question
         private TextView tvStudentName;
@@ -125,10 +128,13 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private TextView tvStartTime;
         private View vQuestionView;
         private ImageButton ibDelete;
+        private ImageButton ibReply;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
 
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
             tvStudentName = itemView.findViewById(R.id.tvStudentName);
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
             tvHelpEmoji = itemView.findViewById(R.id.tvHelpEmoji);
@@ -136,86 +142,52 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             vQuestionView = itemView.findViewById(R.id.clQuestion);
             tvStartTime = itemView.findViewById(R.id.tvAnswerTime);
             ibDelete = itemView.findViewById(R.id.ibDelete);
+            ibReply = itemView.findViewById(R.id.ibReply);
+        }
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        private void adminSlideMenu(View v) {
+            TranslateAnimation animate = new TranslateAnimation(
+                    v.getX(),
+                    -325,
+                    0,
+                    0
+            );
+            animate.setDuration(300);
+            animate.setFillAfter(true);
+            vQuestionView.startAnimation(animate);
+            ibDelete.setVisibility(ibDelete.VISIBLE);
+            ibReply.setVisibility(ibReply.VISIBLE);
+            ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onLongClick(View v) {
-                    ParseUser currentUser = ParseUser.getCurrentUser();
-                    if (User.isAdmin(currentUser)) {
-                        //                        showAdminPopup(v);
-                        TranslateAnimation animate = new TranslateAnimation(
-                                v.getX(),
-                                -200,
-                                0,
-                                0
-                        );
-                        animate.setDuration(300);
-                        animate.setFillAfter(true);
-                        ibDelete.setVisibility(ibDelete.VISIBLE);
-                        vQuestionView.startAnimation(animate);
-                        ibDelete.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                answerQuestion(getAdapterPosition());
-                            }
-                        });
-
-                    } else if (User.getFullName(currentUser)
-                            .equals(tvStudentName.getText().toString())) {
-                        showStudentPopup(v);
-                    }
-                    return false;
+                public void onClick(View v) {
+                    archiveQuestion(getAdapterPosition());
+                }
+            });
+            ibReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    answerQuestion(getAdapterPosition());
                 }
             });
         }
 
-        // Displays anchored popup menu based on view selected (for admin)
-        private void showAdminPopup(View v) {
-            PopupMenu popup = new PopupMenu(mContext, v);
-            popup.inflate(R.menu.menu_popup_admin);
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.menu_answer:
-                            answerQuestion(getAdapterPosition());
-                            return true;
-                        case R.id.menu_delete:
-                            archiveQuestion(getAdapterPosition());
-                            return true;
-                        default:
-                            return false;
-                    }
+        private void studentSlideMenu(View v) {
+            TranslateAnimation animate = new TranslateAnimation(
+                    v.getX(),
+                    -150,
+                    0,
+                    0
+            );
+            animate.setDuration(300);
+            animate.setFillAfter(true);
+            vQuestionView.startAnimation(animate);
+            ibDelete.setVisibility(ibDelete.VISIBLE);
+            ibDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    archiveQuestion(getAdapterPosition());
                 }
             });
-            popup.show();
-        }
-
-        // Displays anchored popup menu based on view selected (for student)
-        private void showStudentPopup(View v) {
-            PopupMenu popup = new PopupMenu(mContext, v);
-            popup.inflate(R.menu.menu_popup_student);
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.menu_delete:
-                            int adapterPosition = getAdapterPosition();
-                            Question question = mQuestions.get(adapterPosition);
-                            try {
-                                question.delete();
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            question.saveInBackground();
-                            Toast.makeText(mContext, R.string.delete_question,
-                                    Toast.LENGTH_LONG).show();
-                            removeAt(adapterPosition);
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
-            });
-            popup.show();
         }
 
         // Bind the view elements to the Question.
@@ -232,6 +204,46 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 tvHelpEmoji.setText(R.string.EMOJI_WRITTEN);
             }
         }
+
+        @Override
+        public void onClick(View v) {
+            mClickListener.onItemClick(getAdapterPosition(), v);
+            if(ibDelete.getVisibility() == View.VISIBLE) {
+                TranslateAnimation animate = new TranslateAnimation(
+                        itemView.getX(),
+                        0,
+                        0,
+                        0
+                );
+                animate.setDuration(400);
+                animate.setFillAfter(true);
+                vQuestionView.startAnimation(animate);
+                ibDelete.setVisibility(ibDelete.INVISIBLE);
+                ibReply.setVisibility(ibReply.INVISIBLE);
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            mClickListener.onItemLongClick(getAdapterPosition(), v);
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            if (User.isAdmin(currentUser)) {
+                adminSlideMenu(v);
+            } else if (User.getFullName(currentUser)
+                    .equals(tvStudentName.getText().toString())) {
+                studentSlideMenu(v);
+            }
+            return true;
+        }
+
     }
 
+    public void setOnItemClickListener(ClickListener clickListener) {
+        QueueAdapter.mClickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+        void onItemLongClick(int position, View v);
+    }
 }
