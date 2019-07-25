@@ -10,14 +10,13 @@ import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String TAG = "MainActivity";
     private FragmentManager mFragmentManager;
-    private boolean isPortrait;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mFragmentManager = getSupportFragmentManager();
 
         ParseUser user = ParseUser.getCurrentUser();
