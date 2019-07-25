@@ -1,6 +1,6 @@
 package com.example.helpq.model;
 
-import android.content.res.Resources;
+import android.content.Context;
 
 import com.example.helpq.R;
 
@@ -14,15 +14,17 @@ public class WaitTimeCalculator {
     private static final String STRETCH = "\uD83D\uDE80";
     private static final String CURIOSITY = "\uD83D\uDD0D";
 
+    private Context mContext;
     private List<Question> mBlockingQuestions;
     private List<Question> mStretchQuestions;
     private List<Question> mCuriosityQuestions;
 
-    private long mBlockingTime;
-    private long mStretchTime;
-    private long mCuriosityTime;
+    private String mBlockingTime;
+    private String mStretchTime;
+    private String mCuriosityTime;
 
-    public WaitTimeCalculator(List<Question> questions) {
+    public WaitTimeCalculator(Context context, List<Question> questions) {
+        mContext = context;
         mBlockingQuestions = new ArrayList<>();
         mStretchQuestions = new ArrayList<>();
         mCuriosityQuestions = new ArrayList<>();
@@ -43,35 +45,40 @@ public class WaitTimeCalculator {
             }
         }
 
-        mBlockingTime = calculateWaitTime(mBlockingQuestions);
-        mStretchTime = calculateWaitTime(mStretchQuestions);
-        mCuriosityTime = calculateWaitTime(mCuriosityQuestions);
+        mBlockingTime = getWaitTime(mBlockingQuestions);
+        mStretchTime = getWaitTime(mStretchQuestions);
+        mCuriosityTime = getWaitTime(mCuriosityQuestions);
     }
 
-    public long getBlockingWaitTime() {
-        return mBlockingTime;
+    public String getBlockingWaitTime() {
+        return mContext.getResources().getString(R.string.blocking_wait_time)
+                + " " + mBlockingTime;
     }
 
-    public long getStretchWaitTime() {
-        return mStretchTime;
-    }
-    public long getCuriosityWaitTime() {
-        return mCuriosityTime;
+    public String getStretchWaitTime() {
+        return mContext.getResources().getString(R.string.stretch_wait_time)
+                + " " + mStretchTime;
     }
 
-    public static String formatWaitTime(long averageTime) {
+    public String getCuriosityWaitTime() {
+        return mContext.getResources().getString(R.string.curiosity_wait_time)
+                + " " + mCuriosityTime;
+    }
+
+    private String getWaitTime(List<Question> questions) {
+        long averageTime = calculateWaitTime(questions);
         if (averageTime == 0) {
-            return Resources.getSystem().getString(R.string.default_wait_time);
+            return mContext.getResources().getString(R.string.default_wait_time);
         }
         // Convert the time to average time to hours and minutes
         long averageMinutes = averageTime / (60 * 1000) % 60;
         long averageHours = averageTime / (60 * 60 * 1000);
         String time = null;
         if (averageHours != 0) {
-            time = String.format(Resources.getSystem().getString(R.string.format_hours),
+            time = String.format(mContext.getResources().getString(R.string.format_hours),
                     averageHours, averageMinutes);
         } else {
-            time = String.format(Resources.getSystem().getString(R.string.format_minutes),
+            time = String.format(mContext.getResources().getString(R.string.format_minutes),
                     averageMinutes);
         }
         return time;
