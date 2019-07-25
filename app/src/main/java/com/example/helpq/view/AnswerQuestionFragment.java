@@ -15,6 +15,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.helpq.R;
+import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
 import com.parse.ParseException;
@@ -69,11 +70,10 @@ public class AnswerQuestionFragment extends DialogFragment {
         String studentName = User.getFullName(mQuestion.getAsker());
         tvStudent.setText(studentName + "'s question:");
         tvDescription.setText(mQuestion.getText());
-        submitAnswer();
+        setupSubmitButton();
     }
 
-    // Submit the answer Parse.
-    private void submitAnswer() {
+    private void setupSubmitButton() {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,24 +83,31 @@ public class AnswerQuestionFragment extends DialogFragment {
                             Toast.LENGTH_LONG).show();
                     return;
                 } else {
-                    mQuestion.setAnswer(etAnswer.getText().toString());
-                    mQuestion.setAnsweredAt(new Date(System.currentTimeMillis()));
-                    mQuestion.setIsArchived(true);
-                    mQuestion.setIsPrivate(tbPrivate.isChecked());
-                    mQuestion.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                Toast.makeText(getContext(), R.string.success_question_answered,
-                                        Toast.LENGTH_LONG).show();
-                                Log.d(TAG, "Answer submitted successfully");
-                                dismiss();
-                            } else {
-                                Log.d(TAG, "Answer failed to submit");
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                    submitAnswer();
+                }
+            }
+        });
+    }
+
+    // Submit the answer Parse.
+    private void submitAnswer() {
+        mQuestion.setAnswer(etAnswer.getText().toString());
+        mQuestion.setAnsweredAt(new Date(System.currentTimeMillis()));
+        mQuestion.setIsArchived(true);
+        mQuestion.setIsPrivate(tbPrivate.isChecked());
+        mQuestion.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(getContext(), R.string.success_question_answered,
+                            Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "Answer submitted successfully");
+                    DialogDismissListener listener = (DialogDismissListener) getTargetFragment();
+                    listener.onDismiss();
+                    dismiss();
+                } else {
+                    Log.d(TAG, "Answer failed to submit");
+                    e.printStackTrace();
                 }
             }
         });
