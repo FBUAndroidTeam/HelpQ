@@ -51,17 +51,17 @@ public class WaitTimeCalculator {
     }
 
     public String getBlockingWaitTime() {
-        return mContext.getResources().getString(R.string.blocking_wait_time)
+        return mContext.getResources().getString(R.string.PRIORITY_BLOCKING)
                 + " " + mBlockingTime;
     }
 
     public String getStretchWaitTime() {
-        return mContext.getResources().getString(R.string.stretch_wait_time)
+        return mContext.getResources().getString(R.string.PRIORITY_STRETCH)
                 + " " + mStretchTime;
     }
 
     public String getCuriosityWaitTime() {
-        return mContext.getResources().getString(R.string.curiosity_wait_time)
+        return mContext.getResources().getString(R.string.PRIORITY_CURIOSITY)
                 + " " + mCuriosityTime;
     }
 
