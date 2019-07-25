@@ -12,11 +12,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 import com.example.helpq.R;
 import com.example.helpq.model.User;
 import com.parse.ParseUser;
+import com.bumptech.glide.Glide;
 
 public class StudentProfileFragment extends Fragment {
 
