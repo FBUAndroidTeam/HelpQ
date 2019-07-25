@@ -1,6 +1,5 @@
 package com.example.helpq.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.helpq.R;
@@ -37,7 +35,6 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     private List<Question> mQuestions;
     private QueueAdapter mAdapter;
     private SwipeRefreshLayout mSwipeContainer;
-    private Button btLogout;
 
     // Wait time calculation fields
     private TextView tvBlockingWaitTime;
@@ -67,7 +64,6 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvQuestions.setLayoutManager(layoutManager);
 
-        setupLogout(view);
         setupWaitTimeCalculation(view);
         queryQuestions();
         setupSwipeRefreshing(view);
@@ -84,6 +80,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         });
     }
 
+    // Displays wait times above queue.
     private void setupWaitTimeCalculation(@NonNull View view) {
         tvBlockingWaitTime = view.findViewById(R.id.tvBlockingWaitTime);
         tvStretchWaitTime = view.findViewById(R.id.tvStretchWaitTime);
@@ -124,24 +121,11 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                     }
                 }
 
-                WaitTimeCalculator calculator = new WaitTimeCalculator(getContext(), questions);
+                WaitTimeCalculator calculator =
+                        new WaitTimeCalculator(getParentFragment().getContext(), questions);
                 tvBlockingWaitTime.setText(calculator.getBlockingWaitTime());
                 tvStretchWaitTime.setText(calculator.getStretchWaitTime());
                 tvCuriosityWaitTime.setText(calculator.getCuriosityWaitTime());
-            }
-        });
-    }
-
-    // Handle logic for logging out.
-    private void setupLogout(@NonNull View view) {
-        btLogout = view.findViewById(R.id.btLogoutButt);
-        btLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParseUser.logOut();
-                Intent intent = new Intent(getContext(), LoginActivity.class);
-                startActivity(intent);
-                ((MainActivity) getActivity()).finish();
             }
         });
     }
@@ -174,8 +158,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     private void queryQuestions() {
         final ParseQuery<Question> questionQuery = new ParseQuery<Question>(Question.class);
         questionQuery.whereEqualTo(Question.KEY_ARCHIVED, false)
-                .include(Question.KEY_ASKER)
-                .whereNotEqualTo(User.KEY_IS_ADMIN, true);
+                .include(Question.KEY_ASKER);
         questionQuery.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> objects, ParseException e) {

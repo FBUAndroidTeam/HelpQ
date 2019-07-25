@@ -36,7 +36,7 @@ public class AdminFragment extends Fragment {
         ViewPager vpPager = (ViewPager) view.findViewById(R.id.vpPager);
         mAdapterViewPager = new AdminPagerAdapter(getFragmentManager(), getContext());
         vpPager.setAdapter(mAdapterViewPager);
-        vpPager.setCurrentItem(1);
+        vpPager.setCurrentItem(2);
     }
 
     public static class AdminPagerAdapter extends FragmentPagerAdapter {
@@ -62,9 +62,9 @@ public class AdminFragment extends Fragment {
                 case 0:
                     return AdminProfileFragment.newInstance();
                 case 1:
-                    return AdminQueueFragment.newInstance();
-                case 2:
                     return AdminEnrolledFragment.newInstance();
+                case 2:
+                    return AdminQueueFragment.newInstance();
                 case 3:
                     return AdminWorkshopFragment.newInstance();
                 default:
@@ -79,9 +79,9 @@ public class AdminFragment extends Fragment {
                 case 0:
                     return mContext.getResources().getString(R.string.profile_tab);
                 case 1:
-                    return mContext.getResources().getString(R.string.queue_tab);
-                case 2:
                     return mContext.getResources().getString(R.string.enrolled_tab);
+                case 2:
+                    return mContext.getResources().getString(R.string.queue_tab);
                 case 3:
                     return mContext.getResources().getString(R.string.workshops_tab);
                 default:

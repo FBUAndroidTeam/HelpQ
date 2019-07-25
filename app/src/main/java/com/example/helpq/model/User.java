@@ -37,4 +37,5 @@ public class User {
     public static void setAdminName(String adminName, ParseUser user) {
         user.put(KEY_ADMIN_NAME, adminName);
     }
+
 }

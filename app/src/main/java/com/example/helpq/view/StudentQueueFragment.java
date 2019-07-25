@@ -33,7 +33,7 @@ public class StudentQueueFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_student_queue, parent, false);
         mQueueFragment = new QueueFragment();
-        getFragmentManager().beginTransaction()
+        getChildFragmentManager().beginTransaction()
                 .replace(R.id.flStudentQueueContainer, mQueueFragment, QueueFragment.TAG)
                 .commit();
 
@@ -41,7 +41,7 @@ public class StudentQueueFragment extends Fragment {
         fabCreateQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = getFragmentManager();
+                FragmentManager fm = getChildFragmentManager();
                 CreateQuestionFragment createQuestionFragment =
                         CreateQuestionFragment.newInstance("Some Title");
                 createQuestionFragment.setTargetFragment(mQueueFragment, 300);

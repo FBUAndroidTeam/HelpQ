@@ -30,7 +30,6 @@ public class AdminListFragment extends DialogFragment {
     private static final String KEY_TITLE = "title";
     private static final String KEY_IS_ADMIN = "isAdmin";
 
-
     private RecyclerView rvAdmins;
     private List<ParseUser> mAdmins;
     private AdminListAdapter adapter;

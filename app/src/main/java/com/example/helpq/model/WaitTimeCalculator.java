@@ -67,6 +67,10 @@ public class WaitTimeCalculator {
 
     private String getWaitTime(List<Question> questions) {
         long averageTime = calculateWaitTime(questions);
+        return getWaitTime(averageTime);
+    }
+
+    private String getWaitTime(long averageTime) {
         if (averageTime == 0) {
             return mContext.getResources().getString(R.string.default_wait_time);
         }

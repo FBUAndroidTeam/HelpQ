@@ -1,5 +1,6 @@
 package com.example.helpq.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,9 +8,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.helpq.R;
 import com.example.helpq.model.User;
 import com.parse.ParseUser;
@@ -22,6 +25,7 @@ public class StudentProfileFragment extends Fragment {
     private TextView tvFullName;
     private TextView tvAdmin;
     private TextView tvUsername;
+    private Button btnLogout;
 
     public static StudentProfileFragment newInstance() {
         return new StudentProfileFragment();
@@ -40,8 +44,27 @@ public class StudentProfileFragment extends Fragment {
         tvAdmin = view.findViewById(R.id.tvAdmin);
         tvFullName = view.findViewById(R.id.tvFullName);
         tvUsername = view.findViewById(R.id.tvUsername);
+        btnLogout = view.findViewById(R.id.btnLogout);
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         tvAdmin.setText(User.getAdminName(ParseUser.getCurrentUser()));
         tvFullName.setText(User.getFullName(ParseUser.getCurrentUser()));
+        setupLogout();
+
+        Glide.with(getContext())
+                .load("http://via.placeholder.com/50.png")
+                .into(ivProfileImage);
+    }
+
+    // Handle logic for logging out.
+    private void setupLogout() {
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser.logOut();
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+                ((MainActivity) getActivity()).finish();
+            }
+        });
     }
 }

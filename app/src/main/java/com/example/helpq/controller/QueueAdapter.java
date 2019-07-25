@@ -6,13 +6,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
