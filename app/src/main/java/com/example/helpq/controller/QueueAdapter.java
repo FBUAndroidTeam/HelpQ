@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -121,6 +123,8 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private TextView tvHelpEmoji;
         private TextView tvDescription;
         private TextView tvStartTime;
+        private View vQuestionView;
+        private ImageButton ibDelete;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -129,14 +133,33 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
             tvHelpEmoji = itemView.findViewById(R.id.tvHelpEmoji);
             tvDescription = itemView.findViewById(R.id.tvQuestion);
+            vQuestionView = itemView.findViewById(R.id.clQuestion);
             tvStartTime = itemView.findViewById(R.id.tvAnswerTime);
+            ibDelete = itemView.findViewById(R.id.ibDelete);
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     ParseUser currentUser = ParseUser.getCurrentUser();
                     if (User.isAdmin(currentUser)) {
-                        showAdminPopup(v);
+                        //                        showAdminPopup(v);
+                        TranslateAnimation animate = new TranslateAnimation(
+                                v.getX(),
+                                -200,
+                                0,
+                                0
+                        );
+                        animate.setDuration(300);
+                        animate.setFillAfter(true);
+                        ibDelete.setVisibility(ibDelete.VISIBLE);
+                        vQuestionView.startAnimation(animate);
+                        ibDelete.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                answerQuestion(getAdapterPosition());
+                            }
+                        });
+
                     } else if (User.getFullName(currentUser)
                             .equals(tvStudentName.getText().toString())) {
                         showStudentPopup(v);
