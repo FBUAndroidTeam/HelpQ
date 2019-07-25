@@ -6,7 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,7 +61,7 @@ public class StudentWorkshopAdapter extends
         private TextView tvWorkshopDate;
         private TextView tvWorkshopLocation;
         private TextView tvWorkshopAttendanceCount;
-        private Button btnSignUp;
+        private Switch swSignUp;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,30 +69,33 @@ public class StudentWorkshopAdapter extends
             tvWorkshopDate = itemView.findViewById(R.id.tvStudentWorkshopDate);
             tvWorkshopLocation = itemView.findViewById(R.id.tvStudentWorkshopLocation);
             tvWorkshopAttendanceCount = itemView.findViewById(R.id.tvStudentWorkshopSignedUpCount);
-            btnSignUp = itemView.findViewById(R.id.btnSignUp);
+            swSignUp = itemView.findViewById(R.id.swSignUp);
         }
 
-        private boolean buttonText(final Workshop workshop) {
+        private boolean setButtonText(final Workshop workshop) {
+            if(isSignedUp(workshop)) {
+                swSignUp.setText(R.string.signed_up);
+                return true;
+            } else {
+                swSignUp.setText(R.string.sign_up);
+                return false;
+            }
+        }
+
+        private boolean isSignedUp(final Workshop workshop) {
             //checks to see if user is signed up, will set button text accordingly
             JSONArray attendeesArr = workshop.getAttendees();
-            Boolean isSignedUp = false;
+            String userID = ParseUser.getCurrentUser().getObjectId();
             for(int i = 0; i < attendeesArr.length(); i++) {
                 try {
-                    if((ParseUser.getCurrentUser().getObjectId()).
-                            equals(attendeesArr.getJSONObject(i).getString("objectId"))) {
-                        isSignedUp = true;
-                        break;
+                    if(userID.equals(attendeesArr.getJSONObject(i).getString("objectId"))) {
+                        return true;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            if(isSignedUp) {
-                btnSignUp.setText(R.string.signed_up);
-            } else {
-                btnSignUp.setText(R.string.sign_up);
-            }
-            return isSignedUp;
+            return false;
         }
 
         private void setAttendeeText(Workshop workshop) {
@@ -105,22 +109,28 @@ public class StudentWorkshopAdapter extends
             }
         }
 
+        private void setSwitchStatus(final Workshop workshop) {
+            if(setButtonText(workshop)) {
+                swSignUp.setChecked(true);
+            } else {
+                swSignUp.setChecked(false);
+            }
+        }
+
         public void bind(final Workshop workshop) {
             tvWorkshopName.setText(workshop.getTitle());
             tvWorkshopDate.setText(workshop.getDate());
             tvWorkshopLocation.setText(workshop.getLocation());
-            boolean signedUp = buttonText(workshop);
+            setSwitchStatus(workshop);
             setAttendeeText(workshop);
 
-
-            btnSignUp.setOnClickListener(new View.OnClickListener() {
+            swSignUp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    if (buttonText(workshop)) {
-
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(!isChecked) {
                         workshop.unsignUp(ParseUser.getCurrentUser());
                         workshop.saveInBackground();
-                        buttonText(workshop);
+                        setButtonText(workshop);
                         setAttendeeText(workshop);
                         Toast.makeText(mContext,
                                 R.string.unenrolled,
@@ -128,7 +138,7 @@ public class StudentWorkshopAdapter extends
                     } else {
                         workshop.setAttendee(ParseUser.getCurrentUser());
                         workshop.saveInBackground();
-                        buttonText(workshop);
+                        setButtonText(workshop);
                         setAttendeeText(workshop);
                         Toast.makeText(mContext,
                                 R.string.enrolled,
