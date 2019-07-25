@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.helpq.R;
@@ -36,7 +35,6 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     private List<Question> mQuestions;
     private QueueAdapter mAdapter;
     private SwipeRefreshLayout mSwipeContainer;
-    private Button btLogout;
 
     // Wait time calculation fields
     private TextView tvBlockingWaitTime;
@@ -111,7 +109,8 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                     }
                 }
 
-                WaitTimeCalculator calculator = new WaitTimeCalculator(getContext(), questions);
+                WaitTimeCalculator calculator =
+                        new WaitTimeCalculator(getParentFragment().getContext(), questions);
                 tvBlockingWaitTime.setText(calculator.getBlockingWaitTime());
                 tvStretchWaitTime.setText(calculator.getStretchWaitTime());
                 tvCuriosityWaitTime.setText(calculator.getCuriosityWaitTime());

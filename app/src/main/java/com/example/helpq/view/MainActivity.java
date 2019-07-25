@@ -11,6 +11,7 @@ import com.parse.ParseUser;
 public class MainActivity extends AppCompatActivity {
 
     private FragmentManager mFragmentManager;
+    private boolean isPortrait;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
