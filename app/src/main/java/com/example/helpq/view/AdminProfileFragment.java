@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.helpq.R;
 import com.example.helpq.model.User;
 import com.parse.ParseUser;
@@ -45,6 +46,11 @@ public class AdminProfileFragment extends Fragment {
         tvFullName.setText(User.getFullName(ParseUser.getCurrentUser()));
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         setupLogout();
+
+
+        Glide.with(getContext())
+                .load("http://via.placeholder.com/50.png")
+                .into(ivProfileImage);
     }
 
     // Handle logic for logging out.

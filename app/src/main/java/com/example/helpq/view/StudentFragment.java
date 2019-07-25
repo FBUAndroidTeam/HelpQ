@@ -36,7 +36,7 @@ public class StudentFragment extends Fragment {
         ViewPager vpPager = (ViewPager) view.findViewById(R.id.vpPager);
         mAdapterViewPager = new StudentPagerAdapter(getFragmentManager(), getContext());
         vpPager.setAdapter(mAdapterViewPager);
-        vpPager.setCurrentItem(1);
+        vpPager.setCurrentItem(2);
     }
 
     public static class StudentPagerAdapter extends FragmentPagerAdapter {
@@ -62,9 +62,9 @@ public class StudentFragment extends Fragment {
                 case 0:
                     return StudentProfileFragment.newInstance();
                 case 1:
-                    return StudentQueueFragment.newInstance();
-                case 2:
                     return StudentWorkshopFragment.newInstance();
+                case 2:
+                    return StudentQueueFragment.newInstance();
                 case 3:
                     return StudentInboxFragment.newInstance();
                 case 4:
@@ -81,9 +81,9 @@ public class StudentFragment extends Fragment {
                 case 0:
                     return mContext.getResources().getString(R.string.profile_tab);
                 case 1:
-                    return mContext.getResources().getString(R.string.queue_tab);
-                case 2:
                     return mContext.getResources().getString(R.string.workshops_tab);
+                case 2:
+                    return mContext.getResources().getString(R.string.queue_tab);
                 case 3:
                     return mContext.getResources().getString(R.string.inbox_tab);
                 case 4:

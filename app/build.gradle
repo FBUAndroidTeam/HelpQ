@@ -35,4 +35,7 @@ dependencies {
 
     implementation 'com.facebook.android:facebook-android-sdk:4.33.0'
     implementation 'com.parse:parsefacebookutils-v4-android:1.10.7'
+
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 }
