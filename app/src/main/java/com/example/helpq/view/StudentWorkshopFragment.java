@@ -45,7 +45,7 @@ public class StudentWorkshopFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_student_workshop, container, false);
     }
 
-    //reloads landscape version of layout faster
+    //reloads landscape/portrait version of layout faster on config change
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
