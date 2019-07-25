@@ -4,27 +4,27 @@
 
     <item
         android:id="@+id/action_profile"
-        android:icon="@color/colorBlue"
+        android:icon="@drawable/profile_emoji"
         android:title="@string/profile_tab"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_workshop"
-        android:icon="@color/colorBlue"
+        android:icon="@drawable/workshop_emoji"
         android:title="@string/workshops_tab"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_queue"
-        android:icon="@color/colorBlue"
+        android:icon="@drawable/queue_emoji"
         android:title="@string/queue_tab"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_inbox"
-        android:icon="@color/colorBlue"
+        android:icon="@drawable/inbox_emoji"
         android:title="@string/inbox_tab"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_board"
-        android:icon="@color/colorBlue"
+        android:icon="@drawable/board_emoji"
         android:title="@string/board_tab"
         app:showAsAction="always" />
 </menu>
