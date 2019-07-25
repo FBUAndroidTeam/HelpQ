@@ -43,6 +43,7 @@ public class StudentFragment extends Fragment {
 
         vpPager.setAdapter(mAdapterViewPager);
         vpPager.setCurrentItem(2);
+        mNagivationView.setSelectedItemId(R.id.action_queue);
         vpPager.setOnPageChangeListener(new StudentPageChanger());
 
         setupNavigationView();
