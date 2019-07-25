@@ -25,9 +25,10 @@
     <string name="attendee"> attendee</string>
     <string name="attendees"> attendees</string>
     <string name="request_in_person">The student requested in-person help!</string>
-    <string name="archive_question">Question archived</string>
+    <string name="archive_question">Question archived.</string>
+    <string name="delete_question">Question deleted.</string>
     <string name="edge_case_answer">Please enter an answer.</string>
-    <string name="success_question_answered">Question answered</string>
+    <string name="success_question_answered">Question answered!</string>
     <string name="edge_case_enter_question">Please enter a question.</string>
     <string name="edge_case_enter_priority">Please select type of priority.</string>
     <string name="edge_case_enter_type_of_help">Please select type of help.</string>

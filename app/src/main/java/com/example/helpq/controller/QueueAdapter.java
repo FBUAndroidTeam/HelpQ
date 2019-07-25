@@ -198,7 +198,17 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.menu_delete:
-                            archiveQuestion(getAdapterPosition());
+                            int adapterPosition = getAdapterPosition();
+                            Question question = mQuestions.get(adapterPosition);
+                            try {
+                                question.delete();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            question.saveInBackground();
+                            Toast.makeText(mContext, R.string.delete_question,
+                                    Toast.LENGTH_LONG).show();
+                            removeAt(adapterPosition);
                             return true;
                         default:
                             return false;
