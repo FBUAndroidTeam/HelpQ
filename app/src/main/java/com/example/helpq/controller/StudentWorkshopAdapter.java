@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,7 +62,7 @@ public class StudentWorkshopAdapter extends
         private TextView tvWorkshopDate;
         private TextView tvWorkshopLocation;
         private TextView tvWorkshopAttendanceCount;
-        private Button btnSignUp;
+        private Switch swSignUp;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,15 +70,15 @@ public class StudentWorkshopAdapter extends
             tvWorkshopDate = itemView.findViewById(R.id.tvStudentWorkshopDate);
             tvWorkshopLocation = itemView.findViewById(R.id.tvStudentWorkshopLocation);
             tvWorkshopAttendanceCount = itemView.findViewById(R.id.tvStudentWorkshopSignedUpCount);
-            btnSignUp = itemView.findViewById(R.id.btnSignUp);
+            swSignUp = itemView.findViewById(R.id.swSignUp);
         }
 
         private boolean setButtonText(final Workshop workshop) {
             if(isSignedUp(workshop)) {
-                btnSignUp.setText(R.string.signed_up);
+                swSignUp.setText(R.string.signed_up);
                 return true;
             } else {
-                btnSignUp.setText(R.string.sign_up);
+                swSignUp.setText(R.string.sign_up);
                 return false;
             }
         }
@@ -108,16 +110,25 @@ public class StudentWorkshopAdapter extends
             }
         }
 
+        private void setSwitchStatus(final Workshop workshop) {
+            if(setButtonText(workshop)) {
+                swSignUp.setChecked(true);
+            } else {
+                swSignUp.setChecked(false);
+            }
+        }
+
         public void bind(final Workshop workshop) {
             tvWorkshopName.setText(workshop.getTitle());
             tvWorkshopDate.setText(workshop.getDate());
             tvWorkshopLocation.setText(workshop.getLocation());
+            setSwitchStatus(workshop);
             setAttendeeText(workshop);
 
-            btnSignUp.setOnClickListener(new View.OnClickListener() {
+            swSignUp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    if (setButtonText(workshop)) {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(!isChecked) {
                         workshop.unsignUp(ParseUser.getCurrentUser());
                         workshop.saveInBackground();
                         setButtonText(workshop);
