@@ -224,6 +224,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private void setInitialQuestionText() {
             if(questionText.length() > MAX_QUESTION_LENGTH) {
                 tvDescription.setText(questionText.substring(0, MAX_QUESTION_LENGTH) + "...");
+                tvSeeMore.setVisibility(View.VISIBLE);
             } else {
                 tvDescription.setText(questionText);
                 tvSeeMore.setVisibility(View.GONE);
