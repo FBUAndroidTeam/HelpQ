@@ -4,11 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,6 +20,8 @@ public class StudentFragment extends Fragment {
 
     public static final String TAG = "StudentFragment";
     private FragmentPagerAdapter mAdapterViewPager;
+    private ViewPager vpPager;
+    private BottomNavigationView mNagivationView;
 
     public static StudentFragment newInstance() {
         return new StudentFragment();
@@ -33,10 +37,42 @@ public class StudentFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ViewPager vpPager = (ViewPager) view.findViewById(R.id.vpPager);
+        vpPager = view.findViewById(R.id.vpPager);
+        mNagivationView = view.findViewById(R.id.student_navigation);
         mAdapterViewPager = new StudentPagerAdapter(getFragmentManager(), getContext());
+
         vpPager.setAdapter(mAdapterViewPager);
         vpPager.setCurrentItem(2);
+        vpPager.setOnPageChangeListener(new StudentPageChanger());
+
+        setupNavigationView();
+    }
+
+    private void setupNavigationView() {
+        mNagivationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.action_profile:
+                        vpPager.setCurrentItem(0);
+                        return true;
+                    case R.id.action_workshop:
+                        vpPager.setCurrentItem(1);
+                        return true;
+                    case R.id.action_queue:
+                        vpPager.setCurrentItem(2);
+                        return true;
+                    case R.id.action_inbox:
+                        vpPager.setCurrentItem(3);
+                        return true;
+                    case R.id.action_board:
+                        vpPager.setCurrentItem(4);
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     public static class StudentPagerAdapter extends FragmentPagerAdapter {
@@ -91,6 +127,39 @@ public class StudentFragment extends Fragment {
                 default:
                     return null;
             }
+        }
+    }
+
+    public class StudentPageChanger implements ViewPager.OnPageChangeListener {
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            switch (position) {
+                case 0:
+                    mNagivationView.setSelectedItemId(R.id.action_profile);
+                    break;
+                case 1:
+                    mNagivationView.setSelectedItemId(R.id.action_workshop);
+                    break;
+                case 2:
+                    mNagivationView.setSelectedItemId(R.id.action_queue);
+                    break;
+                case 3:
+                    mNagivationView.setSelectedItemId(R.id.action_inbox);
+                    break;
+                case 4:
+                    mNagivationView.setSelectedItemId(R.id.action_board);
+                    break;
+                default:
+                    break;
+            }
+        }
+        @Override
+        public void onPageScrollStateChanged(int state) {
         }
     }
 }
