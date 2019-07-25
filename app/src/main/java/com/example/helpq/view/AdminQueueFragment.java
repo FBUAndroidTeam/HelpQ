@@ -20,7 +20,7 @@ public class AdminQueueFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_admin_queue, parent, false);
 
-        getFragmentManager().beginTransaction()
+        getChildFragmentManager().beginTransaction()
                 .replace(R.id.flAdminQueueContainer, new QueueFragment(), QueueFragment.TAG)
                 .commit();
 
