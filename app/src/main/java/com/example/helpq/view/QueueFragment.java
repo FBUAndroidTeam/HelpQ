@@ -73,11 +73,38 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         setupSwipeRefreshing(view);
     }
 
+    // Displays wait times above queue.
     private void setupWaitTimeCalculation(@NonNull View view) {
         tvBlockingWaitTime = view.findViewById(R.id.tvBlockingWaitTime);
         tvStretchWaitTime = view.findViewById(R.id.tvStretchWaitTime);
         tvCuriosityWaitTime = view.findViewById(R.id.tvCuriosityWaitTime);
 
+        final ParseUser user = ParseUser.getCurrentUser();
+        if (User.isAdmin(user)) {
+
+            // Get the admin's wait times
+            long blockingMillis = User.getBlockingMillis(user);
+            long stretchMillis = User.getStretchMillis(user);
+            long curiosityMillis = User.getCuriosityMillis(user);
+
+            // If the admin's wait times do not exist, calculate them, and
+            // store them in Parse.
+            if (blockingMillis == -1 || stretchMillis == -1 || curiosityMillis == -1) {
+                setAdminWaitTimes(user);
+                return;
+            }
+
+            // Display the wait times.
+            WaitTimeCalculator calculator = new WaitTimeCalculator(getContext(),
+                    blockingMillis, stretchMillis, curiosityMillis);
+            tvBlockingWaitTime.setText(calculator.getBlockingWaitTime());
+            tvStretchWaitTime.setText(calculator.getStretchWaitTime());
+            tvCuriosityWaitTime.setText(calculator.getCuriosityWaitTime());
+        }
+    }
+
+    // Calculate the admin's wait times and save them in Parse.
+    private void setAdminWaitTimes(final ParseUser user) {
         final ParseQuery<Question> questionQuery = new ParseQuery<Question>(Question.class);
         questionQuery.whereEqualTo(Question.KEY_ARCHIVED, true)
                 .include(Question.KEY_ASKER);
@@ -114,6 +141,10 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                 }
 
                 WaitTimeCalculator calculator = new WaitTimeCalculator(getContext(), questions);
+                User.initWaitTimes(user, calculator.getBlockingMillis(), calculator.getBlockingSize(),
+                        calculator.getStretchMillis(), calculator.getStretchSize(),
+                        calculator.getCuriosityMillis(), calculator.getCuriositySize());
+                user.saveInBackground();
                 tvBlockingWaitTime.setText(calculator.getBlockingWaitTime());
                 tvStretchWaitTime.setText(calculator.getStretchWaitTime());
                 tvCuriosityWaitTime.setText(calculator.getCuriosityWaitTime());
