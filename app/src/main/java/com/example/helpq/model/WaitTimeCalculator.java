@@ -23,6 +23,14 @@ public class WaitTimeCalculator {
     private String mStretchTime;
     private String mCuriosityTime;
 
+    public WaitTimeCalculator(Context context, long blockingMillis, long stretchMillis,
+                              long curiosityMillis) {
+        mContext = context;
+        mBlockingTime = getWaitTime(blockingMillis);
+        mStretchTime = getWaitTime(stretchMillis);
+        mCuriosityTime = getWaitTime(curiosityMillis);
+    }
+
     public WaitTimeCalculator(Context context, List<Question> questions) {
         mContext = context;
         mBlockingQuestions = new ArrayList<>();
@@ -65,8 +73,36 @@ public class WaitTimeCalculator {
                 + " " + mCuriosityTime;
     }
 
+    public long getBlockingMillis() {
+        return calculateWaitTime(mBlockingQuestions);
+    }
+
+    public long getStretchMillis() {
+        return calculateWaitTime(mStretchQuestions);
+    }
+
+    public long getCuriosityMillis() {
+        return calculateWaitTime(mCuriosityQuestions);
+    }
+
+    public long getBlockingSize() {
+        return mBlockingQuestions.size();
+    }
+
+    public long getStretchSize() {
+        return mStretchQuestions.size();
+    }
+
+    public long getCuriositySize() {
+        return mCuriosityQuestions.size();
+    }
+
     private String getWaitTime(List<Question> questions) {
         long averageTime = calculateWaitTime(questions);
+        return getWaitTime(averageTime);
+    }
+
+    private String getWaitTime(long averageTime) {
         if (averageTime == 0) {
             return mContext.getResources().getString(R.string.default_wait_time);
         }

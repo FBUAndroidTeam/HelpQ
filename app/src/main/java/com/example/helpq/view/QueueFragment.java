@@ -80,6 +80,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         });
     }
 
+    // Displays wait times above queue.
     private void setupWaitTimeCalculation(@NonNull View view) {
         tvBlockingWaitTime = view.findViewById(R.id.tvBlockingWaitTime);
         tvStretchWaitTime = view.findViewById(R.id.tvStretchWaitTime);
@@ -172,8 +173,6 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                     // user of who is currently logged in
                     String currUser = ParseUser.getCurrentUser().getUsername();
                     String currUserAdmin = "";
-                    String text = question.getText();
-                    String askerUsername = asker.getUsername();
                     if (!User.isAdmin(ParseUser.getCurrentUser())) {
                         currUserAdmin = User.getAdminName(ParseUser.getCurrentUser());
                     }
