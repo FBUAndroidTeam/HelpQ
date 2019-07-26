@@ -155,6 +155,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private ImageButton ibReply;
         private TextView tvSeeMore;
         private String questionText;
+        private int originalLines;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -240,29 +241,37 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
         //determines whether or not see more should be visible
         private void setInitialQuestionText() {
-            if(questionText.length() > MAX_QUESTION_LENGTH) {
-                tvDescription.setText(questionText.substring(0, MAX_QUESTION_LENGTH) + "...");
-                tvSeeMore.setVisibility(View.VISIBLE);
-            } else {
-                tvDescription.setText(questionText);
-                tvSeeMore.setVisibility(View.GONE);
-            }
+            tvDescription.setText(questionText);
+            // runnable is getting the line count before anything is rendering in order to determine
+            // if see more should be displayed or not
+            tvDescription.post(new Runnable() {
+                @Override
+                public void run() {
+                    originalLines = tvDescription.getLineCount();
+                    if(originalLines > 1) {
+                        tvDescription.setMaxLines(1);
+                        tvSeeMore.setVisibility(View.VISIBLE);
+                    } else {
+                        tvSeeMore.setVisibility(View.GONE);
+                    }
+                }
+            });
         }
 
         //determines whether to expand or collapse cell when cell is clicked on
         private void setTextExpansion() {
             if (tvSeeMore.getText().equals(mContext.getResources().getString(R.string.see_more))) {
                 tvSeeMore.setText(mContext.getResources().getString(R.string.see_less));
-                tvDescription.setText(questionText);
+                tvDescription.setMaxLines(Integer.MAX_VALUE);
             } else {
                 tvSeeMore.setText(mContext.getResources().getString(R.string.see_more));
-                tvDescription.setText(questionText.substring(0, MAX_QUESTION_LENGTH) + "...");
+                tvDescription.setMaxLines(1);
             }
         }
 
         @Override
         public void onClick(View v) {
-            if(questionText.length() > MAX_QUESTION_LENGTH) {
+            if(originalLines > 1) {
                 setTextExpansion();
             }
             hideActions(v);
