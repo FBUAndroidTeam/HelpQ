@@ -182,6 +182,8 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     answerQuestion(getAdapterPosition());
+                    ibDelete.setVisibility(ibDelete.INVISIBLE);
+                    ibReply.setVisibility(ibReply.INVISIBLE);
                 }
             });
         }
