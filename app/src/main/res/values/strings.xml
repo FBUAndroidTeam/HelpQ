@@ -55,4 +55,7 @@
     <string name="your_answer">Your answer:</string>
     <string name="admin_answer">\'s answer:</string>
     <string name="empty_enrolled">You currently have no students</string>
+    <string name="workshop_when">When: </string>
+    <string name="workshop_where">Where: </string>
+
 </resources>
