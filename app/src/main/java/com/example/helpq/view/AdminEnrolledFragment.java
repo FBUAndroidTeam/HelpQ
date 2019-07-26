@@ -28,7 +28,7 @@ public class AdminEnrolledFragment extends Fragment {
     public static final String TAG = "AdminEnrolledFragment";
     private RecyclerView rvEnrolledStudents;
     private EnrolledStudentsAdapter adapter;
-    private List<String> mStudents;
+    private List<ParseUser> mStudents;
     private TextView tvNotice;
 
     public static AdminEnrolledFragment newInstance() {
@@ -70,10 +70,8 @@ public class AdminEnrolledFragment extends Fragment {
                     return;
                 }
                 for(int i = 0; i < objects.size(); i++) {
-                    String name = User.getFullName(objects.get(i));
-                    mStudents.add(name);
+                    mStudents.add(objects.get(i));
                     adapter.notifyDataSetChanged();
-                    Log.d(TAG, name + ParseUser.getCurrentUser());
                 }
                 isPageEmpty();
             }
