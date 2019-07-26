@@ -17,6 +17,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:gravity="center_horizontal"
         android:text="@string/empty_enrolled"
         android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"

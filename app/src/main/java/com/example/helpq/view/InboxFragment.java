@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.InboxAdapter;
@@ -23,6 +24,7 @@ public class InboxFragment extends Fragment {
     private RecyclerView rvMessages;
     protected List<Question> mMessages;
     protected InboxAdapter mAdapter;
+    protected TextView tvNotice;
 
     public static InboxFragment newInstance() {
         return new InboxFragment();
@@ -38,6 +40,8 @@ public class InboxFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        tvNotice = view.findViewById(R.id.tvNotice);
+        tvNotice.setVisibility(View.GONE);
 
         // Create data source, adapter, and layout manager
         mMessages = new ArrayList<>();

@@ -1,6 +1,7 @@
 package com.example.helpq.view;
 
 import android.util.Log;
+import android.view.View;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
@@ -36,12 +37,16 @@ public class StudentInboxFragment extends InboxFragment {
                     e.printStackTrace();
                     return;
                 }
+                tvNotice.setVisibility(View.GONE);
                 for (Question question : objects) {
                     if (question.getAnswer() != null) {
                         mMessages.add(question);
                     }
                 }
                 mAdapter.notifyDataSetChanged();
+                if (mMessages.size() == 0) {
+                    tvNotice.setVisibility(View.VISIBLE);
+                }
             }
         });
     }

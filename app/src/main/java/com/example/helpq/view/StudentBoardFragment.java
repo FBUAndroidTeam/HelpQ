@@ -1,6 +1,7 @@
 package com.example.helpq.view;
 
 import android.util.Log;
+import android.view.View;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
@@ -39,6 +40,7 @@ public class StudentBoardFragment extends InboxFragment {
                     return;
                 }
 
+                tvNotice.setVisibility(View.GONE);
                 for (Question question : objects) {
                     // Admin of current user
                     String userAdmin = User.getAdminName(ParseUser.getCurrentUser());
@@ -50,6 +52,9 @@ public class StudentBoardFragment extends InboxFragment {
                     }
                 }
                 mAdapter.notifyDataSetChanged();
+                if (mMessages.size() == 0) {
+                    tvNotice.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
