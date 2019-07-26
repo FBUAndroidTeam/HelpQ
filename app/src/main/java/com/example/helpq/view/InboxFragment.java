@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ public class InboxFragment extends Fragment {
 
     public static final String TAG = "InboxFragment";
     private RecyclerView rvMessages;
+    private SwipeRefreshLayout swipeContainer;
     protected List<Question> mMessages;
     protected InboxAdapter mAdapter;
     protected TextView tvNotice;
@@ -50,7 +52,35 @@ public class InboxFragment extends Fragment {
         rvMessages.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvMessages.setLayoutManager(layoutManager);
+
+        setupSwipeToRefresh(view);
         queryMessages();
+    }
+
+    // Handle logic for swipe to refresh.
+    private void setupSwipeToRefresh(View view) {
+        // Lookup the swipe container view
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchInboxAsync();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+    }
+
+    // Reload inbox.
+    protected void fetchInboxAsync() {
+        mAdapter.clear();
+        queryMessages();
+        swipeContainer.setRefreshing(false);
     }
 
     // Query for messages intended for the current user

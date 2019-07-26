@@ -81,7 +81,7 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchQueueAsync();
+                fetchWorkshopsAsync();
             }
         });
         // Configure the refreshing colors
@@ -91,8 +91,8 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
                 android.R.color.holo_red_light);
     }
 
-    // Refresh the queue, and load workshops.
-    protected void fetchQueueAsync() {
+    // Reload workshops.
+    protected void fetchWorkshopsAsync() {
         adapter.clear();
         queryWorkshops();
         swipeContainer.setRefreshing(false);
@@ -128,6 +128,6 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
 
     @Override
     public void onDismiss() {
-        fetchQueueAsync();
+        fetchWorkshopsAsync();
     }
 }
