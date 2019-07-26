@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.AdminWorkshopAdapter;
@@ -29,6 +30,7 @@ import java.util.List;
 
 public class AdminWorkshopFragment extends Fragment implements DialogDismissListener {
     public static final String TAG = "AdminWorkshopFragment";
+    private TextView tvNotice;
     private RecyclerView rvAdminWorkshops;
     private List<Workshop> mWorkshops;
     private AdminWorkshopAdapter adapter;
@@ -47,6 +49,8 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        tvNotice = view.findViewById(R.id.tvNotice);
+        tvNotice.setVisibility(View.GONE);
         rvAdminWorkshops = view.findViewById(R.id.rvAdminWorkshops);
         mWorkshops = new ArrayList<>();
         adapter = new AdminWorkshopAdapter(getContext(), mWorkshops);
@@ -109,8 +113,17 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
                 } else {
                     e.printStackTrace();
                 }
+                isPageEmpty();
             }
         });
+    }
+
+    private void isPageEmpty() {
+        if(mWorkshops.size() == 0) {
+            tvNotice.setVisibility(View.VISIBLE);
+        } else {
+            tvNotice.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -35,7 +35,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     private List<Question> mQuestions;
     private QueueAdapter mAdapter;
     private SwipeRefreshLayout mSwipeContainer;
-
+    private TextView tvNotice;
     // Wait time calculation fields
     private TextView tvBlockingWaitTime;
     private TextView tvStretchWaitTime;
@@ -55,7 +55,8 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        tvNotice = view.findViewById(R.id.tvNotice);
+        tvNotice.setVisibility(View.GONE);
         // Create data source, adapter, and layout manager
         mQuestions = new ArrayList<>();
         mAdapter = new QueueAdapter(getContext(), mQuestions, this);
@@ -167,25 +168,33 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                     e.printStackTrace();
                     return;
                 }
-                for (Question question : objects) {
-                    // who asked the question
-                    ParseUser asker = question.getAsker();
-                    // user of who is currently logged in
-                    String currUser = ParseUser.getCurrentUser().getUsername();
-                    String currUserAdmin = "";
-                    if (!User.isAdmin(ParseUser.getCurrentUser())) {
-                        currUserAdmin = User.getAdminName(ParseUser.getCurrentUser());
-                    }
-                    // admin of asker
-                    String askerAdmin = User.getAdminName(asker);
-                    if (currUser.equals(askerAdmin) || askerAdmin.equals(currUserAdmin)) {
-                        mQuestions.add(question);
-                    }
-                }
-                Collections.sort(mQuestions);
-                mAdapter.notifyDataSetChanged();
+                addQuestionsToAdapter(objects);
             }
         });
+    }
+
+    private void addQuestionsToAdapter(List<Question> objects) {
+            tvNotice.setVisibility(View.GONE);
+            for (Question question : objects) {
+                // who asked the question
+                ParseUser asker = question.getAsker();
+                // user of who is currently logged in
+                String currUser = ParseUser.getCurrentUser().getUsername();
+                String currUserAdmin = "";
+                if (!User.isAdmin(ParseUser.getCurrentUser())) {
+                    currUserAdmin = User.getAdminName(ParseUser.getCurrentUser());
+                }
+                // admin of asker
+                String askerAdmin = User.getAdminName(asker);
+                if (currUser.equals(askerAdmin) || askerAdmin.equals(currUserAdmin)) {
+                    mQuestions.add(question);
+                }
+            }
+            Collections.sort(mQuestions);
+            mAdapter.notifyDataSetChanged();
+            if(mQuestions.size() == 0) {
+                tvNotice.setVisibility(View.VISIBLE);
+            }
     }
 
     @Override

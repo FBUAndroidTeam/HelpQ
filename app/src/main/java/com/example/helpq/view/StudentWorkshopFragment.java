@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.StudentWorkshopAdapter;
@@ -32,6 +33,7 @@ public class StudentWorkshopFragment extends Fragment {
     private StudentWorkshopAdapter adapter;
     private List<Workshop> mWorkshops;
     private SwipeRefreshLayout swipeContainer;
+    private TextView tvNotice;
 
     public static StudentWorkshopFragment newInstance() {
         return new StudentWorkshopFragment();
@@ -62,6 +64,8 @@ public class StudentWorkshopFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        tvNotice = view.findViewById(R.id.tvNotice);
+        tvNotice.setVisibility(View.GONE);
         mWorkshops = new ArrayList<>();
         adapter = new StudentWorkshopAdapter(getContext(), mWorkshops);
         rvWorkshops = view.findViewById(R.id.rvStudentWorkshops);
@@ -110,17 +114,26 @@ public class StudentWorkshopFragment extends Fragment {
                     e.printStackTrace();
                     return;
                 }
-                for(int i = 0; i < objects.size(); i++) {
-                    String name = objects.get(i).getCreator().getUsername();
-                    String name2 = User.getAdminName(ParseUser.getCurrentUser());
-                    if(name.equals(name2)) {
-                        mWorkshops.add(objects.get(i));
-                        adapter.notifyDataSetChanged();
-                        Log.d(TAG, "adapter notified");
-                    }
-                }
+                addWorkshopsToAdapter(objects);
             }
         });
+    }
+
+    private void addWorkshopsToAdapter(List<Workshop> objects) {
+        for(int i = 0; i < objects.size(); i++) {
+            String name = objects.get(i).getCreator().getUsername();
+            String name2 = User.getAdminName(ParseUser.getCurrentUser());
+            if(name.equals(name2)) {
+                mWorkshops.add(objects.get(i));
+                adapter.notifyDataSetChanged();
+                Log.d(TAG, "adapter notified");
+            }
+        }
+        if(mWorkshops.size() == 0) {
+            tvNotice.setVisibility(View.VISIBLE);
+        } else {
+            tvNotice.setVisibility(View.GONE);
+        }
     }
 
 }
