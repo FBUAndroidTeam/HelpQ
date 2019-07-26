@@ -18,11 +18,17 @@ import android.widget.Toast;
 import com.example.helpq.R;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.User;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -34,11 +40,11 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
 
     private EditText etNewUsername;
     private TextView tvAdmin;
-    private EditText etFullName;
     private Button btnRegister;
     private FragmentManager fragmentManager;
     private AdminListFragment adminListFragment;
     private String adminUsername;
+    private String fullName;
 
     public static RegistrationFragment newInstance() {
         return new RegistrationFragment();
@@ -54,9 +60,9 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getFullName();
         tvAdmin = view.findViewById(R.id.tvAdmin);
         etNewUsername = view.findViewById(R.id.etNewUsername);
-        etFullName = view.findViewById(R.id.etFullName);
         btnRegister = view.findViewById(R.id.btnRegister);
         btnRegister.setEnabled(false);
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -83,10 +89,6 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
         if (username.isEmpty()) {
             Toast.makeText(getContext(), R.string.edge_case_empty_username, Toast.LENGTH_LONG).show();
             return;
-        } else if (etFullName.getText().toString().isEmpty()) {
-            Toast.makeText(getContext(), R.string.edge_case_empty_name,
-                    Toast.LENGTH_LONG).show();
-            return;
         } else {
             queryUsernameExists(username);
         }
@@ -95,7 +97,7 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
     //completes registration process if new user from facebook login
     private void completeRegister(ParseUser newUser, final String username) {
         newUser.setUsername(username);
-        User.setFullName(etFullName.getText().toString(), newUser);
+        User.setFullName(fullName, newUser);
         User.setIsAdmin(false, newUser);
         User.setAdminName(adminUsername, newUser);
         newUser.saveInBackground(new SaveCallback() {
@@ -137,5 +139,21 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
         adminUsername = adminListFragment.getSelectedAdmin().getUsername();
         tvAdmin.setText("Admin: " + adminListFragment.getSelectedAdmin().getString(KEY_FULL_NAME));
         btnRegister.setEnabled(true);
+    }
+
+    private void getFullName() {
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        try {
+                            fullName  = String.valueOf(object.getString("name"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+        request.executeAsync();
     }
 }

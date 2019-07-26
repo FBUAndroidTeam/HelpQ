@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/colorFBBlue">
 
-    <ImageView
-        android:id="@+id/ivProfileImage"
+    <com.facebook.login.widget.ProfilePictureView
+        android:id="@+id/ppvPicture"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
@@ -40,7 +40,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivProfileImage"
+        app:layout_constraintTop_toBottomOf="@+id/ppvPicture"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
