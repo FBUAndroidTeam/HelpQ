@@ -114,8 +114,19 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         notifyItemRangeChanged(position, mQuestions.size());
     }
 
+    public void setOnItemClickListener(ClickListener clickListener) {
+        QueueAdapter.mClickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+        void onItemLongClick(int position, View v);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener, View.OnLongClickListener {
+
+        private static final int MAX_QUESTION_LENGTH = 35;
 
         // Layout fields of item_question
         private TextView tvStudentName;
@@ -126,12 +137,15 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private View vQuestionView;
         private ImageButton ibDelete;
         private ImageButton ibReply;
+        private TextView tvSeeMore;
+        private String questionText;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
+
             tvStudentName = itemView.findViewById(R.id.tvStudentName);
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
             tvHelpEmoji = itemView.findViewById(R.id.tvHelpEmoji);
@@ -140,6 +154,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvStartTime = itemView.findViewById(R.id.tvAnswerTime);
             ibDelete = itemView.findViewById(R.id.ibDelete);
             ibReply = itemView.findViewById(R.id.ibReply);
+            tvSeeMore = itemView.findViewById(R.id.tvSeeMore);
         }
 
         private void adminSlideMenu(View v) {
@@ -191,10 +206,13 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         public void bind(Question question) {
             tvStudentName.setText(question.getAsker().getString(Question.KEY_FULL_NAME));
             tvPriorityEmoji.setText(question.getPriority());
-            tvDescription.setText(question.getText());
+            questionText = question.getText();
+            setInitialQuestionText();
             tvStartTime.setText(question.getCreatedTimeAgo());
+            setHelpType(question.getHelpType());
+        }
 
-            String helpType = question.getHelpType();
+        private void setHelpType(String helpType) {
             if (helpType.equals(mContext.getResources().getString(R.string.in_person))) {
                 tvHelpEmoji.setText(R.string.EMOJI_IN_PERSON);
             } else if (helpType.equals(mContext.getResources().getString(R.string.written))) {
@@ -202,8 +220,35 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             }
         }
 
+        //determines whether or not see more should be visible
+        private void setInitialQuestionText() {
+            if(questionText.length() > MAX_QUESTION_LENGTH) {
+                tvDescription.setText(questionText.substring(0, MAX_QUESTION_LENGTH) + "...");
+                tvSeeMore.setVisibility(View.VISIBLE);
+            } else {
+                tvDescription.setText(questionText);
+                tvSeeMore.setVisibility(View.GONE);
+            }
+        }
+
+        //determines whether to expand or collapse cell when cell is clicked on
+        private void setTextExpansion() {
+            if (tvSeeMore.getText().equals(mContext.getResources().getString(R.string.see_more))) {
+                tvSeeMore.setText(mContext.getResources().getString(R.string.see_less));
+                tvDescription.setText(questionText);
+            } else {
+                tvSeeMore.setText(mContext.getResources().getString(R.string.see_more));
+                tvDescription.setText(questionText.substring(0, MAX_QUESTION_LENGTH) + "...");
+            }
+        }
+
         @Override
         public void onClick(View v) {
+            setTextExpansion();
+            hideActions(v);
+        }
+
+        private void hideActions(View v) {
             mClickListener.onItemClick(getAdapterPosition(), v);
             if(ibDelete.getVisibility() == View.VISIBLE) {
                 TranslateAnimation animate = new TranslateAnimation(
@@ -233,14 +278,5 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             return true;
         }
 
-    }
-
-    public void setOnItemClickListener(ClickListener clickListener) {
-        QueueAdapter.mClickListener = clickListener;
-    }
-
-    public interface ClickListener {
-        void onItemClick(int position, View v);
-        void onItemLongClick(int position, View v);
     }
 }

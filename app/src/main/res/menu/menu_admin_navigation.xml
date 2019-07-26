@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/profile_emoji"
+        android:title="@string/profile_tab"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_enrolled"
+        android:icon="@drawable/students_emoji"
+        android:title="@string/enrolled_tab"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_queue"
+        android:icon="@drawable/queue_emoji"
+        android:title="@string/queue_tab"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_workshop"
+        android:icon="@drawable/workshop_emoji"
+        android:title="@string/board_tab"
+        app:showAsAction="always" />
+</menu>
