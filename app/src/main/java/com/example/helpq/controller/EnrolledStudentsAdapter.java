@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.helpq.R;
+import com.example.helpq.model.User;
+import com.facebook.login.widget.ProfilePictureView;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -16,9 +19,9 @@ public class EnrolledStudentsAdapter extends
         RecyclerView.Adapter<EnrolledStudentsAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<String> mEnrolledStudents;
+    private List<ParseUser> mEnrolledStudents;
 
-    public EnrolledStudentsAdapter(Context context, List<String> students) {
+    public EnrolledStudentsAdapter(Context context, List<ParseUser> students) {
         this.mContext = context;
         this.mEnrolledStudents = students;
     }
@@ -43,14 +46,17 @@ public class EnrolledStudentsAdapter extends
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvEnrolledStudent;
+        private ProfilePictureView ppvProfilePic;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvEnrolledStudent = itemView.findViewById(R.id.tvEnrolledStudent);
+            ppvProfilePic = itemView.findViewById(R.id.ppvProfilePic);
         }
 
-        public void bind(String student) {
-            tvEnrolledStudent.setText(student);
+        public void bind(ParseUser student) {
+            tvEnrolledStudent.setText(User.getFullName(student));
+            ppvProfilePic.setProfileId(User.getProfilePicture(student));
         }
     }
 }
