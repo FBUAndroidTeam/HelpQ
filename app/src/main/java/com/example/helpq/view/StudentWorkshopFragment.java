@@ -120,7 +120,7 @@ public class StudentWorkshopFragment extends Fragment {
     }
 
     private void addWorkshopsToAdapter(List<Workshop> objects) {
-        for(int i = 0; i < objects.size(); i++) {
+        for (int i = 0; i < objects.size(); i++) {
             String name = objects.get(i).getCreator().getUsername();
             String name2 = User.getAdminName(ParseUser.getCurrentUser());
             if(name.equals(name2)) {
