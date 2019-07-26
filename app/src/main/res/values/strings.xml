@@ -47,4 +47,6 @@
     <string name="profile_tab">Profile</string>
     <string name="facebook_app_id">347613129505173</string>
     <string name="registration_complete">Registered and logged in successfully</string>
+    <string name="see_more">See More</string>
+    <string name="see_less">See Less</string>
 </resources>
