@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.helpq.R;
+import com.facebook.FacebookSdk;
+import com.facebook.LoggingBehavior;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -30,6 +32,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.setIsDebugEnabled(true);
+        FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
         setContentView(R.layout.activity_login);
         // Allow user to persist between app restarts
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -55,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
             ArrayList<String> permissions = new ArrayList();
             permissions.add("email");
+            permissions.add("public_profile");
             ParseFacebookUtils.logInWithReadPermissionsInBackground(LoginActivity.this,
                 permissions, new LogInCallback() {
                     @Override

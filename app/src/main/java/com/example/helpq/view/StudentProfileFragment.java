@@ -10,22 +10,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.example.helpq.R;
 import com.example.helpq.model.User;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.widget.ProfilePictureView;
 import com.parse.ParseUser;
-import com.bumptech.glide.Glide;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class StudentProfileFragment extends Fragment {
 
     public static final String TAG = "StudentProfileFragment";
 
-    private ImageView ivProfileImage;
     private TextView tvFullName;
     private TextView tvAdmin;
     private TextView tvUsername;
     private Button btnLogout;
+    private ProfilePictureView ppvPicture;
 
     public static StudentProfileFragment newInstance() {
         return new StudentProfileFragment();
@@ -53,7 +59,7 @@ public class StudentProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ivProfileImage = view.findViewById(R.id.ivProfileImage);
+        ppvPicture = view.findViewById(R.id.ppvPicture);
         tvAdmin = view.findViewById(R.id.tvAdmin);
         tvFullName = view.findViewById(R.id.tvFullName);
         tvUsername = view.findViewById(R.id.tvUsername);
@@ -62,10 +68,7 @@ public class StudentProfileFragment extends Fragment {
         tvAdmin.setText(User.getAdminName(ParseUser.getCurrentUser()));
         tvFullName.setText(User.getFullName(ParseUser.getCurrentUser()));
         setupLogout();
-
-        Glide.with(getContext())
-                .load("http://via.placeholder.com/50.png")
-                .into(ivProfileImage);
+        getFacebookPicture();
     }
 
     // Handle logic for logging out.
@@ -79,4 +82,23 @@ public class StudentProfileFragment extends Fragment {
             }
         });
     }
+
+    private void getFacebookPicture() {
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+                try {
+                    String id  = String.valueOf(object.getString("id"));
+                    ppvPicture.setProfileId(id);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        request.executeAsync();
+    }
+
+
 }

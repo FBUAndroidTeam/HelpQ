@@ -9,19 +9,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.helpq.R;
 import com.example.helpq.model.User;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.widget.ProfilePictureView;
 import com.parse.ParseUser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class AdminProfileFragment extends Fragment {
 
     public static final String TAG = "AdminProfileFragment";
 
-    private ImageView ivProfileImage;
+    private ProfilePictureView ppvPicture;
     private TextView tvFullName;
     private  TextView tvUsername;
     private Button btnLogout;
@@ -42,15 +47,11 @@ public class AdminProfileFragment extends Fragment {
         tvUsername = view.findViewById(R.id.tvUsername);
         tvFullName = view.findViewById(R.id.tvFullName);
         btnLogout = view.findViewById(R.id.btnLogout);
-        ivProfileImage = (ImageView) view.findViewById(R.id.ivProfileImage);
+        ppvPicture = view.findViewById(R.id.ppvPicture);
         tvFullName.setText(User.getFullName(ParseUser.getCurrentUser()));
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         setupLogout();
-
-
-        Glide.with(getContext())
-                .load("http://via.placeholder.com/50.png")
-                .into(ivProfileImage);
+        getFacebookPicture();
     }
 
     // Handle logic for logging out.
@@ -64,5 +65,22 @@ public class AdminProfileFragment extends Fragment {
                 ((MainActivity) getActivity()).finish();
             }
         });
+    }
+
+    private void getFacebookPicture() {
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        try {
+                            String id  = String.valueOf(object.getString("id"));
+                            ppvPicture.setProfileId(id);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+        request.executeAsync();
     }
 }
