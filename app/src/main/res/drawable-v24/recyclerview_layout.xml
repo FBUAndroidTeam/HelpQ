@@ -2,10 +2,10 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-    <solid android:color="@color/colorPeach"/>
+    <solid android:color="@color/colorWhite"/>
 
     <stroke android:width="3dp"
-        android:color="@color/colorSalmon"/>
+        android:color="@color/colorWhite"/>
 
     <padding android:left="1dp"
         android:top="1dp"
