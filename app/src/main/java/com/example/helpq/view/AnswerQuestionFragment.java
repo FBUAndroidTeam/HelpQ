@@ -25,7 +25,7 @@ import java.util.Date;
 
 public class AnswerQuestionFragment extends DialogFragment {
 
-    private static final String TAG = "AnswerQuestionFragment";
+    public static final String TAG = "AnswerQuestionFragment";
     private Question mQuestion;
 
     // Layout fields

@@ -18,7 +18,6 @@ import com.example.helpq.R;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
 import com.example.helpq.view.AnswerQuestionFragment;
-import com.example.helpq.view.CreateQuestionFragment;
 import com.example.helpq.view.MainActivity;
 import com.example.helpq.view.QueueFragment;
 import com.parse.ParseException;
@@ -84,7 +83,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             FragmentManager manager = ((MainActivity) mContext).getSupportFragmentManager();
             List<Fragment> fragmentList = manager.getFragments();
             FragmentManager queueFragManager = fragmentList.get(1).getChildFragmentManager();
-            fragment.show(queueFragManager, CreateQuestionFragment.TAG);
+            fragment.show(queueFragManager, AnswerQuestionFragment.TAG);
         } else {
             Toast.makeText(mContext, R.string.request_in_person,
                     Toast.LENGTH_LONG).show();
@@ -108,6 +107,20 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 }
             }
         });
+    }
+
+    // Deletes this question from parse
+    private void deleteQuestion(final int adapterPosition) {
+        Question question = mQuestions.get(adapterPosition);
+        try {
+            question.delete();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        question.saveInBackground();
+        Toast.makeText(mContext, R.string.delete_question,
+                Toast.LENGTH_LONG).show();
+        removeAt(adapterPosition);
     }
 
     // Removes question at this position
@@ -202,7 +215,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    archiveQuestion(getAdapterPosition());
+                    deleteQuestion(getAdapterPosition());
                 }
             });
         }
