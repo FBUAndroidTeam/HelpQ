@@ -2,6 +2,7 @@ package com.example.helpq.controller;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -81,7 +82,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             AnswerQuestionFragment fragment = AnswerQuestionFragment.newInstance(question);
             fragment.setTargetFragment(mQueueFragment, 300);
             FragmentManager manager = ((MainActivity) mContext).getSupportFragmentManager();
-            fragment.show(manager, CreateQuestionFragment.TAG);
+            List<Fragment> fragmentList = manager.getFragments();
+            FragmentManager queueFragManager = fragmentList.get(1).getChildFragmentManager();
+            fragment.show(queueFragManager, CreateQuestionFragment.TAG);
         } else {
             Toast.makeText(mContext, R.string.request_in_person,
                     Toast.LENGTH_LONG).show();
@@ -244,7 +247,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
         @Override
         public void onClick(View v) {
-            setTextExpansion();
+            if(questionText.length() > MAX_QUESTION_LENGTH) {
+                setTextExpansion();
+            }
             hideActions(v);
         }
 
