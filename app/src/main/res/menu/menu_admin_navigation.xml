@@ -22,4 +22,10 @@
         android:icon="@drawable/workshop_emoji"
         android:title="@string/workshops_tab"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_board"
+        android:icon="@drawable/board_emoji"
+        android:title="@string/board_tab"
+        app:showAsAction="always" />
+
 </menu>

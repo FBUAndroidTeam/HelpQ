@@ -79,7 +79,12 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             tvPriorityEmoji.setText(message.getPriority());
             tvQuestion.setText(message.getText());
             tvAnswerTime.setText(message.getAnsweredTimeAgo());
-            tvAdminName.setText(User.getAdminName(ParseUser.getCurrentUser()) + "'s answer");
+            if (User.isAdmin(ParseUser.getCurrentUser())) {
+                tvAdminName.setText(mContext.getResources().getString(R.string.your_answer));
+            } else {
+                tvAdminName.setText(User.getAdminName(ParseUser.getCurrentUser()) +
+                        mContext.getResources().getString(R.string.admin_answer));
+            }
             tvAnswer.setText(message.getAnswer());
         }
     }
