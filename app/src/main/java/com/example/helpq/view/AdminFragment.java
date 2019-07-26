@@ -67,6 +67,9 @@ public class AdminFragment extends Fragment {
                             case R.id.action_workshop:
                                 vpPager.setCurrentItem(3);
                                 return true;
+                            case R.id.action_board:
+                                vpPager.setCurrentItem(4);
+                                return true;
                         }
                         return false;
                     }
@@ -75,7 +78,7 @@ public class AdminFragment extends Fragment {
 
     public static class AdminPagerAdapter extends FragmentPagerAdapter {
 
-        private static int NUM_ITEMS = 4; // Number of pages
+        private static int NUM_ITEMS = 5; // Number of pages
         private Context mContext;
 
         public AdminPagerAdapter(FragmentManager fm, Context context) {
@@ -101,6 +104,8 @@ public class AdminFragment extends Fragment {
                     return AdminQueueFragment.newInstance();
                 case 3:
                     return AdminWorkshopFragment.newInstance();
+                case 4:
+                    return AdminBoardFragment.newInstance();
                 default:
                     return null;
             }
@@ -118,6 +123,8 @@ public class AdminFragment extends Fragment {
                     return mContext.getResources().getString(R.string.queue_tab);
                 case 3:
                     return mContext.getResources().getString(R.string.workshops_tab);
+                case 4:
+                    return mContext.getResources().getString(R.string.board_tab);
                 default:
                     return null;
             }
@@ -144,6 +151,9 @@ public class AdminFragment extends Fragment {
                     break;
                 case 3:
                     mNagivationView.setSelectedItemId(R.id.action_workshop);
+                    break;
+                case 4:
+                    mNagivationView.setSelectedItemId(R.id.action_board);
                     break;
                 default:
                     break;

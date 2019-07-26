@@ -12,20 +12,19 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
-public class StudentBoardFragment extends InboxFragment {
+public class AdminBoardFragment extends InboxFragment {
 
-    public static final String TAG = "StudentBoardFragment";
+    public static final String TAG = "AdminBoardFragment";
 
-    public static StudentBoardFragment newInstance() {
-        return new StudentBoardFragment();
+    public static AdminBoardFragment newInstance() {
+        return new AdminBoardFragment();
     }
 
-    // Query for public messages intended for all students
+    // Query for all questions answered by this admin
     protected void queryMessages() {
         final ParseQuery<Question> messageQuery = new ParseQuery<Question>(Question.class);
         messageQuery.include(Question.KEY_ASKER)
                 .whereEqualTo(Question.KEY_ARCHIVED, true)
-                .whereEqualTo(Question.KEY_IS_PRIVATE, false)
                 .whereEqualTo(Question.KEY_HELP_TYPE,
                         getContext().getResources().getString(R.string.written))
                 .orderByDescending(Question.KEY_ANSWERED_AT);
@@ -40,12 +39,11 @@ public class StudentBoardFragment extends InboxFragment {
                 }
 
                 for (Question question : objects) {
-                    // Admin of current user
-                    String userAdmin = User.getAdminName(ParseUser.getCurrentUser());
                     // Admin of asker
                     String askerAdmin = User.getAdminName(question.getAsker());
 
-                    if (askerAdmin.equals(userAdmin) && question.getAnswer() != null) {
+                    if (askerAdmin.equals(ParseUser.getCurrentUser().getUsername())
+                            && question.getAnswer() != null) {
                         mMessages.add(question);
                     }
                 }

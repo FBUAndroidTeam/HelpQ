@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.EnrolledStudentsAdapter;
@@ -28,6 +29,7 @@ public class AdminEnrolledFragment extends Fragment {
     private RecyclerView rvEnrolledStudents;
     private EnrolledStudentsAdapter adapter;
     private List<String> mStudents;
+    private TextView tvNotice;
 
     public static AdminEnrolledFragment newInstance() {
         return new AdminEnrolledFragment();
@@ -43,6 +45,8 @@ public class AdminEnrolledFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        tvNotice = view.findViewById(R.id.tvNotice);
+        tvNotice.setVisibility(View.GONE);
         rvEnrolledStudents = view.findViewById(R.id.rvEnrolledStudents);
         mStudents = new ArrayList<>();
         adapter = new EnrolledStudentsAdapter(getContext(), mStudents);
@@ -71,8 +75,17 @@ public class AdminEnrolledFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                     Log.d(TAG, name + ParseUser.getCurrentUser());
                 }
+                isPageEmpty();
             }
         });
+    }
+
+    private void isPageEmpty() {
+        if(mStudents.size() == 0) {
+            tvNotice.setVisibility(View.VISIBLE);
+        } else {
+            tvNotice.setVisibility(View.GONE);
+        }
     }
 
 }

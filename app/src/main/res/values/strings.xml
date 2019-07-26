@@ -49,7 +49,10 @@
     <string name="registration_complete">Registered and logged in successfully</string>
     <string name="see_more">See More</string>
     <string name="see_less">See Less</string>
-    <string name="empty_inbox">You currently have nothing in your inbox</string>
+    <string name="empty_inbox">You currently have nothing here, check back later!</string>
     <string name="empty_queue">There are currently no questions on the queue</string>
     <string name="empty_workshop">There are currently no workshops</string>
+    <string name="your_answer">Your answer:</string>
+    <string name="admin_answer">\'s answer:</string>
+    <string name="empty_enrolled">You currently have no students</string>
 </resources>
