@@ -45,6 +45,7 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
     private AdminListFragment adminListFragment;
     private String adminUsername;
     private String fullName;
+    private String profilePicId;
 
     public static RegistrationFragment newInstance() {
         return new RegistrationFragment();
@@ -60,7 +61,7 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getFullName();
+        getFacebookInformation();
         tvAdmin = view.findViewById(R.id.tvAdmin);
         etNewUsername = view.findViewById(R.id.etNewUsername);
         btnRegister = view.findViewById(R.id.btnRegister);
@@ -100,6 +101,7 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
         User.setFullName(fullName, newUser);
         User.setIsAdmin(false, newUser);
         User.setAdminName(adminUsername, newUser);
+        User.setProfilePicture(profilePicId, newUser);
         newUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -141,13 +143,15 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
         btnRegister.setEnabled(true);
     }
 
-    private void getFullName() {
+    //gets user's full name and profile picture from Facebook
+    private void getFacebookInformation() {
         GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         try {
                             fullName  = String.valueOf(object.getString("name"));
+                            profilePicId  = String.valueOf(object.getString("id"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
