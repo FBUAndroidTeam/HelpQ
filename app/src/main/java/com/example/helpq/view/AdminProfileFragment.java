@@ -13,14 +13,8 @@ import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.model.User;
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.login.widget.ProfilePictureView;
 import com.parse.ParseUser;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class AdminProfileFragment extends Fragment {
 
@@ -51,7 +45,7 @@ public class AdminProfileFragment extends Fragment {
         tvFullName.setText(User.getFullName(ParseUser.getCurrentUser()));
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         setupLogout();
-        getFacebookPicture();
+        ppvPicture.setProfileId(User.getProfilePicture(ParseUser.getCurrentUser()));
     }
 
     // Handle logic for logging out.
@@ -65,22 +59,5 @@ public class AdminProfileFragment extends Fragment {
                 ((MainActivity) getActivity()).finish();
             }
         });
-    }
-
-    private void getFacebookPicture() {
-        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        try {
-                            String id  = String.valueOf(object.getString("id"));
-                            ppvPicture.setProfileId(id);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                });
-        request.executeAsync();
     }
 }
