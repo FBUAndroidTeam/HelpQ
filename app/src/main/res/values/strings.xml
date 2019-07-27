@@ -57,6 +57,6 @@
     <string name="empty_enrolled">You currently have no students</string>
     <string name="workshop_when">When: </string>
     <string name="workshop_where">Where: </string>
-    <string name="max_notifications">99+</string>
+    <string name="max_notifications">99</string>
 
 </resources>

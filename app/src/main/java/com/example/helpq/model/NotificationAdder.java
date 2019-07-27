@@ -20,8 +20,28 @@ public class NotificationAdder {
         mContext = context;
     }
 
+    public void setProfileTabNotification(int number) {
+        setNotificationBadge(R.id.action_profile, number);
+    }
+
+    public void setEnrolledTabNotification(int number) {
+        setNotificationBadge(R.id.action_enrolled, number);
+    }
+
     public void setQueueTabNotification(int number) {
         setNotificationBadge(R.id.action_queue, number);
+    }
+
+    public void setWorkshopTabNotification(int number) {
+        setNotificationBadge(R.id.action_workshop, number);
+    }
+
+    public void setBoardTabNotification(int number) {
+        setNotificationBadge(R.id.action_board, number);
+    }
+
+    public void setInboxTabNotification(int number) {
+        setNotificationBadge(R.id.action_inbox, number);
     }
 
     private void setNotificationBadge(int layoutId, int number)

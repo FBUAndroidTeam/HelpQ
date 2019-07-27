@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.helpq.R;
-import com.example.helpq.model.NotificationAdder;
 
 public class AdminFragment extends Fragment {
 
@@ -46,9 +45,6 @@ public class AdminFragment extends Fragment {
         vpPager.setCurrentItem(2);
         mNavigationView.setSelectedItemId(R.id.action_queue);
         vpPager.setOnPageChangeListener(new AdminPageChanger());
-
-        NotificationAdder adder = new NotificationAdder(mNavigationView, getContext());
-        adder.setQueueTabNotification(100);
 
         setupNavigationView();
     }
