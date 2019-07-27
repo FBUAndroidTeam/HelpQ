@@ -21,7 +21,7 @@ public class StudentFragment extends Fragment {
     public static final String TAG = "StudentFragment";
     private FragmentPagerAdapter mAdapterViewPager;
     private ViewPager vpPager;
-    private BottomNavigationView mNagivationView;
+    private BottomNavigationView mNavigationView;
 
     public static StudentFragment newInstance() {
         return new StudentFragment();
@@ -38,19 +38,19 @@ public class StudentFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         vpPager = view.findViewById(R.id.vpPager);
-        mNagivationView = view.findViewById(R.id.student_navigation);
+        mNavigationView = view.findViewById(R.id.student_navigation);
         mAdapterViewPager = new StudentPagerAdapter(getFragmentManager(), getContext());
 
         vpPager.setAdapter(mAdapterViewPager);
         vpPager.setCurrentItem(2);
-        mNagivationView.setSelectedItemId(R.id.action_queue);
+        mNavigationView.setSelectedItemId(R.id.action_queue);
         vpPager.setOnPageChangeListener(new StudentPageChanger());
 
         setupNavigationView();
     }
 
     private void setupNavigationView() {
-        mNagivationView.setOnNavigationItemSelectedListener(
+        mNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -141,19 +141,19 @@ public class StudentFragment extends Fragment {
         public void onPageSelected(int position) {
             switch (position) {
                 case 0:
-                    mNagivationView.setSelectedItemId(R.id.action_profile);
+                    mNavigationView.setSelectedItemId(R.id.action_profile);
                     break;
                 case 1:
-                    mNagivationView.setSelectedItemId(R.id.action_workshop);
+                    mNavigationView.setSelectedItemId(R.id.action_workshop);
                     break;
                 case 2:
-                    mNagivationView.setSelectedItemId(R.id.action_queue);
+                    mNavigationView.setSelectedItemId(R.id.action_queue);
                     break;
                 case 3:
-                    mNagivationView.setSelectedItemId(R.id.action_inbox);
+                    mNavigationView.setSelectedItemId(R.id.action_inbox);
                     break;
                 case 4:
-                    mNagivationView.setSelectedItemId(R.id.action_board);
+                    mNavigationView.setSelectedItemId(R.id.action_board);
                     break;
                 default:
                     break;
