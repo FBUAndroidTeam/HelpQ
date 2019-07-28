@@ -9,12 +9,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.helpq.R;
+import com.example.helpq.model.Notification;
+import com.example.helpq.model.NotificationHelper;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.util.List;
 
 public class StudentFragment extends Fragment {
 
@@ -22,6 +31,7 @@ public class StudentFragment extends Fragment {
     private FragmentPagerAdapter mAdapterViewPager;
     private ViewPager vpPager;
     private BottomNavigationView mNavigationView;
+    private NotificationHelper mHelper;
 
     public static StudentFragment newInstance() {
         return new StudentFragment();
@@ -46,7 +56,52 @@ public class StudentFragment extends Fragment {
         mNavigationView.setSelectedItemId(R.id.action_queue);
         vpPager.setOnPageChangeListener(new StudentPageChanger());
 
+        mHelper = new NotificationHelper(mNavigationView, getContext());
+
+        addNotificationBadges();
         setupNavigationView();
+    }
+
+    private void addNotificationBadges() {
+        ParseQuery<Notification> notificationQuery = new ParseQuery<Notification>(Notification.class);
+        notificationQuery.whereEqualTo(Notification.KEY_USER, ParseUser.getCurrentUser());
+        notificationQuery.findInBackground(new FindCallback<Notification>() {
+            @Override
+            public void done(List<Notification> objects, ParseException e) {
+                Log.d(TAG, "Student notifications retrieved");
+                int profileCount = 0;
+                int workshopsCount = 0;
+                int queueCount = 0;
+                int inboxCount = 0;
+                int boardCount = 0;
+
+                for (Notification notification : objects) {
+                    switch (notification.getTab()) {
+                        case 0:
+                            profileCount++;
+                            break;
+                        case 1:
+                            workshopsCount++;
+                            break;
+                        case 2:
+                            queueCount++;
+                            break;
+                        case 3:
+                            inboxCount++;
+                            break;
+                        case 4:
+                            boardCount++;
+                            break;
+                    }
+                }
+
+                if (profileCount > 0) mHelper.addBadge(R.id.action_profile, profileCount);
+                if (workshopsCount > 0) mHelper.addBadge(R.id.action_workshop, workshopsCount);
+                if (queueCount > 0) mHelper.addBadge(R.id.action_queue, queueCount);
+                if (inboxCount > 0) mHelper.addBadge(R.id.action_inbox, inboxCount);
+                if (boardCount > 0) mHelper.addBadge(R.id.action_board, boardCount);
+            }
+        });
     }
 
     private void setupNavigationView() {
