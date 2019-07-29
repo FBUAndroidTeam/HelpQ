@@ -28,6 +28,10 @@ public class Question extends ParseObject implements Comparable<Question>{
     public static final String KEY_ANSWERED_AT = "answeredAt";
     public static final String KEY_IS_PRIVATE = "isPrivate";
 
+    public void setCreatedAt(Date date) {
+        put(KEY_CREATED_AT, date);
+    }
+
     public String getText() {
         return getString(KEY_TEXT);
     }

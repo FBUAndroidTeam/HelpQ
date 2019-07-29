@@ -118,9 +118,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             e.printStackTrace();
         }
         question.saveInBackground();
-        Toast.makeText(mContext, R.string.delete_question,
-                Toast.LENGTH_LONG).show();
         removeAt(adapterPosition);
+        mQueueFragment.createSnackbar(question.getCreatedAt(), question.getAsker(),
+                question.getText(), question.getPriority(), question.getHelpType(), adapterPosition);
     }
 
     // Removes question at this position
@@ -217,6 +217,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     deleteQuestion(getAdapterPosition());
+                    ibDelete.setVisibility(ibDelete.INVISIBLE);
                 }
             });
         }

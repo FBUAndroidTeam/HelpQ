@@ -57,5 +57,6 @@
     <string name="empty_enrolled">You currently have no students</string>
     <string name="workshop_when">When: </string>
     <string name="workshop_where">Where: </string>
-
+    <string name="snackbar_text">Your question was deleted.</string>
+    <string name="snackbar_action">UNDO</string>
 </resources>
