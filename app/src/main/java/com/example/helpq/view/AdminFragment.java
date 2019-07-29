@@ -126,9 +126,9 @@ public class AdminFragment extends Fragment {
                     }
                     notification.saveInBackground();
                 }
-                mHelper.removeBadge(itemId);
             }
         });
+        mHelper.removeBadge(itemId);
     }
 
     private void setupNavigationView() {
