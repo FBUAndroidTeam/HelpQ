@@ -16,6 +16,7 @@ import android.widget.ToggleButton;
 
 import com.example.helpq.R;
 import com.example.helpq.model.DialogDismissListener;
+import com.example.helpq.model.Notification;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
 import com.parse.ParseException;
@@ -111,5 +112,14 @@ public class AnswerQuestionFragment extends DialogFragment {
                 }
             }
         });
+        notifyStudent();
+    }
+
+    // Put a notification that this question has been answered in the student's inbox.
+    private void notifyStudent() {
+        Notification notification = new Notification();
+        notification.setUser(mQuestion.getAsker());
+        notification.setTab(3);
+        notification.saveInBackground();
     }
 }
