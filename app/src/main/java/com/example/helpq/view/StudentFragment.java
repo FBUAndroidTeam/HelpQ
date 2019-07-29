@@ -70,7 +70,10 @@ public class StudentFragment extends Fragment {
         notificationQuery.findInBackground(new FindCallback<Notification>() {
             @Override
             public void done(List<Notification> objects, ParseException e) {
-                Log.d(TAG, "Student notifications retrieved");
+                if (e != null) {
+                    Log.d(TAG, "Error querying for notifications");
+                }
+
                 int profileCount = 0;
                 int workshopsCount = 0;
                 int queueCount = 0;

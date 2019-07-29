@@ -8,6 +8,7 @@ public class User {
     public static String KEY_FULL_NAME = "fullName";
     public static String KEY_ADMIN_NAME = "adminName";
     public static String KEY_PROFILE_PIC = "profilePictureId";
+    public static String KEY_USERNAME = "username";
 
     // Is the user an admin?
     public static boolean isAdmin(ParseUser user) {
