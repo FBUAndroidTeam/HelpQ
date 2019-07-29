@@ -56,8 +56,6 @@ public class AdminEnrolledFragment extends Fragment {
         queryEnrolledStudents();
     }
 
-
-
     private void queryEnrolledStudents() {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo(User.KEY_ADMIN_NAME, ParseUser.getCurrentUser().getUsername());

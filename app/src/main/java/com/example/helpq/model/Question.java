@@ -28,6 +28,10 @@ public class Question extends ParseObject implements Comparable<Question>{
     public static final String KEY_ANSWERED_AT = "answeredAt";
     public static final String KEY_IS_PRIVATE = "isPrivate";
 
+    public void setCreatedAt(Date date) {
+        put(KEY_CREATED_AT, date);
+    }
+
     public String getText() {
         return getString(KEY_TEXT);
     }
@@ -126,7 +130,7 @@ public class Question extends ParseObject implements Comparable<Question>{
     public long getTimeDifference() {
         Date asked = this.getCreatedAt();
         Date answered = this.getAnsweredAt();
-         return answered.getTime() - asked.getTime();
+        return answered.getTime() - asked.getTime();
     }
 
     // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");

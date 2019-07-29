@@ -3,6 +3,7 @@ package com.example.helpq.view;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,9 +24,11 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class QueueFragment extends Fragment implements DialogDismissListener {
@@ -200,6 +203,29 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     @Override
     public void onDismiss() {
         fetchQueueAsync();
+    }
+
+    //created at, asker, text, priority, help type, set archived to false
+    public void createSnackbar(final Date createdAt, final ParseUser asker, final String text, final String priority, final String helpType, final int adapterpos){
+        View.OnClickListener myOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Question q = new Question();
+                q.setCreatedAt(createdAt);
+                q.setAsker(asker);
+                q.setText(text);
+                q.setPriority(priority);
+                q.setHelpType(helpType);
+                q.setIsArchived(false);
+                q.saveInBackground();
+                mAdapter.notifyItemInserted(adapterpos);
+                rvQuestions.scrollToPosition(adapterpos);
+            }
+        };
+
+        Snackbar.make(getView(), R.string.snackbar_text, Snackbar.LENGTH_LONG)
+                .setAction(R.string.snackbar_action, myOnClickListener)
+                .show();
     }
 }
 
