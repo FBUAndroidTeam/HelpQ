@@ -216,26 +216,19 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             animate.setFillAfter(true);
             vQuestionView.startAnimation(animate);
             ibDelete.setVisibility(ibDelete.VISIBLE);
-            ibDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    Question q = mQuestions.get(position);
-                    q.setIsArchived(true);
-                    q.setAnsweredAt(Calendar.getInstance().getTime());
-                    q.saveInBackground();
-                    removeAt(position);
-                    mQueueFragment.createSnackbar(position, q);
-                    ibDelete.setVisibility(ibDelete.INVISIBLE);
-                }
-            });
             if(User.getFullName(currentUser)
                     .equals(tvStudentName.getText().toString())) {
                 ibDelete.setVisibility(ibDelete.VISIBLE);
                 ibDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        archiveQuestion(getAdapterPosition());
+                        int position = getAdapterPosition();
+                        Question q = mQuestions.get(position);
+                        q.setIsArchived(true);
+                        q.setAnsweredAt(Calendar.getInstance().getTime());
+                        q.saveInBackground();
+                        removeAt(position);
+                        mQueueFragment.createSnackbar(position, q);
                         ibDelete.setVisibility(ibDelete.INVISIBLE);
                     }
                 });
