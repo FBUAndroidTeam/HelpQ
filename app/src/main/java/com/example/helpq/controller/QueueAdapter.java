@@ -24,6 +24,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -76,8 +77,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     // Answers this question
     private void answerQuestion(int adapterPosition) {
         Question question = mQuestions.get(adapterPosition);
-        if (question.getHelpType()
-                .equals(mContext.getResources().getString(R.string.written))) {
+        if (question.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
             AnswerQuestionFragment fragment = AnswerQuestionFragment.newInstance(question);
             fragment.setTargetFragment(mQueueFragment, 300);
             FragmentManager manager = ((MainActivity) mContext).getSupportFragmentManager();
@@ -87,6 +87,13 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         } else {
             Toast.makeText(mContext, R.string.request_in_person,
                     Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void replyToQuestion(int adapterPosition) {
+        Question question = mQuestions.get(adapterPosition);
+        if(question.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
+
         }
     }
 
@@ -110,17 +117,15 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     }
 
     // Deletes this question from parse
-    private void deleteQuestion(final int adapterPosition) {
-        Question question = mQuestions.get(adapterPosition);
+    public void deleteQuestion(Question q) {
         try {
-            question.delete();
+            q.delete();
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        question.saveInBackground();
-        removeAt(adapterPosition);
-        mQueueFragment.createSnackbar(question.getCreatedAt(), question.getAsker(),
-                question.getText(), question.getPriority(), question.getHelpType(), adapterPosition);
+        q.saveInBackground();
+        notifyDataSetChanged();
+//        removeAt(adapterPosition);
     }
 
     // Removes question at this position
@@ -141,8 +146,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener, View.OnLongClickListener {
-
-        private static final int MAX_QUESTION_LENGTH = 35;
 
         // Layout fields of item_question
         private TextView tvStudentName;
@@ -202,7 +205,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             });
         }
 
-        private void studentSlideMenu(View v) {
+        private void studentSlideMenu(View v, ParseUser currentUser) {
             TranslateAnimation animate = new TranslateAnimation(
                     v.getX(),
                     -150,
@@ -213,13 +216,33 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             animate.setFillAfter(true);
             vQuestionView.startAnimation(animate);
             ibDelete.setVisibility(ibDelete.VISIBLE);
-            ibDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    deleteQuestion(getAdapterPosition());
-                    ibDelete.setVisibility(ibDelete.INVISIBLE);
-                }
-            });
+            if(User.getFullName(currentUser)
+                    .equals(tvStudentName.getText().toString())) {
+                ibDelete.setVisibility(ibDelete.VISIBLE);
+                ibDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = getAdapterPosition();
+                        Question q = mQuestions.get(position);
+                        q.setIsArchived(true);
+                        q.setAnsweredAt(Calendar.getInstance().getTime());
+                        q.saveInBackground();
+                        removeAt(position);
+                        mQueueFragment.createSnackbar(position, q);
+                        ibDelete.setVisibility(ibDelete.INVISIBLE);
+                    }
+                });
+            } else {
+                ibReply.setVisibility(View.VISIBLE);
+                ibDelete.setVisibility(View.GONE);
+                ibReply.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        replyToQuestion(getAdapterPosition());
+                        ibReply.setVisibility(ibReply.INVISIBLE);
+                    }
+                });
+            }
         }
 
         // Bind the view elements to the Question.
@@ -280,7 +303,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
         private void hideActions(View v) {
             mClickListener.onItemClick(getAdapterPosition(), v);
-            if(ibDelete.getVisibility() == View.VISIBLE) {
+            if(ibDelete.getVisibility() == View.VISIBLE || ibReply.getVisibility() == View.VISIBLE){
                 TranslateAnimation animate = new TranslateAnimation(
                         itemView.getX(),
                         0,
@@ -290,8 +313,8 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 animate.setDuration(400);
                 animate.setFillAfter(true);
                 vQuestionView.startAnimation(animate);
-                ibDelete.setVisibility(ibDelete.INVISIBLE);
-                ibReply.setVisibility(ibReply.INVISIBLE);
+                ibDelete.setVisibility(ibDelete.GONE);
+                ibReply.setVisibility(ibReply.GONE);
             }
         }
 
@@ -301,12 +324,10 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             ParseUser currentUser = ParseUser.getCurrentUser();
             if (User.isAdmin(currentUser)) {
                 adminSlideMenu(v);
-            } else if (User.getFullName(currentUser)
-                    .equals(tvStudentName.getText().toString())) {
-                studentSlideMenu(v);
+            } else {
+                studentSlideMenu(v, currentUser);
             }
             return true;
         }
-
     }
 }
