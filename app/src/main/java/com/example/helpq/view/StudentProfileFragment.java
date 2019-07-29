@@ -20,12 +20,14 @@ import com.parse.ParseUser;
 public class StudentProfileFragment extends Fragment {
 
     public static final String TAG = "StudentProfileFragment";
+    private static final String KEY_PROFILE_PIC = "ProfilePic";
 
     private TextView tvFullName;
     private TextView tvAdmin;
     private TextView tvUsername;
     private Button btnLogout;
     private ProfilePictureView ppvPicture;
+    private String mProfile;
 
     public static StudentProfileFragment newInstance() {
         return new StudentProfileFragment();
@@ -34,19 +36,25 @@ public class StudentProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
+        mProfile = User.getProfilePicture(ParseUser.getCurrentUser());
         return inflater.inflate(R.layout.fragment_student_profile, container, false);
     }
 
-    //reloads landscape/portrait version of layout faster on config change
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_PROFILE_PIC, mProfile);
+
+    }
+
+    //gets retained instance on configuration change
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ||
                 newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            getFragmentManager().beginTransaction()
-                    .detach(this)
-                    .attach(this)
-                    .commit();
+            getRetainInstance();
         }
     }
 
@@ -61,7 +69,7 @@ public class StudentProfileFragment extends Fragment {
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         tvAdmin.setText(User.getAdminName(ParseUser.getCurrentUser()));
         tvFullName.setText(User.getFullName(ParseUser.getCurrentUser()));
-        ppvPicture.setProfileId(User.getProfilePicture(ParseUser.getCurrentUser()));
+        ppvPicture.setProfileId(mProfile);
         setupLogout();
     }
 
