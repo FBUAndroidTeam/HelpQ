@@ -206,18 +206,15 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     }
 
     //created at, asker, text, priority, help type, set archived to false
-    public void createSnackbar(final Date createdAt, final ParseUser asker, final String text, final String priority, final String helpType, final int adapterpos){
+    public void createSnackbar(final int adapterpos, final Question q){
+
         View.OnClickListener myOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Question q = new Question();
-                q.setCreatedAt(createdAt);
-                q.setAsker(asker);
-                q.setText(text);
-                q.setPriority(priority);
-                q.setHelpType(helpType);
                 q.setIsArchived(false);
                 q.saveInBackground();
+                mQuestions.add(q);
+                Collections.sort(mQuestions);
                 mAdapter.notifyItemInserted(adapterpos);
                 rvQuestions.scrollToPosition(adapterpos);
             }
@@ -225,7 +222,16 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
 
         Snackbar.make(getView(), R.string.snackbar_text, Snackbar.LENGTH_LONG)
                 .setAction(R.string.snackbar_action, myOnClickListener)
+                .addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        if(event == DISMISS_EVENT_SWIPE || event == DISMISS_EVENT_TIMEOUT) {
+                            mAdapter.deleteQuestion(q);
+                        }
+                    }
+                })
                 .show();
+
     }
 }
 

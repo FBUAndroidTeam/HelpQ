@@ -24,6 +24,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -110,17 +111,15 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     }
 
     // Deletes this question from parse
-    private void deleteQuestion(final int adapterPosition) {
-        Question question = mQuestions.get(adapterPosition);
+    public void deleteQuestion(Question q) {
         try {
-            question.delete();
+            q.delete();
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        question.saveInBackground();
-        removeAt(adapterPosition);
-        mQueueFragment.createSnackbar(question.getCreatedAt(), question.getAsker(),
-                question.getText(), question.getPriority(), question.getHelpType(), adapterPosition);
+        q.saveInBackground();
+        notifyDataSetChanged();
+//        removeAt(adapterPosition);
     }
 
     // Removes question at this position
@@ -216,7 +215,13 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteQuestion(getAdapterPosition());
+                    int position = getAdapterPosition();
+                    Question q = mQuestions.get(position);
+                    q.setIsArchived(true);
+                    q.setAnsweredAt(Calendar.getInstance().getTime());
+                    q.saveInBackground();
+                    removeAt(position);
+                    mQueueFragment.createSnackbar(position, q);
                     ibDelete.setVisibility(ibDelete.INVISIBLE);
                 }
             });
