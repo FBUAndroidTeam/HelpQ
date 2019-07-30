@@ -1,9 +1,16 @@
 package com.example.helpq.view;
 
+import android.annotation.TargetApi;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +23,8 @@ import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.StudentWorkshopAdapter;
+import com.example.helpq.model.AlertReceiver;
+import com.example.helpq.model.Question;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.User;
 import com.example.helpq.model.Workshop;
@@ -25,15 +34,19 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class StudentWorkshopFragment extends Fragment {
     public static final String TAG = "StudentWorkshopFragment";
+    public static final long ONE_MINUTE_IN_MILLIS = 60000;
     private RecyclerView rvWorkshops;
     private StudentWorkshopAdapter adapter;
     private List<Workshop> mWorkshops;
     private SwipeRefreshLayout swipeContainer;
     private TextView tvNotice;
+    private Question q = new Question();
 
     public static StudentWorkshopFragment newInstance() {
         return new StudentWorkshopFragment();
@@ -67,7 +80,7 @@ public class StudentWorkshopFragment extends Fragment {
         tvNotice = view.findViewById(R.id.tvNotice);
         tvNotice.setVisibility(View.GONE);
         mWorkshops = new ArrayList<>();
-        adapter = new StudentWorkshopAdapter(getContext(), mWorkshops);
+        adapter = new StudentWorkshopAdapter(getContext(), mWorkshops, this);
         rvWorkshops = view.findViewById(R.id.rvStudentWorkshops);
         rvWorkshops.setAdapter(adapter);
         rvWorkshops.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -133,4 +146,32 @@ public class StudentWorkshopFragment extends Fragment {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public void onTimeSet(Date workshopTime) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(workshopTime);
+        c.setTime(timeSetHelper(c));
+        Log.d(TAG, "alarm time: " + q.getRelativeTimeAgo(c.getTimeInMillis()));
+        startAlarm(c);
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void startAlarm(Calendar c) {
+        AlarmManager alarmManager = (AlarmManager) getContext()
+                .getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getContext(), AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),
+                1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (c.before(Calendar.getInstance())) {
+            c.add(Calendar.DATE, 1);
+        }
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+    }
+
+    public Date timeSetHelper (Calendar calendar) {
+        long time = calendar.getTimeInMillis();
+        Date alarmTime = new Date(time - (15 * ONE_MINUTE_IN_MILLIS));
+        return alarmTime;
+    }
 }
