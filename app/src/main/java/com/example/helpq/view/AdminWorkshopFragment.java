@@ -68,8 +68,20 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
 
             }
         });
+
         queryWorkshops();
         setupSwipeRefreshing(view);
+
+        adapter.setOnItemClickListener(new AdminWorkshopAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                Log.d(TAG, "onItemClick position: " + position);
+            }
+            @Override
+            public void onItemLongClick(int position, View v) {
+                Log.d(TAG, "onItemLongClick position: " + position);
+            }
+        });
     }
 
     // Handle logic for Swipe to Refresh.

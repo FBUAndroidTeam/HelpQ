@@ -225,7 +225,6 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                     }
                 })
                 .show();
-
     }
 }
 

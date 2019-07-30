@@ -79,7 +79,8 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         if (question.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
             AnswerQuestionFragment fragment = AnswerQuestionFragment.newInstance(question);
             fragment.setTargetFragment(mQueueFragment, 300);
-            FragmentManager manager = mQueueFragment.getParentFragment().getChildFragmentManager(); //((MainActivity) mContext).getSupportFragmentManager();
+            FragmentManager manager = mQueueFragment.getParentFragment().getChildFragmentManager();
+            //((MainActivity) mContext).getSupportFragmentManager();
             //List<Fragment> fragmentList = manager.getFragments();
             //FragmentManager queueFragManager = fragmentList.get(1).getChildFragmentManager();
             fragment.show(manager, AnswerQuestionFragment.TAG);
@@ -124,7 +125,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         }
         q.saveInBackground();
         notifyDataSetChanged();
-//        removeAt(adapterPosition);
     }
 
     // Removes question at this position

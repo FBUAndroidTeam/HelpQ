@@ -6,10 +6,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.helpq.R;
+import com.example.helpq.model.Question;
+import com.example.helpq.model.User;
 import com.example.helpq.model.Workshop;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -17,6 +23,8 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
 
     private Context mContext;
     private List<Workshop> mWorkshops;
+    private static ClickListener mClickListener;
+
 
     public AdminWorkshopAdapter(Context context, List<Workshop> workshops) {
         mContext = context;
@@ -46,18 +54,56 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    // Deletes this workshop from parse
+    public void deleteWorkshop(Workshop w) {
+        try {
+            w.delete();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        w.saveInBackground();
+    }
+
+    // Removes question at this position
+    public void removeAt(int position) {
+        mWorkshops.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, mWorkshops.size());
+    }
+
+    public void setOnItemClickListener(ClickListener clickListener) {
+        AdminWorkshopAdapter.mClickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+        void onItemLongClick(int position, View v);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder  implements
+            View.OnClickListener, View.OnLongClickListener {
         private TextView tvTitle;
         private TextView tvStartTime;
         private TextView tvLocation;
         private TextView tvAttendees;
+        private View vAdminWorkshopView;
+        private ImageButton ibDelete;
+        private ImageButton ibEdit;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+
             tvAttendees = itemView.findViewById(R.id.tvAttendees);
             tvLocation = itemView.findViewById(R.id.tvLocation);
             tvStartTime = itemView.findViewById(R.id.tvAnswerTime);
             tvTitle = itemView.findViewById(R.id.tvTitle);
+            vAdminWorkshopView = itemView.findViewById(R.id.clWorkshop);
+            ibDelete = itemView.findViewById(R.id.ibAdminDeleteWorkshop);
+            ibEdit = itemView.findViewById(R.id.ibAdminEditWorkshop);
+
         }
 
         public void bind(Workshop workshop) {
@@ -74,6 +120,53 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
                 tvAttendees.setText(attendees + " " +
                         mContext.getResources().getString(R.string.attendees));
             }
+        }
+
+        @Override
+        public void onClick(View v) {
+            TranslateAnimation animate = new TranslateAnimation(
+                    itemView.getX(),
+                    0,
+                    0,
+                    0
+            );
+            animate.setDuration(300);
+            animate.setFillAfter(true);
+            vAdminWorkshopView.startAnimation(animate);
+            ibDelete.setVisibility(ibDelete.GONE);
+            ibEdit.setVisibility(ibEdit.GONE);
+        }
+
+
+        @Override
+        public boolean onLongClick(View v) {
+            mClickListener.onItemLongClick(getAdapterPosition(), v);
+            TranslateAnimation animate = new TranslateAnimation(
+                    v.getX(),
+                    -325,
+                    0,
+                    0
+            );
+            animate.setDuration(300);
+            animate.setFillAfter(true);
+            vAdminWorkshopView.startAnimation(animate);
+            ibDelete.setVisibility(ibDelete.VISIBLE);
+            ibEdit.setVisibility(ibEdit.VISIBLE);
+            ibDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteWorkshop(mWorkshops.get(getAdapterPosition()));
+                    removeAt(getAdapterPosition());
+                }
+            });
+            ibEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ibDelete.setVisibility(ibDelete.INVISIBLE);
+                    ibEdit.setVisibility(ibEdit.INVISIBLE);
+                }
+            });
+            return true;
         }
     }
 }
