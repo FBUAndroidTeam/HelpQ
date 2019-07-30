@@ -48,8 +48,8 @@ public class AlarmHelper extends ContextWrapper {
 
     public NotificationCompat.Builder getChannelNotification() {
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
-                .setContentTitle("Alarm!")
-                .setContentText("Your AlarmManager is working.")
+                .setContentTitle(getResources().getString(R.string.workshop_alarm))
+                .setContentText(getResources().getString(R.string.workshop_alarm_description))
                 .setSmallIcon(R.drawable.com_facebook_button_login_logo)
                 .setAutoCancel(true);
     }
