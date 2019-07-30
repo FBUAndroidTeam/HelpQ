@@ -2,6 +2,7 @@ package com.example.helpq.controller;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,9 @@ import com.example.helpq.R;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
 import com.example.helpq.model.Workshop;
+import com.example.helpq.view.AdminWorkshopFragment;
+import com.example.helpq.view.AnswerQuestionFragment;
+import com.example.helpq.view.CreateWorkshopFragment;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -23,6 +27,7 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
 
     private Context mContext;
     private List<Workshop> mWorkshops;
+    private AdminWorkshopFragment mAdminWorkshopFragment;
     private static ClickListener mClickListener;
 
 
@@ -88,7 +93,6 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
         private TextView tvAttendees;
         private View vAdminWorkshopView;
         private ImageButton ibDelete;
-        private ImageButton ibEdit;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -102,8 +106,6 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
             tvTitle = itemView.findViewById(R.id.tvTitle);
             vAdminWorkshopView = itemView.findViewById(R.id.clWorkshop);
             ibDelete = itemView.findViewById(R.id.ibAdminDeleteWorkshop);
-            ibEdit = itemView.findViewById(R.id.ibAdminEditWorkshop);
-
         }
 
         public void bind(Workshop workshop) {
@@ -134,7 +136,6 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
             animate.setFillAfter(true);
             vAdminWorkshopView.startAnimation(animate);
             ibDelete.setVisibility(ibDelete.GONE);
-            ibEdit.setVisibility(ibEdit.GONE);
         }
 
 
@@ -143,7 +144,7 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
             mClickListener.onItemLongClick(getAdapterPosition(), v);
             TranslateAnimation animate = new TranslateAnimation(
                     v.getX(),
-                    -325,
+                    -150,
                     0,
                     0
             );
@@ -151,19 +152,11 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
             animate.setFillAfter(true);
             vAdminWorkshopView.startAnimation(animate);
             ibDelete.setVisibility(ibDelete.VISIBLE);
-            ibEdit.setVisibility(ibEdit.VISIBLE);
             ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     deleteWorkshop(mWorkshops.get(getAdapterPosition()));
                     removeAt(getAdapterPosition());
-                }
-            });
-            ibEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ibDelete.setVisibility(ibDelete.INVISIBLE);
-                    ibEdit.setVisibility(ibEdit.INVISIBLE);
                 }
             });
             return true;
