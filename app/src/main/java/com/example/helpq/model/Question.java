@@ -116,10 +116,10 @@ public class Question extends ParseObject implements Comparable<Question>{
     }
 
     // Add a like to this question.
-    public void likePost(ParseUser user) { add(KEY_LIKES, user); }
+    public void likeQuestion(ParseUser user) { add(KEY_LIKES, user); }
 
     // Remove a like from this question.
-    public void unlikePost(ParseUser user) {
+    public void unlikeQuestion(ParseUser user) {
         ArrayList<ParseUser> a = new ArrayList<>();
         a.add(user);
         removeAll(KEY_LIKES, a);
