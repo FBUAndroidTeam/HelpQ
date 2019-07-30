@@ -18,10 +18,10 @@ import android.view.ViewGroup;
 import com.example.helpq.R;
 import com.example.helpq.model.Notification;
 import com.example.helpq.model.NotificationHelper;
+import com.example.helpq.model.QueryFactory;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -64,10 +64,8 @@ public class StudentFragment extends Fragment {
 
     // Add badges to the tabs that have notifications.
     private void addNotificationBadges() {
-        ParseQuery<Notification> notificationQuery =
-                new ParseQuery<Notification>(Notification.class);
-        notificationQuery.whereEqualTo(Notification.KEY_USER, ParseUser.getCurrentUser());
-        notificationQuery.findInBackground(new FindCallback<Notification>() {
+        ParseQuery<Notification> query = QueryFactory.NotificationQuery.getNotifications();
+        query.findInBackground(new FindCallback<Notification>() {
             @Override
             public void done(List<Notification> objects, ParseException e) {
                 if (e != null) {
@@ -111,11 +109,8 @@ public class StudentFragment extends Fragment {
 
     // Remove notifications badge from this tab, if one exists.
     private void removeNotificationBadges(int tab, final int itemId) {
-        ParseQuery<Notification> notificationQuery =
-                new ParseQuery<Notification>(Notification.class);
-        notificationQuery.whereEqualTo(Notification.KEY_USER, ParseUser.getCurrentUser());
-        notificationQuery.whereEqualTo(Notification.KEY_TAB, tab);
-        notificationQuery.findInBackground(new FindCallback<Notification>() {
+        ParseQuery<Notification> query = QueryFactory.NotificationQuery.getNotificationsForTab(tab);
+        query.findInBackground(new FindCallback<Notification>() {
             @Override
             public void done(List<Notification> objects, ParseException e) {
                 for (Notification notification : objects) {

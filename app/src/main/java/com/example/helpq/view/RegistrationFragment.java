@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.DialogDismissListener;
+import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.User;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -119,9 +120,8 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
 
     //checks to see if username is taken already or not
     private void queryUsernameExists(final String username) {
-        ParseQuery<ParseUser> queryUsername = ParseUser.getQuery();
-        queryUsername.whereEqualTo("username", username);
-        queryUsername.findInBackground(new FindCallback<ParseUser>() {
+        ParseQuery<ParseUser> query = QueryFactory.UserQuery.getUserByUsername(username);
+        query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
                 if(e != null) {

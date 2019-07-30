@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.StudentWorkshopAdapter;
+import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.User;
 import com.example.helpq.model.Workshop;
 import com.parse.FindCallback;
@@ -24,7 +25,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class StudentWorkshopFragment extends Fragment {
@@ -102,11 +102,8 @@ public class StudentWorkshopFragment extends Fragment {
     }
 
     private void queryWorkshops() {
-        ParseQuery<Workshop> workshopQuery = ParseQuery.getQuery("Workshop");
-        workshopQuery.include("creator");
-        workshopQuery.addAscendingOrder("startTime");
-        workshopQuery.whereGreaterThan("startTime", new Date(System.currentTimeMillis()));
-        workshopQuery.findInBackground(new FindCallback<Workshop>() {
+        ParseQuery<Workshop> query = QueryFactory.WorkshopQuery.getWorkshopsForStudent();
+        query.findInBackground(new FindCallback<Workshop>() {
             @Override
             public void done(List<Workshop> objects, ParseException e) {
                 if (e != null) {

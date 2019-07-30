@@ -18,8 +18,8 @@ import android.widget.ToggleButton;
 import com.example.helpq.R;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Notification;
+import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
-import com.example.helpq.model.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -208,9 +208,8 @@ public class CreateQuestionFragment extends DialogFragment {
     }
 
     private void notifyAdmin() {
-        ParseQuery<ParseUser> adminQuery = new ParseQuery<ParseUser>(ParseUser.class);
-        adminQuery.whereEqualTo(User.KEY_USERNAME, User.getAdminName(ParseUser.getCurrentUser()));
-        adminQuery.findInBackground(new FindCallback<ParseUser>() {
+        ParseQuery<ParseUser> query = QueryFactory.UserQuery.getAdmin();
+        query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
                 if (e != null) {
