@@ -41,13 +41,6 @@ public class StudentProfileFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_student_profile, container, false);
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(KEY_PROFILE_PIC, mProfile);
-
-    }
-
     //gets retained instance on configuration change
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
