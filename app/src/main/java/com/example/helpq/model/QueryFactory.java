@@ -82,6 +82,12 @@ public class QueryFactory {
             return query;
         }
 
+        public static ParseQuery<ParseUser> getUserByObjectId(String objectId) {
+            ParseQuery<ParseUser> query = ParseUser.getQuery();
+            query.whereEqualTo("objectId", objectId);
+            return query;
+        }
+
         // Query for all admins.
         public static ParseQuery<ParseUser> getAllAdmins() {
             ParseQuery<ParseUser> query = ParseUser.getQuery();
