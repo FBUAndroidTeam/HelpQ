@@ -3,6 +3,7 @@ package com.example.helpq.controller;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -155,6 +157,8 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private View vQuestionView;
         private ImageButton ibDelete;
         private ImageButton ibReply;
+        private ImageButton ibLike;
+        private ImageButton ibView;
         private TextView tvSeeMore;
         private String questionText;
         private int originalLines;
@@ -173,21 +177,24 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvStartTime = itemView.findViewById(R.id.tvAnswerTime);
             ibDelete = itemView.findViewById(R.id.ibDelete);
             ibReply = itemView.findViewById(R.id.ibReply);
+            ibLike = itemView.findViewById(R.id.ibLike);
             tvSeeMore = itemView.findViewById(R.id.tvSeeMore);
+            ibView = itemView.findViewById(R.id.ibView);
         }
 
         private void adminSlideMenu(View v) {
             TranslateAnimation animate = new TranslateAnimation(
                     v.getX(),
-                    -325,
+                    -425,
                     0,
                     0
             );
             animate.setDuration(300);
             animate.setFillAfter(true);
             vQuestionView.startAnimation(animate);
-            ibDelete.setVisibility(ibDelete.VISIBLE);
-            ibReply.setVisibility(ibReply.VISIBLE);
+            ibDelete.setVisibility(View.VISIBLE);
+            ibReply.setVisibility(View.VISIBLE);
+            ibView.setVisibility(ibView.VISIBLE);
             ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -198,18 +205,28 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     answerQuestion(getAdapterPosition());
-                    ibDelete.setVisibility(ibDelete.INVISIBLE);
-                    ibReply.setVisibility(ibReply.INVISIBLE);
+                    ibDelete.setVisibility(View.INVISIBLE);
+                    ibReply.setVisibility(View.INVISIBLE);
+                    resetRecyclerCell();
+                }
+            });
+            ibView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Question question = mQuestions.get(getAdapterPosition());
+                    replyToQuestion(question);
+                    ibView.setVisibility(View.GONE);
+                    resetRecyclerCell();
                 }
             });
         }
 
         private void studentSlideMenu(View v, ParseUser currentUser) {
             vQuestionView.startAnimation(slideRecyclerCell(v));
-            ibDelete.setVisibility(ibDelete.VISIBLE);
-            if(User.getFullName(currentUser)
+            ibDelete.setVisibility(View.VISIBLE);
+            if (User.getFullName(currentUser)
                     .equals(tvStudentName.getText().toString())) {
-                ibDelete.setVisibility(ibDelete.VISIBLE);
+                ibDelete.setVisibility(View.VISIBLE);
                 ibDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -220,19 +237,37 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                         q.saveInBackground();
                         removeAt(position);
                         mQueueFragment.createSnackbar(position, q);
-                        ibDelete.setVisibility(ibDelete.INVISIBLE);
+                        ibDelete.setVisibility(View.INVISIBLE);
                     }
                 });
             } else {
+
                 ibReply.setVisibility(View.VISIBLE);
                 ibDelete.setVisibility(View.GONE);
+                ibLike.setVisibility(View.VISIBLE);
+
+                ibLike.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Question question = mQuestions.get(getAdapterPosition());
+                        boolean isLiked = question.isLiked();
+                        if (!isLiked) {
+                            question.likePost(ParseUser.getCurrentUser());
+                        } else {
+                            question.unlikePost(ParseUser.getCurrentUser());
+                        }
+                        question.saveInBackground();
+                        setButton(ibLike, !isLiked,
+                                R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
+                    }
+                });
                 ibReply.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Question question = mQuestions.get(getAdapterPosition());
-                        if(question.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
+                        if (question.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
                             replyToQuestion(question);
-                            ibReply.setVisibility(ibReply.GONE);
+                            ibReply.setVisibility(View.GONE);
                         } else {
                             Toast.makeText(mContext,
                                 mContext.getResources().getString(R.string.reply_in_person_help),
@@ -247,7 +282,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private TranslateAnimation slideRecyclerCell(View v) {
             TranslateAnimation animate = new TranslateAnimation(
                     v.getX(),
-                    -150,
+                    -325,
                     0,
                     0
             );
@@ -264,6 +299,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             setInitialQuestionText();
             tvStartTime.setText(question.getCreatedTimeAgo());
             setHelpType(question.getHelpType());
+
+            setButton(ibLike, question.isLiked(),
+                    R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
         }
 
         private void setHelpType(String helpType) {
@@ -276,18 +314,19 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
         //determines whether or not see more should be visible
         private void setInitialQuestionText() {
-            tvDescription.setText(questionText);
             // runnable is getting the line count before anything is rendering in order to determine
             // if see more should be displayed or not
             tvDescription.post(new Runnable() {
                 @Override
                 public void run() {
+                    tvDescription.setText(questionText);
+                    tvDescription.setMaxLines(1);
                     originalLines = tvDescription.getLineCount();
                     if(originalLines > 1) {
-                        tvDescription.setMaxLines(1);
                         tvSeeMore.setVisibility(View.VISIBLE);
                     } else {
                         tvSeeMore.setVisibility(View.GONE);
+                        tvDescription.setMaxLines(Integer.MAX_VALUE);
                     }
                 }
             });
@@ -329,8 +368,10 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             animate.setDuration(400);
             animate.setFillAfter(true);
             vQuestionView.startAnimation(animate);
-            ibDelete.setVisibility(ibDelete.GONE);
-            ibReply.setVisibility(ibReply.GONE);
+            ibDelete.setVisibility(View.GONE);
+            ibReply.setVisibility(View.GONE);
+            ibLike.setVisibility(View.GONE);
+            ibView.setVisibility(View.GONE);
         }
 
         @Override
@@ -344,5 +385,11 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             }
             return true;
         }
+    }
+
+    // sets the color of a button, depending on whether it is active
+    private void setButton(ImageView iv, boolean isActive, int strokeResId, int fillResId, int activeColor) {
+        iv.setImageResource(isActive ? fillResId : strokeResId);
+        iv.setColorFilter(ContextCompat.getColor(mContext, isActive ? activeColor : R.color.colorFBBlue));
     }
 }

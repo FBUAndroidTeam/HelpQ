@@ -1,5 +1,6 @@
 package com.example.helpq.view;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -55,7 +56,17 @@ public class ReplyQuestionFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
         return inflater.inflate(R.layout.fragment_reply_question, container, false);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ||
+                newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            getRetainInstance();
+        }
     }
 
     @Override
@@ -81,6 +92,15 @@ public class ReplyQuestionFragment extends DialogFragment {
         ppvAskerPic.setProfileId(User.getProfilePicture(mQuestion.getAsker()));
         ppvProfilePic.setProfileId(User.getProfilePicture(ParseUser.getCurrentUser()));
         submitReply();
+        if(User.isAdmin(ParseUser.getCurrentUser())) {
+            disableReply();
+        }
+    }
+
+    private void disableReply() {
+        ppvProfilePic.setVisibility(View.GONE);
+        etReply.setVisibility(View.GONE);
+        btnReply.setVisibility(View.GONE);
     }
 
     private void submitReply() {
@@ -92,6 +112,7 @@ public class ReplyQuestionFragment extends DialogFragment {
                     newReply.setText(etReply.getText().toString());
                     newReply.setQuestion(mQuestion);
                     newReply.setUser(ParseUser.getCurrentUser());
+                    newReply.setVerified(false);
                     newReply.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -100,6 +121,7 @@ public class ReplyQuestionFragment extends DialogFragment {
                                 //hide keyboard
                                 mReplies.add(newReply);
                                 adapter.notifyDataSetChanged();
+                                rvReplies.getLayoutManager().scrollToPosition(0);
                             } else {
                                 Log.d(TAG, "error creating reply");
                                 e.printStackTrace();

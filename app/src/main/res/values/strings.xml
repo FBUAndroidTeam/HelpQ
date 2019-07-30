@@ -64,4 +64,5 @@
     <string name="reply_in_person_help">You cannot reply to a question that requests in-person help</string>
     <string name="workshop_alarm">Upcoming Workshop</string>
     <string name="workshop_alarm_description">Your workshop will begin in 15 minutes.</string>
+    <string name="verfication">Verified</string>
 </resources>
