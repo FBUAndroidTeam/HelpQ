@@ -42,7 +42,6 @@ public class QueryFactory {
         public static ParseQuery<Question> getStudentInboxMessages() {
             ParseQuery<Question> query = new ParseQuery<>(Question.class);
             query.include(Question.KEY_ASKER)
-                    .whereEqualTo(Question.KEY_ASKER, ParseUser.getCurrentUser())
                     .whereEqualTo(Question.KEY_HELP_TYPE, KEY_WRITTEN)
                     .whereEqualTo(Question.KEY_ARCHIVED, true)
                     .orderByDescending(Question.KEY_ANSWERED_AT);
