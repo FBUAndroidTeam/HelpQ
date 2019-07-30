@@ -88,7 +88,7 @@ public class ReplyQuestionFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if(!etReply.getText().toString().equals("")) {
-                    Reply newReply = new Reply();
+                    final Reply newReply = new Reply();
                     newReply.setText(etReply.getText().toString());
                     newReply.setQuestion(mQuestion);
                     newReply.setUser(ParseUser.getCurrentUser());
@@ -97,8 +97,9 @@ public class ReplyQuestionFragment extends DialogFragment {
                         public void done(ParseException e) {
                             if (e == null) {
                                 etReply.setText("");
-                                //hide keyboard, will remove toast once auto refresh implemented
-                                Toast.makeText(getContext(), "Reply posted", Toast.LENGTH_LONG).show();
+                                //hide keyboard
+                                mReplies.add(newReply);
+                                adapter.notifyDataSetChanged();
                             } else {
                                 Log.d(TAG, "error creating reply");
                                 e.printStackTrace();
