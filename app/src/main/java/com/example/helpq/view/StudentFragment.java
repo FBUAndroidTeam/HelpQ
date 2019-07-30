@@ -69,7 +69,8 @@ public class StudentFragment extends Fragment {
             @Override
             public void done(List<Notification> objects, ParseException e) {
                 if (e != null) {
-                    Log.d(TAG, "Error querying for notifications");
+                    Log.e(TAG, "Error querying for notifications");
+                    return;
                 }
 
                 int profileCount = 0;
@@ -114,6 +115,10 @@ public class StudentFragment extends Fragment {
             @Override
             public void done(List<Notification> objects, ParseException e) {
                 for (Notification notification : objects) {
+                    if (e != null) {
+                        Log.e(TAG, "Error querying for notifications");
+                        return;
+                    }
                     try {
                         notification.delete();
                     } catch (ParseException e1) {

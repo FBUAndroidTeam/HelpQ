@@ -69,7 +69,8 @@ public class AdminFragment extends Fragment {
             @Override
             public void done(List<Notification> objects, ParseException e) {
                 if (e != null) {
-                    Log.d(TAG, "Error querying for notifications");
+                    Log.e(TAG, "Error querying for notifications");
+                    return;
                 }
 
                 int profileCount = 0;
@@ -113,6 +114,10 @@ public class AdminFragment extends Fragment {
         query.findInBackground(new FindCallback<Notification>() {
             @Override
             public void done(List<Notification> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error querying for notifications");
+                    return;
+                }
                 for (Notification notification : objects) {
                     try {
                         notification.delete();
