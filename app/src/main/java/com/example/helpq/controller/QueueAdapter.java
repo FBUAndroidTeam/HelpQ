@@ -2,7 +2,6 @@ package com.example.helpq.controller;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,8 +17,8 @@ import com.example.helpq.R;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
 import com.example.helpq.view.AnswerQuestionFragment;
-import com.example.helpq.view.MainActivity;
 import com.example.helpq.view.QueueFragment;
+import com.example.helpq.view.ReplyQuestionFragment;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -79,10 +78,10 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         if (question.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
             AnswerQuestionFragment fragment = AnswerQuestionFragment.newInstance(question);
             fragment.setTargetFragment(mQueueFragment, 300);
-            FragmentManager manager = ((MainActivity) mContext).getSupportFragmentManager();
-            List<Fragment> fragmentList = manager.getFragments();
-            FragmentManager queueFragManager = fragmentList.get(1).getChildFragmentManager();
-            fragment.show(queueFragManager, AnswerQuestionFragment.TAG);
+            FragmentManager manager = mQueueFragment.getParentFragment().getChildFragmentManager(); //((MainActivity) mContext).getSupportFragmentManager();
+            //List<Fragment> fragmentList = manager.getFragments();
+            //FragmentManager queueFragManager = fragmentList.get(1).getChildFragmentManager();
+            fragment.show(manager, AnswerQuestionFragment.TAG);
         } else {
             Toast.makeText(mContext, R.string.request_in_person,
                     Toast.LENGTH_LONG).show();
@@ -92,7 +91,13 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     private void replyToQuestion(int adapterPosition) {
         Question question = mQuestions.get(adapterPosition);
         if(question.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
-
+            ReplyQuestionFragment fragment = ReplyQuestionFragment.newInstance(question);
+            fragment.setTargetFragment(mQueueFragment, 300);
+            FragmentManager manager = mQueueFragment.getParentFragment().getChildFragmentManager();
+            fragment.show(manager, ReplyQuestionFragment.TAG);
+        } else {
+            Toast.makeText(mContext, "You cannot reply to your own question",
+                    Toast.LENGTH_LONG).show();
         }
     }
 

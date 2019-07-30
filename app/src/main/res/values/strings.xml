@@ -60,4 +60,5 @@
     <string name="snackbar_text">Your question was deleted.</string>
     <string name="snackbar_action">UNDO</string>
     <string name="max_notifications">99</string>
+    <string name="empty_reply">Please enter a comment</string>
 </resources>
