@@ -158,6 +158,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private ImageButton ibDelete;
         private ImageButton ibReply;
         private ImageButton ibLike;
+        private ImageButton ibView;
         private TextView tvSeeMore;
         private String questionText;
         private int originalLines;
@@ -178,12 +179,13 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             ibReply = itemView.findViewById(R.id.ibReply);
             ibLike = itemView.findViewById(R.id.ibLike);
             tvSeeMore = itemView.findViewById(R.id.tvSeeMore);
+            ibView = itemView.findViewById(R.id.ibView);
         }
 
         private void adminSlideMenu(View v) {
             TranslateAnimation animate = new TranslateAnimation(
                     v.getX(),
-                    -325,
+                    -425,
                     0,
                     0
             );
@@ -192,6 +194,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             vQuestionView.startAnimation(animate);
             ibDelete.setVisibility(View.VISIBLE);
             ibReply.setVisibility(View.VISIBLE);
+            ibView.setVisibility(ibView.VISIBLE);
             ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -204,6 +207,16 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     answerQuestion(getAdapterPosition());
                     ibDelete.setVisibility(View.INVISIBLE);
                     ibReply.setVisibility(View.INVISIBLE);
+                    resetRecyclerCell();
+                }
+            });
+            ibView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Question question = mQuestions.get(getAdapterPosition());
+                    replyToQuestion(question);
+                    ibView.setVisibility(View.GONE);
+                    resetRecyclerCell();
                 }
             });
         }
@@ -301,18 +314,19 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
         //determines whether or not see more should be visible
         private void setInitialQuestionText() {
-            tvDescription.setText(questionText);
             // runnable is getting the line count before anything is rendering in order to determine
             // if see more should be displayed or not
             tvDescription.post(new Runnable() {
                 @Override
                 public void run() {
+                    tvDescription.setText(questionText);
+                    tvDescription.setMaxLines(1);
                     originalLines = tvDescription.getLineCount();
                     if(originalLines > 1) {
-                        tvDescription.setMaxLines(1);
                         tvSeeMore.setVisibility(View.VISIBLE);
                     } else {
                         tvSeeMore.setVisibility(View.GONE);
+                        tvDescription.setMaxLines(Integer.MAX_VALUE);
                     }
                 }
             });
@@ -357,6 +371,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             ibDelete.setVisibility(View.GONE);
             ibReply.setVisibility(View.GONE);
             ibLike.setVisibility(View.GONE);
+            ibView.setVisibility(View.GONE);
         }
 
         @Override
@@ -375,6 +390,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     // sets the color of a button, depending on whether it is active
     private void setButton(ImageView iv, boolean isActive, int strokeResId, int fillResId, int activeColor) {
         iv.setImageResource(isActive ? fillResId : strokeResId);
-        iv.setColorFilter(ContextCompat.getColor(mContext, isActive ? activeColor : R.color.colorWhite));
+        iv.setColorFilter(ContextCompat.getColor(mContext, isActive ? activeColor : R.color.colorFBBlue));
     }
 }

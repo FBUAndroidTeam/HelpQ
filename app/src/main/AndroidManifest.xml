@@ -42,6 +42,8 @@
         <activity
             android:name=".view.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"></activity>
+
+    <receiver android:name=".model.AlertReceiver" />
     </application>
 
 </manifest>
