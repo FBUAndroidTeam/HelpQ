@@ -9,7 +9,7 @@ public class Reply extends ParseObject {
     public static final String KEY_TEXT = "text";
     public static final String KEY_QUESTION = "question";
     public static final String KEY_USER = "user";
-    public static final String KEY_TARGET = "targetQuestion";
+    public static final String KEY_VERIFY = "isVerified";
 
     public void setText(String text) {
         put(KEY_TEXT, text);
@@ -33,5 +33,13 @@ public class Reply extends ParseObject {
 
     public ParseUser getUser() {
         return (ParseUser) get(KEY_USER);
+    }
+
+    public void setVerified(boolean verified) {
+        put(KEY_VERIFY, verified);
+    }
+
+    public boolean getVerification(){
+        return getBoolean(KEY_VERIFY);
     }
 }
