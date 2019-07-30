@@ -76,7 +76,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                     verification(reply);
                 }
                 if(reply.getVerification()) {
-                    ivVerified.setColorFilter(ContextCompat.getColor(mContext, R.color.colorAccent));
+                    ivVerified.setColorFilter(ContextCompat
+                            .getColor(mContext, R.color.colorAccent));
                     tvVerification.setVisibility(View.VISIBLE);
                 } else {
                     ivVerified.clearColorFilter();
@@ -94,7 +95,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     if(!reply.getVerification()) {
-                        ivVerified.setColorFilter(ContextCompat.getColor(mContext, R.color.colorAccent));
+                        ivVerified.setColorFilter(ContextCompat
+                                .getColor(mContext, R.color.colorAccent));
                         tvVerification.setVisibility(View.VISIBLE);
                         reply.setVerified(true);
                     } else {

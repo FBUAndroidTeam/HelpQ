@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -55,17 +56,22 @@ public class ReplyQuestionFragment extends DialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setRetainInstance(true);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_reply_question, container, false);
     }
 
+    //deals with configuration change by switching to new horizontal layout; recreates itself
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ||
                 newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            getRetainInstance();
+            FragmentManager fm = getParentFragment().getChildFragmentManager();
+            ReplyQuestionFragment frag = 
+                    ReplyQuestionFragment.newInstance((Question) getArguments().get("Question"));
+            fm.beginTransaction().remove(this).attach(frag).commit();
+            frag.show(fm, TAG);
         }
     }
 
