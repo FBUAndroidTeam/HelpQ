@@ -4,16 +4,17 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Reply;
 import com.example.helpq.model.User;
+import com.example.helpq.view.ReplyQuestionFragment;
 import com.facebook.login.widget.ProfilePictureView;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -77,6 +78,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                 if(reply.getVerification()) {
                     ivVerified.setColorFilter(ContextCompat.getColor(mContext, R.color.colorAccent));
                     tvVerification.setVisibility(View.VISIBLE);
+                } else {
+                    ivVerified.clearColorFilter();
+                    tvVerification.setVisibility(View.GONE);
                 }
             } else {
                 ivVerified.setVisibility(View.GONE);
@@ -102,7 +106,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                         @Override
                         public void done(ParseException e) {
                             if(e == null) {
-                                Toast.makeText(mContext, "Verification saved", Toast.LENGTH_LONG).show();
+                                Log.d(ReplyQuestionFragment.TAG, "Verification saved");
                             } else {
                                 e.printStackTrace();
                             }

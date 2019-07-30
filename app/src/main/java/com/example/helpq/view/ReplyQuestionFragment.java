@@ -121,7 +121,7 @@ public class ReplyQuestionFragment extends DialogFragment {
                                 //hide keyboard
                                 mReplies.add(newReply);
                                 adapter.notifyDataSetChanged();
-                                rvReplies.getLayoutManager().scrollToPosition(0);
+                                rvReplies.getLayoutManager().scrollToPosition(mReplies.size() - 1);
                             } else {
                                 Log.d(TAG, "error creating reply");
                                 e.printStackTrace();
