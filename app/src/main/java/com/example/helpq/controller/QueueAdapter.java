@@ -158,6 +158,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private ImageButton ibDelete;
         private ImageButton ibReply;
         private ImageButton ibLike;
+        private TextView tvLikes;
         private ImageButton ibView;
         private TextView tvSeeMore;
         private String questionText;
@@ -178,6 +179,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             ibDelete = itemView.findViewById(R.id.ibDelete);
             ibReply = itemView.findViewById(R.id.ibReply);
             ibLike = itemView.findViewById(R.id.ibLike);
+            tvLikes = itemView.findViewById(R.id.tvLikes);
             tvSeeMore = itemView.findViewById(R.id.tvSeeMore);
             ibView = itemView.findViewById(R.id.ibView);
         }
@@ -252,13 +254,14 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                         Question question = mQuestions.get(getAdapterPosition());
                         boolean isLiked = question.isLiked();
                         if (!isLiked) {
-                            question.likePost(ParseUser.getCurrentUser());
+                            question.likeQuestion(ParseUser.getCurrentUser());
                         } else {
-                            question.unlikePost(ParseUser.getCurrentUser());
+                            question.unlikeQuestion(ParseUser.getCurrentUser());
                         }
                         question.saveInBackground();
                         setButton(ibLike, !isLiked,
                                 R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
+                        setLikeText(question, tvLikes);
                     }
                 });
                 ibReply.setOnClickListener(new View.OnClickListener() {
@@ -299,9 +302,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             setInitialQuestionText();
             tvStartTime.setText(question.getCreatedTimeAgo());
             setHelpType(question.getHelpType());
-
             setButton(ibLike, question.isLiked(),
                     R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
+            setLikeText(question, tvLikes);
         }
 
         private void setHelpType(String helpType) {
@@ -391,5 +394,11 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     private void setButton(ImageView iv, boolean isActive, int strokeResId, int fillResId, int activeColor) {
         iv.setImageResource(isActive ? fillResId : strokeResId);
         iv.setColorFilter(ContextCompat.getColor(mContext, isActive ? activeColor : R.color.colorFBBlue));
+    }
+
+    private void setLikeText(Question question, TextView view) {
+        int likeCount = question.getLikeCount();
+        if (likeCount == 1) view.setText(String.format("%d like", question.getLikeCount()));
+        else view.setText(String.format("%d likes", question.getLikeCount()));
     }
 }
