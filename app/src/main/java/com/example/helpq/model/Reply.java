@@ -34,12 +34,4 @@ public class Reply extends ParseObject {
     public ParseUser getUser() {
         return (ParseUser) get(KEY_USER);
     }
-
-    public void setRepliedQuestion(String targetObjectId) {
-        put(KEY_TARGET, targetObjectId);
-    }
-
-    public String getRepliedQuestion() {
-        return (String) get(KEY_TARGET);
-    }
 }
