@@ -13,11 +13,13 @@ import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Workshop;
+import com.example.helpq.view.StudentWorkshopFragment;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.Date;
 import java.util.List;
 
 public class StudentWorkshopAdapter extends
@@ -26,10 +28,13 @@ public class StudentWorkshopAdapter extends
     public static final String TAG = "StudentWorkshopAdapter";
     private Context mContext;
     private List<Workshop> mWorkshops;
+    private StudentWorkshopFragment mStudentWorkshopFragment;
 
-    public StudentWorkshopAdapter(Context context, List<Workshop> workshops) {
+    public StudentWorkshopAdapter(Context context, List<Workshop> workshops,
+                                  StudentWorkshopFragment fragment) {
         this.mContext = context;
         this.mWorkshops = workshops;
+        this.mStudentWorkshopFragment = fragment;
     }
 
     @NonNull
@@ -139,6 +144,8 @@ public class StudentWorkshopAdapter extends
                                 Toast.LENGTH_LONG).show();
                     } else {
                         workshop.setAttendee(ParseUser.getCurrentUser());
+                        Date time = workshop.getStartTime();
+                        mStudentWorkshopFragment.onTimeSet(time);
                         workshop.saveInBackground();
                         setButtonText(workshop);
                         setAttendeeText(workshop);
