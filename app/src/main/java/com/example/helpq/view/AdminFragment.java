@@ -9,12 +9,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.helpq.R;
+import com.example.helpq.model.Notification;
+import com.example.helpq.model.NotificationHelper;
+import com.example.helpq.model.QueryFactory;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+
+import java.util.List;
 
 public class AdminFragment extends Fragment {
 
@@ -22,6 +31,7 @@ public class AdminFragment extends Fragment {
     private FragmentPagerAdapter mAdapterViewPager;
     private ViewPager vpPager;
     private BottomNavigationView mNavigationView;
+    private NotificationHelper mHelper;
 
     public static AdminFragment newInstance() {
         return new AdminFragment();
@@ -46,7 +56,79 @@ public class AdminFragment extends Fragment {
         mNavigationView.setSelectedItemId(R.id.action_queue);
         vpPager.setOnPageChangeListener(new AdminPageChanger());
 
+        mHelper = new NotificationHelper(mNavigationView, getContext());
+
+        addNotificationBadges();
         setupNavigationView();
+    }
+
+    // Add badges to the tabs that have notifications.
+    private void addNotificationBadges() {
+        ParseQuery<Notification> query = QueryFactory.NotificationQuery.getNotifications();
+        query.findInBackground(new FindCallback<Notification>() {
+            @Override
+            public void done(List<Notification> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error querying for notifications");
+                    return;
+                }
+
+                int profileCount = 0;
+                int enrolledCount = 0;
+                int queueCount = 0;
+                int workshopsCount = 0;
+                int boardCount = 0;
+
+                for (Notification notification : objects) {
+                    switch (notification.getTab()) {
+                        case 0:
+                            profileCount++;
+                            break;
+                        case 1:
+                            enrolledCount++;
+                            break;
+                        case 2:
+                            queueCount++;
+                            break;
+                        case 3:
+                            workshopsCount++;
+                            break;
+                        case 4:
+                            boardCount++;
+                            break;
+                    }
+                }
+
+                if (profileCount > 0) mHelper.addBadge(R.id.action_profile, profileCount);
+                if (enrolledCount > 0) mHelper.addBadge(R.id.action_workshop, enrolledCount);
+                if (queueCount > 0) mHelper.addBadge(R.id.action_queue, queueCount);
+                if (workshopsCount > 0) mHelper.addBadge(R.id.action_inbox, workshopsCount);
+                if (boardCount > 0) mHelper.addBadge(R.id.action_board, boardCount);
+            }
+        });
+    }
+
+    // Remove notifications badge from this tab, if one exists.
+    private void removeNotificationBadges(int tab, final int itemId) {
+        ParseQuery<Notification> query = QueryFactory.NotificationQuery.getNotificationsForTab(tab);
+        query.findInBackground(new FindCallback<Notification>() {
+            @Override
+            public void done(List<Notification> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error querying for notifications");
+                    return;
+                }
+                for (Notification notification : objects) {
+                    try {
+                        notification.delete();
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
+                    notification.saveInBackground();
+                }
+            }
+        });
+        mHelper.removeBadge(itemId);
     }
 
     private void setupNavigationView() {
@@ -142,18 +224,23 @@ public class AdminFragment extends Fragment {
             switch (position) {
                 case 0:
                     mNavigationView.setSelectedItemId(R.id.action_profile);
+                    removeNotificationBadges(0, R.id.action_profile);
                     break;
                 case 1:
                     mNavigationView.setSelectedItemId(R.id.action_enrolled);
+                    removeNotificationBadges(1, R.id.action_enrolled);
                     break;
                 case 2:
                     mNavigationView.setSelectedItemId(R.id.action_queue);
+                    removeNotificationBadges(2, R.id.action_queue);
                     break;
                 case 3:
                     mNavigationView.setSelectedItemId(R.id.action_workshop);
+                    removeNotificationBadges(3, R.id.action_workshop);
                     break;
                 case 4:
                     mNavigationView.setSelectedItemId(R.id.action_board);
+                    removeNotificationBadges(4, R.id.action_board);
                     break;
                 default:
                     break;

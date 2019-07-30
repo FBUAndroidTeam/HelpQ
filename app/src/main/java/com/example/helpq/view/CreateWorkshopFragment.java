@@ -17,8 +17,12 @@ import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.DialogDismissListener;
+import com.example.helpq.model.Notification;
+import com.example.helpq.model.User;
 import com.example.helpq.model.Workshop;
+import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -26,6 +30,7 @@ import org.json.JSONArray;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class CreateWorkshopFragment extends DialogFragment {
 
@@ -110,7 +115,7 @@ public class CreateWorkshopFragment extends DialogFragment {
         workshop.setStartTime(createStartTimeDate());
 
         Date currTime = new Date(System.currentTimeMillis());
-        if(currTime.compareTo(workshop.getStartTime()) < 0) {
+        if (currTime.compareTo(workshop.getStartTime()) < 0) {
             workshop.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -128,6 +133,7 @@ public class CreateWorkshopFragment extends DialogFragment {
                     }
                 }
             });
+            notifyAllStudents();
         } else {
             Toast.makeText(getContext(), R.string.edge_case_wrong_date_workshop,
                     Toast.LENGTH_LONG).show();
@@ -147,4 +153,27 @@ public class CreateWorkshopFragment extends DialogFragment {
         return cal.getTime();
     }
 
+    // Send notifications to all students that this workshops has been created.
+    private void notifyAllStudents() {
+        ParseQuery<ParseUser> studentQuery = ParseUser.getQuery();
+        studentQuery.whereEqualTo(User.KEY_ADMIN_NAME, ParseUser.getCurrentUser().getUsername());
+        studentQuery.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "error with query");
+                    e.printStackTrace();
+                    return;
+                }
+
+                // Add Notification to student's board tab.
+                for (ParseUser student : objects) {
+                    Notification notification = new Notification();
+                    notification.setUser(student);
+                    notification.setTab(1);
+                    notification.saveInBackground();
+                }
+            }
+        });
+    }
 }

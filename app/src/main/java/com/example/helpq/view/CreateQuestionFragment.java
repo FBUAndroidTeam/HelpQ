@@ -17,10 +17,16 @@ import android.widget.ToggleButton;
 
 import com.example.helpq.R;
 import com.example.helpq.model.DialogDismissListener;
+import com.example.helpq.model.Notification;
+import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
+import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import java.util.List;
 
 public class CreateQuestionFragment extends DialogFragment {
 
@@ -171,6 +177,7 @@ public class CreateQuestionFragment extends DialogFragment {
                             Toast.LENGTH_LONG).show();
                 } else {
                     submitQuestion();
+                    notifyAdmin();
                 }
             }
         });
@@ -195,6 +202,27 @@ public class CreateQuestionFragment extends DialogFragment {
                 } else {
                     Log.d(TAG, "Question failed to create");
                     e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void notifyAdmin() {
+        ParseQuery<ParseUser> query = QueryFactory.UserQuery.getAdmin();
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                if (e != null) {
+                    Log.d(TAG, "Error querying for admin");
+                }
+                if (objects.size() > 1) {
+                    Log.d(TAG, "Only one admin should return!");
+                }
+                for (ParseUser admin : objects) {
+                    Notification notification = new Notification();
+                    notification.setUser(admin);
+                    notification.setTab(2);
+                    notification.saveInBackground();
                 }
             }
         });

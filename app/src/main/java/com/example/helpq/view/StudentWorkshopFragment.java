@@ -25,6 +25,7 @@ import com.example.helpq.R;
 import com.example.helpq.controller.StudentWorkshopAdapter;
 import com.example.helpq.model.AlertReceiver;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.User;
 import com.example.helpq.model.Workshop;
 import com.parse.FindCallback;
@@ -114,11 +115,8 @@ public class StudentWorkshopFragment extends Fragment {
     }
 
     private void queryWorkshops() {
-        ParseQuery<Workshop> workshopQuery = ParseQuery.getQuery("Workshop");
-        workshopQuery.include("creator");
-        workshopQuery.addAscendingOrder("startTime");
-        workshopQuery.whereGreaterThan("startTime", new Date(System.currentTimeMillis()));
-        workshopQuery.findInBackground(new FindCallback<Workshop>() {
+        ParseQuery<Workshop> query = QueryFactory.WorkshopQuery.getWorkshopsForStudent();
+        query.findInBackground(new FindCallback<Workshop>() {
             @Override
             public void done(List<Workshop> objects, ParseException e) {
                 if (e != null) {
@@ -176,5 +174,4 @@ public class StudentWorkshopFragment extends Fragment {
         Date alarmTime = new Date(time - (15 * ONE_MINUTE_IN_MILLIS));
         return alarmTime;
     }
-
 }

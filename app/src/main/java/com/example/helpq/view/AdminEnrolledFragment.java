@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.EnrolledStudentsAdapter;
-import com.example.helpq.model.User;
+import com.example.helpq.model.QueryFactory;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -57,8 +57,7 @@ public class AdminEnrolledFragment extends Fragment {
     }
 
     private void queryEnrolledStudents() {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo(User.KEY_ADMIN_NAME, ParseUser.getCurrentUser().getUsername());
+        ParseQuery<ParseUser> query = QueryFactory.UserQuery.getStudentList();
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {

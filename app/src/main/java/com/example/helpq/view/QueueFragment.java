@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.helpq.R;
 import com.example.helpq.controller.QueueAdapter;
 import com.example.helpq.model.DialogDismissListener;
+import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
 import com.example.helpq.model.WaitTimeCalculator;
@@ -24,11 +25,9 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 public class QueueFragment extends Fragment implements DialogDismissListener {
@@ -90,11 +89,8 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         tvStretchWaitTime = view.findViewById(R.id.tvStretchWaitTime);
         tvCuriosityWaitTime = view.findViewById(R.id.tvCuriosityWaitTime);
 
-        final ParseQuery<Question> questionQuery = new ParseQuery<Question>(Question.class);
-        questionQuery.whereEqualTo(Question.KEY_ARCHIVED, true)
-                .include(Question.KEY_ASKER);
-
-        questionQuery.findInBackground(new FindCallback<Question>() {
+        final ParseQuery<Question> query = QueryFactory.QuestionQuery.getArchivedQuestions();
+        query.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> objects, ParseException e) {
                 if (e != null) {
@@ -160,10 +156,8 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     }
 
     private void queryQuestions() {
-        final ParseQuery<Question> questionQuery = new ParseQuery<Question>(Question.class);
-        questionQuery.whereEqualTo(Question.KEY_ARCHIVED, false)
-                .include(Question.KEY_ASKER);
-        questionQuery.findInBackground(new FindCallback<Question>() {
+        final ParseQuery<Question> query = QueryFactory.QuestionQuery.getQuestionsForQueue();
+        query.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> objects, ParseException e) {
                 if (e != null) {

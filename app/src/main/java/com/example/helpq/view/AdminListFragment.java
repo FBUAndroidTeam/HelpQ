@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.helpq.R;
 import com.example.helpq.controller.AdminListAdapter;
 import com.example.helpq.model.DialogDismissListener;
+import com.example.helpq.model.QueryFactory;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -28,7 +29,6 @@ public class AdminListFragment extends DialogFragment {
 
     public static final String TAG = "AdminListFragment";
     private static final String KEY_TITLE = "title";
-    private static final String KEY_IS_ADMIN = "isAdmin";
 
     private RecyclerView rvAdmins;
     private List<ParseUser> mAdmins;
@@ -82,8 +82,7 @@ public class AdminListFragment extends DialogFragment {
     }
 
     private void findAllAdmins() {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo(KEY_IS_ADMIN, true);
+        ParseQuery<ParseUser> query = QueryFactory.UserQuery.getAllAdmins();
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
