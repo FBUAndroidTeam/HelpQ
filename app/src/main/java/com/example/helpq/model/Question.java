@@ -6,9 +6,13 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -27,6 +31,7 @@ public class Question extends ParseObject implements Comparable<Question>{
     private static final String KEY_ANSWER = "answerText";
     public static final String KEY_ANSWERED_AT = "answeredAt";
     public static final String KEY_IS_PRIVATE = "isPrivate";
+    private static final String KEY_LIKES = "likes";
 
     public void setCreatedAt(Date date) {
         put(KEY_CREATED_AT, date);
@@ -95,6 +100,47 @@ public class Question extends ParseObject implements Comparable<Question>{
 
     public void setIsPrivate(boolean isPrivate) {
         put(KEY_IS_PRIVATE, isPrivate);
+    }
+
+    // Returns the array of users who liked this question.
+    public JSONArray getLikes() {
+        return getJSONArray(KEY_LIKES);
+    }
+
+    // Returns the number of likes on this question.
+    public int getLikeCount() {
+        if (getLikes() != null) {
+            return getLikes().length();
+        }
+        else return 0;
+    }
+
+    // Add a like to this question.
+    public void likePost(ParseUser user) { add(KEY_LIKES, user); }
+
+    // Remove a like from this question.
+    public void unlikePost(ParseUser user) {
+        ArrayList<ParseUser> a = new ArrayList<>();
+        a.add(user);
+        removeAll(KEY_LIKES, a);
+    }
+
+    // Check if this question has been liked.
+    public boolean isLiked() {
+        JSONArray a = getLikes();
+        if (a != null) {
+            for (int i = 0; i < a.length(); i++) {
+                try {
+                    if (a.getJSONObject(i).getString("objectId")
+                            .equals(ParseUser.getCurrentUser().getObjectId())) {
+                        return true;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
     }
 
     // Get the date that this question is asked.
