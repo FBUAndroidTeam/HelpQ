@@ -20,6 +20,7 @@ import com.example.helpq.controller.QueueAdapter;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.Search;
 import com.example.helpq.model.User;
 import com.example.helpq.model.WaitTime;
 import com.example.helpq.model.WaitTimeHelper;
@@ -74,6 +75,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         setupWaitTimes(view);
         queryQuestions();
         setupSwipeRefreshing(view);
+        search();
 
         mAdapter.setOnItemClickListener(new QueueAdapter.ClickListener() {
             @Override
@@ -211,6 +213,35 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                     }
                 })
                 .show();
+    }
+
+    protected void search() {
+        svQueueSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(final String query) {
+                final ParseQuery<Question> queueQuestions =
+                        QueryFactory.QuestionQuery.getQuestionsForQueue();
+                queueQuestions.findInBackground(new FindCallback<Question>() {
+                    @Override
+                    public void done(List<Question> objects, ParseException e) {
+                        List<Question> result = Search.mSearch(objects, query);
+                        mQuestions.clear();
+                        mQuestions.addAll(result);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    mQuestions.clear();
+                    queryQuestions();
+                }
+                return false;
+            }
+        });
     }
 }
 
