@@ -17,6 +17,7 @@ import android.widget.ToggleButton;
 import com.example.helpq.R;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Notification;
+import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
 import com.parse.FindCallback;
@@ -24,6 +25,9 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.Date;
 import java.util.List;
@@ -91,7 +95,10 @@ public class AnswerQuestionFragment extends DialogFragment {
                     submitAnswer();
 
                     // Create and send notifications to students
-                    if (!tbPrivate.isChecked()) notifyAllStudents();
+                    if (!tbPrivate.isChecked()) {
+                        notifyAllStudents();
+                        notifyLikers();
+                    }
                     notifyStudent();
                 }
             }
@@ -128,6 +135,38 @@ public class AnswerQuestionFragment extends DialogFragment {
         notification.setUser(mQuestion.getAsker());
         notification.setTab(3);
         notification.saveInBackground();
+    }
+
+    // Put a notification that this question has been answered in the inboxes of students who
+    // have liked this question.
+    private void notifyLikers() {
+        JSONArray likes = mQuestion.getLikes();
+        if (likes != null) {
+            for (int i = 0; i < likes.length(); i++) {
+                try {
+                    String objectId = likes.getJSONObject(i).getString("objectId");
+                    ParseQuery<ParseUser> query = QueryFactory.UserQuery.getUserByObjectId(objectId);
+                    query.findInBackground(new FindCallback<ParseUser>() {
+                        @Override
+                        public void done(List<ParseUser> objects, ParseException e) {
+                            if (e != null) {
+                                Log.e(TAG, "Error querying for liker of this question");
+                                return;
+                            }
+                            if (objects.size() > 1) {
+                                Log.d(TAG, "All users should have unique objectId!");
+                            }
+                            Notification notification = new Notification();
+                            notification.setUser(objects.get(0));
+                            notification.setTab(3);
+                            notification.saveInBackground();
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     // Put a notification that this question has been answered on all students' boards.

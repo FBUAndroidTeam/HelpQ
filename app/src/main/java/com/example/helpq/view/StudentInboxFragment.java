@@ -8,6 +8,7 @@ import com.example.helpq.model.Question;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -32,7 +33,12 @@ public class StudentInboxFragment extends InboxFragment {
                 }
                 tvNotice.setVisibility(View.GONE);
                 for (Question question : objects) {
-                    if (question.getAnswer() != null) {
+                    // Check if the current user asked or liked this question
+                    boolean forCurrentUser =
+                            question.getAsker().getUsername()
+                                    .equals(ParseUser.getCurrentUser().getUsername()) ||
+                                    question.isLiked();
+                    if (question.getAnswer() != null && forCurrentUser) {
                         mMessages.add(question);
                     }
                 }

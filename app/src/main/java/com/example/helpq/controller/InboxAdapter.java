@@ -64,6 +64,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         private TextView tvAnswerTime;
         private TextView tvAdminName;
         private TextView tvAnswer;
+        private TextView tvLikes;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -72,6 +73,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             tvAnswerTime = itemView.findViewById(R.id.tvAnswerTime);
             tvAdminName = itemView.findViewById(R.id.tvAdminName);
             tvAnswer = itemView.findViewById(R.id.tvAnswer);
+            tvLikes = itemView.findViewById(R.id.tvLikes);
         }
 
         // Bind the view elements to the message.
@@ -86,6 +88,13 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                         mContext.getResources().getString(R.string.admin_answer));
             }
             tvAnswer.setText(message.getAnswer());
+            setLikeText(message, tvLikes);
         }
+    }
+
+    private void setLikeText(Question question, TextView view) {
+        int likeCount = question.getLikeCount();
+        if (likeCount == 1) view.setText(String.format("%d like", question.getLikeCount()));
+        else view.setText(String.format("%d likes", question.getLikeCount()));
     }
 }
