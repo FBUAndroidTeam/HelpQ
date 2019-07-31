@@ -21,7 +21,8 @@ import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
-import com.example.helpq.model.WaitTimeCalculator;
+import com.example.helpq.model.WaitTime;
+import com.example.helpq.model.WaitTimeHelper;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -70,7 +71,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         rvQuestions.setLayoutManager(layoutManager);
         svQueueSearch = view.findViewById(R.id.svQueueSearch);
 
-        setupWaitTimeCalculation(view);
+        setupWaitTimes(view);
         queryQuestions();
         setupSwipeRefreshing(view);
 
@@ -86,49 +87,31 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         });
     }
 
-    // Displays wait times above queue.
-    private void setupWaitTimeCalculation(@NonNull View view) {
+    private void setupWaitTimes(@NonNull View view) {
         tvBlockingWaitTime = view.findViewById(R.id.tvBlockingWaitTime);
         tvStretchWaitTime = view.findViewById(R.id.tvStretchWaitTime);
         tvCuriosityWaitTime = view.findViewById(R.id.tvCuriosityWaitTime);
 
-        final ParseQuery<Question> query = QueryFactory.QuestionQuery.getArchivedQuestions();
-        query.findInBackground(new FindCallback<Question>() {
+        final ParseQuery<WaitTime> query = QueryFactory.WaitTimeQuery.getAdminWaitTimes();
+        query.findInBackground(new FindCallback<WaitTime>() {
             @Override
-            public void done(List<Question> objects, ParseException e) {
+            public void done(List<WaitTime> objects, ParseException e) {
                 if (e != null) {
-                    Log.e(TAG, "Error with question wait time query");
-                    e.printStackTrace();
+                    Log.e(TAG, "Error querying for wait times");
                     return;
                 }
-
-                List<Question> questions = new ArrayList<>();
-
-                for (Question question : objects) {
-
-                    // User who asked the question
-                    ParseUser asker = question.getAsker();
-                    // User who is currently logged in
-                    String currUser = ParseUser.getCurrentUser().getUsername();
-
-                    // Admin of current user
-                    String currUserAdmin = null;
-                    if (!User.isAdmin(ParseUser.getCurrentUser())) {
-                        currUserAdmin = User.getAdminName(ParseUser.getCurrentUser());
-                    }
-                    // Admin of asker
-                    String askerAdmin = User.getAdminName(asker);
-
-                    if (currUser.equals(askerAdmin) || askerAdmin.equals(currUserAdmin)) {
-                        questions.add(question);
-                    }
+                if (objects.size() > 1) {
+                    Log.e(TAG, "Every admin should only have one WaitTime dataset!");
+                    return;
                 }
-
-                WaitTimeCalculator calculator =
-                        new WaitTimeCalculator(getParentFragment().getContext(), questions);
-                tvBlockingWaitTime.setText(calculator.getBlockingWaitTime());
-                tvStretchWaitTime.setText(calculator.getStretchWaitTime());
-                tvCuriosityWaitTime.setText(calculator.getCuriosityWaitTime());
+                WaitTime waitTime = objects.get(0);
+                WaitTimeHelper helper = new WaitTimeHelper(getParentFragment().getContext());
+                tvBlockingWaitTime.setText(
+                        helper.getBlockingWaitTime(waitTime.getBlockingTime()));
+                tvStretchWaitTime.setText(
+                        helper.getStretchWaitTime(waitTime.getStretchTime()));
+                tvCuriosityWaitTime.setText(
+                        helper.getCuriosityWaitTime(waitTime.getCuriosityTime()));
             }
         });
     }
