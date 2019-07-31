@@ -34,7 +34,6 @@ public class StudentBoardFragment extends InboxFragment {
                     e.printStackTrace();
                     return;
                 }
-
                 tvNotice.setVisibility(View.GONE);
                 for (Question question : objects) {
                     // Admin of current user

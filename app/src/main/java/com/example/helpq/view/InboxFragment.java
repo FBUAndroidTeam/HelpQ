@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,7 @@ public class InboxFragment extends Fragment {
 
         // Create data source, adapter, and layout manager
         mMessages = new ArrayList<>();
-        mAdapter = new InboxAdapter(getContext(), mMessages);
+        mAdapter = new InboxAdapter(getContext(), mMessages, this);
         rvMessages = view.findViewById(R.id.rvMessages);
         rvMessages.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -59,6 +60,17 @@ public class InboxFragment extends Fragment {
         setupSwipeToRefresh(view);
         queryMessages();
         search();
+
+        mAdapter.setOnItemClickListener(new InboxAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                Log.d(TAG, "onItemClick position: " + position);
+            }
+            @Override
+            public void onItemLongClick(int position, View v) {
+                Log.d(TAG, "onItemLongClick position: " + position);
+            }
+        });
     }
 
     // Handle logic for swipe to refresh.

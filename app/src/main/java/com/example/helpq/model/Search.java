@@ -19,8 +19,9 @@ public class Search {
             boardQuestionText.add(question.getText());
             map.put(question.getText(), question);
         }
-        List<ExtractedResult> m = FuzzySearch.extractTop(query, boardQuestionText,  MAX_RESULTS);
-        for(ExtractedResult extracted : m) {
+        List<ExtractedResult> extractList =
+                FuzzySearch.extractTop(query, boardQuestionText, MAX_RESULTS);
+        for(ExtractedResult extracted : extractList) {
             result.add(map.get(extracted.getString()));
         }
         return result;
