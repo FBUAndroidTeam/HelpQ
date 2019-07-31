@@ -71,12 +71,20 @@ public class AdminIndividualQuestionsAdapter extends
             } else {
                 tvStudentName.setVisibility(tvStudentName.INVISIBLE);
                 tvPriorityEmoji.setText(q.getPriority());
-                tvHelpEmoji.setText(q.getHelpType());
+                setHelpType(q.getHelpType());
                 tvDescription.setText(q.getText());
                 tvStartTime.setText(q.getCreatedTimeAgo());
                 tvLikes.setText(Integer.toString(q.getLikeCount()) + " " +
                         mContext.getResources().getString(R.string.likes));
                 tvSeeMore.setVisibility(tvSeeMore.INVISIBLE);
+            }
+        }
+
+        private void setHelpType(String helpType) {
+            if (helpType.equals(mContext.getResources().getString(R.string.in_person))) {
+                tvHelpEmoji.setText(R.string.EMOJI_IN_PERSON);
+            } else if (helpType.equals(mContext.getResources().getString(R.string.written))) {
+                tvHelpEmoji.setText(R.string.EMOJI_WRITTEN);
             }
         }
     }
