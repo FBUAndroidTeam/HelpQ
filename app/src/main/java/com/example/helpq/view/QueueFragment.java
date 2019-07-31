@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.helpq.R;
@@ -38,6 +39,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     private QueueAdapter mAdapter;
     private SwipeRefreshLayout mSwipeContainer;
     private TextView tvNotice;
+    private SearchView svQueueSearch;
     // Wait time calculation fields
     private TextView tvBlockingWaitTime;
     private TextView tvStretchWaitTime;
@@ -66,6 +68,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         rvQuestions.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvQuestions.setLayoutManager(layoutManager);
+        svQueueSearch = view.findViewById(R.id.svQueueSearch);
 
         setupWaitTimeCalculation(view);
         queryQuestions();
