@@ -134,4 +134,19 @@ public class QueryFactory {
             return query;
         }
     }
+
+    public static class WaitTimeQuery {
+
+        // Get the wait times that correspond to the current user's admin,
+        // or, get the current user's wait times, if they are an admin.
+        public static ParseQuery<WaitTime> getAdminWaitTimes() {
+            ParseUser user = ParseUser.getCurrentUser();
+            String adminName;
+            if (User.isAdmin(user)) adminName = user.getUsername();
+            else adminName = User.getAdminName(user);
+            ParseQuery<WaitTime> query = new ParseQuery<WaitTime>(WaitTime.class);
+            query.whereEqualTo(WaitTime.KEY_ADMIN_NAME, adminName);
+            return query;
+        }
+    }
 }

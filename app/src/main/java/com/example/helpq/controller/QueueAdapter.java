@@ -16,12 +16,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.helpq.R;
+import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
+import com.example.helpq.model.WaitTime;
+import com.example.helpq.model.WaitTimeHelper;
 import com.example.helpq.view.AnswerQuestionFragment;
 import com.example.helpq.view.QueueFragment;
 import com.example.helpq.view.ReplyQuestionFragment;
+import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -116,6 +121,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 }
             }
         });
+        updateWaitTime(mQuestions.get(adapterPosition));
     }
 
     // Deletes this question from parse
@@ -399,5 +405,55 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         int likeCount = question.getLikeCount();
         if (likeCount == 1) view.setText(String.format("%d like", question.getLikeCount()));
         else view.setText(String.format("%d likes", question.getLikeCount()));
+    }
+
+    // Add the wait time of the newly archived question to the weighted average.
+    private void updateWaitTime(final Question question) {
+        ParseQuery<WaitTime> query = QueryFactory.WaitTimeQuery.getAdminWaitTimes();
+        query.findInBackground(new FindCallback<WaitTime>() {
+            @Override
+            public void done(List<WaitTime> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error querying for wait times");
+                    return;
+                }
+                if (objects.size() > 1) {
+                    Log.e(TAG, "Every admin should only have one WaitTime dataset!");
+                    return;
+                }
+                WaitTime waitTime = objects.get(0);
+                updateWaitTimeByPriority(waitTime, question);
+                waitTime.saveInBackground();
+            }
+        });
+    }
+
+    // Set the wait time by priority, and increment the corresponding question count.
+    private void updateWaitTimeByPriority(WaitTime waitTime, Question question) {
+        WaitTimeHelper helper = new WaitTimeHelper(mContext);
+        long newWaitTime;
+        switch (question.getPriority()) {
+
+            case WaitTimeHelper.BLOCKING:
+                newWaitTime = helper.updateWaitTime(waitTime.getBlockingTime(),
+                        waitTime.getBlockingSize(), question.getTimeDifference());
+                waitTime.setBlockingTime(newWaitTime);
+                waitTime.setBlockingSize(waitTime.getBlockingSize() + 1);
+                break;
+
+            case WaitTimeHelper.STRETCH:
+                newWaitTime = helper.updateWaitTime(waitTime.getStretchTime(),
+                        waitTime.getStretchSize(), question.getTimeDifference());
+                waitTime.setStretchTime(newWaitTime);
+                waitTime.setStretchSize(waitTime.getStretchSize() + 1);
+                break;
+
+            case WaitTimeHelper.CURIOSITY:
+                newWaitTime = helper.updateWaitTime(waitTime.getCuriosityTime(),
+                        waitTime.getCuriositySize(), question.getTimeDifference());
+                waitTime.setCuriosityTime(newWaitTime);
+                waitTime.setCuriositySize(waitTime.getCuriositySize() + 1);
+                break;
+        }
     }
 }
