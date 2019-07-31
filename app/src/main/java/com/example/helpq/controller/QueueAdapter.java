@@ -169,6 +169,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private TextView tvSeeMore;
         private String questionText;
         private int originalLines;
+        private TextView tvWaitTime;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -188,6 +189,21 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvLikes = itemView.findViewById(R.id.tvLikes);
             tvSeeMore = itemView.findViewById(R.id.tvSeeMore);
             ibView = itemView.findViewById(R.id.ibView);
+            tvWaitTime = itemView.findViewById(R.id.tvWaitTime);
+        }
+
+        // Bind the view elements to the Question.
+        public void bind(Question question) {
+            tvStudentName.setText(question.getAsker().getString(Question.KEY_FULL_NAME));
+            tvPriorityEmoji.setText(question.getPriority());
+            questionText = question.getText();
+            setInitialQuestionText();
+            tvStartTime.setText(question.getCreatedTimeAgo());
+            setHelpType(question.getHelpType());
+            setButton(ibLike, question.isLiked(),
+                    R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
+            setLikeText(question, tvLikes);
+            setWaitTimeText(question, tvWaitTime);
         }
 
         private void adminSlideMenu(View v) {
@@ -224,67 +240,93 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private void studentSlideMenu(View v, ParseUser currentUser) {
             ibDelete.setVisibility(ibDelete.VISIBLE);
             final Question q = mQuestions.get(getAdapterPosition());
-            vQuestionView.startAnimation(slideRecyclerCell(v, -300));
             if(User.getFullName(currentUser)
-                    .equals(tvStudentName.getText().toString())) {
-                ibDelete.setVisibility(ibDelete.VISIBLE);
-                ibDelete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        q.setIsArchived(true);
-                        q.setAnsweredAt(Calendar.getInstance().getTime());
-                        q.saveInBackground();
-                        removeAt(getAdapterPosition());
-                        mQueueFragment.createSnackbar(getAdapterPosition(), q);
-                        ibDelete.setVisibility(ibDelete.INVISIBLE);
-                    }
-                });
-                if(q.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
-                    ibView.setVisibility(View.VISIBLE);
-                    ibView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            replyToQuestion(mQuestions.get(getAdapterPosition()));
-                            ibView.setVisibility(View.GONE);
-                        }
-                    });
-                }
+                    .equals(tvStudentName.getText().toString()) && q.getHelpType().equals("written")) {
+                currentUserWrittenMenu(v, q);
+            } else if(User.getFullName(currentUser)
+                    .equals(tvStudentName.getText().toString()) && q.getHelpType().equals("in-person")) {
+                currentUserInpersonMenu(v, q);
             } else {
-                ibReply.setVisibility(View.VISIBLE);
-                ibDelete.setVisibility(View.GONE);
-                ibLike.setVisibility(View.VISIBLE);
+                peerQuestionMenu(v, q);
+            }
+        }
 
-                ibLike.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Question question = mQuestions.get(getAdapterPosition());
-                        boolean isLiked = question.isLiked();
-                        if (!isLiked) {
-                            question.likeQuestion(ParseUser.getCurrentUser());
-                        } else {
-                            question.unlikeQuestion(ParseUser.getCurrentUser());
-                        }
-                        question.saveInBackground();
-                        setButton(ibLike, !isLiked,
-                                R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
-                        setLikeText(question, tvLikes);
+        private void currentUserWrittenMenu(View v, final Question q) {
+            vQuestionView.startAnimation(slideRecyclerCell(v, -300));
+            ibDelete.setVisibility(ibDelete.VISIBLE);
+            ibDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    q.setIsArchived(true);
+                    q.setAnsweredAt(Calendar.getInstance().getTime());
+                    q.saveInBackground();
+                    removeAt(getAdapterPosition());
+                    mQueueFragment.createSnackbar(getAdapterPosition(), q);
+                    ibDelete.setVisibility(ibDelete.INVISIBLE);
+                }
+            });
+            ibView.setVisibility(View.VISIBLE);
+            ibView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    replyToQuestion(mQuestions.get(getAdapterPosition()));
+                    ibView.setVisibility(View.GONE);
+                }
+            });
+        }
+
+        private void currentUserInpersonMenu(View v, final Question q) {
+            vQuestionView.startAnimation(slideRecyclerCell(v, -150));
+            ibDelete.setVisibility(ibDelete.VISIBLE);
+            ibDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    q.setIsArchived(true);
+                    q.setAnsweredAt(Calendar.getInstance().getTime());
+                    q.saveInBackground();
+                    removeAt(getAdapterPosition());
+                    mQueueFragment.createSnackbar(getAdapterPosition(), q);
+                    ibDelete.setVisibility(ibDelete.INVISIBLE);
+                }
+            });
+        }
+
+        private void peerQuestionMenu(View v, final Question q) {
+            vQuestionView.startAnimation(slideRecyclerCell(v, -300));
+            ibReply.setVisibility(View.VISIBLE);
+            ibDelete.setVisibility(View.GONE);
+            ibLike.setVisibility(View.VISIBLE);
+
+            ibLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Question question = mQuestions.get(getAdapterPosition());
+                    boolean isLiked = question.isLiked();
+                    if (!isLiked) {
+                        question.likeQuestion(ParseUser.getCurrentUser());
+                    } else {
+                        question.unlikeQuestion(ParseUser.getCurrentUser());
                     }
-                });
-                ibReply.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(q.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
-                            replyToQuestion(q);
-                            ibReply.setVisibility(ibReply.GONE);
-                        } else {
-                            Toast.makeText(mContext,
+                    question.saveInBackground();
+                    setButton(ibLike, !isLiked,
+                            R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
+                    setLikeText(question, tvLikes);
+                }
+            });
+            ibReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(q.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
+                        replyToQuestion(q);
+                        ibReply.setVisibility(ibReply.GONE);
+                    } else {
+                        Toast.makeText(mContext,
                                 mContext.getResources().getString(R.string.reply_in_person_help),
                                 Toast.LENGTH_LONG).show();
-                        }
-                        resetRecyclerCell();
                     }
-                });
-            }
+                    resetRecyclerCell();
+                }
+            });
         }
 
         private TranslateAnimation slideRecyclerCell(View v, int deltaX) {
@@ -297,19 +339,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             animate.setDuration(300);
             animate.setFillAfter(true);
             return animate;
-        }
-
-        // Bind the view elements to the Question.
-        public void bind(Question question) {
-            tvStudentName.setText(question.getAsker().getString(Question.KEY_FULL_NAME));
-            tvPriorityEmoji.setText(question.getPriority());
-            questionText = question.getText();
-            setInitialQuestionText();
-            tvStartTime.setText(question.getCreatedTimeAgo());
-            setHelpType(question.getHelpType());
-            setButton(ibLike, question.isLiked(),
-                    R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
-            setLikeText(question, tvLikes);
         }
 
         private void setHelpType(String helpType) {
@@ -405,6 +434,26 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         int likeCount = question.getLikeCount();
         if (likeCount == 1) view.setText(String.format("%d like", question.getLikeCount()));
         else view.setText(String.format("%d likes", question.getLikeCount()));
+    }
+
+    private void setWaitTimeText(final Question question, final TextView view) {
+        final ParseQuery<WaitTime> query = QueryFactory.WaitTimeQuery.getAdminWaitTimes();
+        query.findInBackground(new FindCallback<WaitTime>() {
+            @Override
+            public void done(List<WaitTime> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error querying for wait times");
+                    return;
+                }
+                if (objects.size() > 1) {
+                    Log.e(TAG, "Every admin should only have one WaitTime dataset!");
+                    return;
+                }
+                WaitTime averageWaitTime = objects.get(0);
+                WaitTimeHelper helper = new WaitTimeHelper(mContext);
+                view.setText(helper.getQuestionWaitTime(question, averageWaitTime) + " wait");
+            }
+        });
     }
 
     // Add the wait time of the newly archived question to the weighted average.

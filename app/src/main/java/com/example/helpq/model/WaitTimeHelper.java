@@ -17,20 +17,20 @@ public class WaitTimeHelper {
 
     public String getBlockingWaitTime(long blockingTime) {
         return mContext.getResources().getString(R.string.PRIORITY_BLOCKING)
-                + " " + getWaitTime(blockingTime, true);
+                + " " + getWaitTimeString(blockingTime, true);
     }
 
     public String getStretchWaitTime(long stretchTime) {
         return mContext.getResources().getString(R.string.PRIORITY_STRETCH)
-                + " " + getWaitTime(stretchTime, true);
+                + " " + getWaitTimeString(stretchTime, true);
     }
 
     public String getCuriosityWaitTime(long curiosityTime) {
         return mContext.getResources().getString(R.string.PRIORITY_CURIOSITY)
-                + " " + getWaitTime(curiosityTime, true);
+                + " " + getWaitTimeString(curiosityTime, true);
     }
 
-    public String getWaitTime(long averageTime, boolean showDefault) {
+    private String getWaitTimeString(long averageTime, boolean showDefault) {
         if (averageTime == 0 && showDefault) {
             return mContext.getResources().getString(R.string.default_wait_time);
         }
@@ -48,11 +48,16 @@ public class WaitTimeHelper {
         return time;
     }
 
+    public String getQuestionWaitTime(Question question, WaitTime waitTime) {
+        long time = calculateWaitTime(question, waitTime);
+        return getWaitTimeString(time, false);
+    }
+
     // Calculate wait time for one question.
-    private long calculateWaitTime(Question question, String priority, WaitTime waitTime) {
+    private long calculateWaitTime(Question question, WaitTime waitTime) {
         long diff = System.currentTimeMillis() - question.getCreatedAt().getTime();
         long time = 0;
-        switch (priority) {
+        switch (question.getPriority()) {
             case BLOCKING:
                 time = waitTime.getBlockingTime() - diff;
                 break;
