@@ -171,6 +171,10 @@ public class CreateQuestionFragment extends DialogFragment {
                     toggleHelpSelected = tbInPerson;
                     submitQuestion();
                     notifyAdmin();
+                } else if (togglePrioritySelected != null && toggleHelpSelected == null) {
+                    toggleHelpSelected = tbInPerson;
+                    submitQuestion();
+                    notifyAdmin();
                 } else if (togglePrioritySelected == null) {
                     Toast.makeText(getContext(),
                             R.string.edge_case_enter_priority,
