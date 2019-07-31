@@ -169,6 +169,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private TextView tvSeeMore;
         private String questionText;
         private int originalLines;
+        private TextView tvWaitTime;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -188,6 +189,21 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvLikes = itemView.findViewById(R.id.tvLikes);
             tvSeeMore = itemView.findViewById(R.id.tvSeeMore);
             ibView = itemView.findViewById(R.id.ibView);
+            tvWaitTime = itemView.findViewById(R.id.tvWaitTime);
+        }
+
+        // Bind the view elements to the Question.
+        public void bind(Question question) {
+            tvStudentName.setText(question.getAsker().getString(Question.KEY_FULL_NAME));
+            tvPriorityEmoji.setText(question.getPriority());
+            questionText = question.getText();
+            setInitialQuestionText();
+            tvStartTime.setText(question.getCreatedTimeAgo());
+            setHelpType(question.getHelpType());
+            setButton(ibLike, question.isLiked(),
+                    R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
+            setLikeText(question, tvLikes);
+            setWaitTimeText(question, tvWaitTime);
         }
 
         private void adminSlideMenu(View v) {
@@ -325,19 +341,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             return animate;
         }
 
-        // Bind the view elements to the Question.
-        public void bind(Question question) {
-            tvStudentName.setText(question.getAsker().getString(Question.KEY_FULL_NAME));
-            tvPriorityEmoji.setText(question.getPriority());
-            questionText = question.getText();
-            setInitialQuestionText();
-            tvStartTime.setText(question.getCreatedTimeAgo());
-            setHelpType(question.getHelpType());
-            setButton(ibLike, question.isLiked(),
-                    R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
-            setLikeText(question, tvLikes);
-        }
-
         private void setHelpType(String helpType) {
             if (helpType.equals(mContext.getResources().getString(R.string.in_person))) {
                 tvHelpEmoji.setText(R.string.EMOJI_IN_PERSON);
@@ -431,6 +434,26 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         int likeCount = question.getLikeCount();
         if (likeCount == 1) view.setText(String.format("%d like", question.getLikeCount()));
         else view.setText(String.format("%d likes", question.getLikeCount()));
+    }
+
+    private void setWaitTimeText(final Question question, final TextView view) {
+        final ParseQuery<WaitTime> query = QueryFactory.WaitTimeQuery.getAdminWaitTimes();
+        query.findInBackground(new FindCallback<WaitTime>() {
+            @Override
+            public void done(List<WaitTime> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error querying for wait times");
+                    return;
+                }
+                if (objects.size() > 1) {
+                    Log.e(TAG, "Every admin should only have one WaitTime dataset!");
+                    return;
+                }
+                WaitTime averageWaitTime = objects.get(0);
+                WaitTimeHelper helper = new WaitTimeHelper(mContext);
+                view.setText(helper.getQuestionWaitTime(question, averageWaitTime) + " wait");
+            }
+        });
     }
 
     // Add the wait time of the newly archived question to the weighted average.

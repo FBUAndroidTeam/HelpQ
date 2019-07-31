@@ -11,7 +11,7 @@
         android:id="@+id/tvStretchWaitTime"
         android:layout_width="115dp"
         android:layout_height="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/round"
         android:gravity="center"
@@ -21,8 +21,8 @@
         app:layout_constraintEnd_toStartOf="@+id/tvCuriosityWaitTime"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tvBlockingWaitTime"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.065" />
+        app:layout_constraintTop_toBottomOf="@+id/svQueueSearch"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tvBlockingWaitTime"
@@ -30,7 +30,7 @@
         android:layout_height="20dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/round"
         android:gravity="center"
@@ -40,8 +40,8 @@
         app:layout_constraintEnd_toStartOf="@+id/tvStretchWaitTime"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.065" />
+        app:layout_constraintTop_toBottomOf="@+id/svQueueSearch"
+        app:layout_constraintVertical_bias="0.0" />
 
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipeContainer"
@@ -74,7 +74,7 @@
         android:id="@+id/tvCuriosityWaitTime"
         android:layout_width="115dp"
         android:layout_height="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
@@ -86,8 +86,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tvStretchWaitTime"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.065" />
+        app:layout_constraintTop_toBottomOf="@+id/svQueueSearch"
+        app:layout_constraintVertical_bias="0.0" />
 
     <android.widget.TextView
         android:id="@+id/tvNotice"
