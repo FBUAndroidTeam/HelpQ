@@ -20,6 +20,8 @@ import com.example.helpq.model.Notification;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
+import com.example.helpq.model.WaitTime;
+import com.example.helpq.model.WaitTimeHelper;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -127,6 +129,7 @@ public class AnswerQuestionFragment extends DialogFragment {
                 }
             }
         });
+        updateWaitTime();
     }
 
     // Put a notification that this question has been answered in the student's inbox.
@@ -189,6 +192,52 @@ public class AnswerQuestionFragment extends DialogFragment {
                     notification.setTab(4);
                     notification.saveInBackground();
                 }
+            }
+        });
+    }
+
+    private void updateWaitTime() {
+        ParseUser user = ParseUser.getCurrentUser();
+        String adminName = "";
+        if (User.isAdmin(user)) adminName = user.getUsername();
+        else adminName = User.getAdminName(user);
+        final ParseQuery<WaitTime> query = new ParseQuery<WaitTime>(WaitTime.class);
+        query.whereEqualTo(WaitTime.KEY_ADMIN_NAME, adminName);
+        query.findInBackground(new FindCallback<WaitTime>() {
+            @Override
+            public void done(List<WaitTime> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error querying for wait times");
+                    return;
+                }
+                if (objects.size() > 1) {
+                    Log.e(TAG, "Every admin should only have one WaitTime dataset!");
+                    return;
+                }
+                WaitTime waitTime = objects.get(0);
+                WaitTimeHelper helper = new WaitTimeHelper(getContext());
+                long newWaitTime;
+                switch (mQuestion.getPriority()) {
+                    case WaitTimeHelper.BLOCKING:
+                        newWaitTime = helper.updateWaitTime(waitTime.getBlockingTime(),
+                                waitTime.getBlockingSize(), mQuestion.getTimeDifference());
+                        waitTime.setBlockingTime(newWaitTime);
+                        waitTime.setBlockingSize(waitTime.getBlockingSize() + 1);
+                        break;
+                    case WaitTimeHelper.STRETCH:
+                        newWaitTime = helper.updateWaitTime(waitTime.getStretchTime(),
+                                waitTime.getStretchSize(), mQuestion.getTimeDifference());
+                        waitTime.setStretchTime(newWaitTime);
+                        waitTime.setStretchSize(waitTime.getStretchSize() + 1);
+                        break;
+                    case WaitTimeHelper.CURIOSITY:
+                        newWaitTime = helper.updateWaitTime(waitTime.getCuriosityTime(),
+                                waitTime.getCuriositySize(), mQuestion.getTimeDifference());
+                        waitTime.setCuriosityTime(newWaitTime);
+                        waitTime.setCuriositySize(waitTime.getCuriositySize() + 1);
+                        break;
+                }
+                waitTime.saveInBackground();
             }
         });
     }

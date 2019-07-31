@@ -2,8 +2,6 @@ package com.example.helpq.model;
 
 import android.content.Context;
 
-import com.example.helpq.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,18 +52,15 @@ public class WaitTimeCalculator {
     }
 
     public String getBlockingWaitTime() {
-        return mContext.getResources().getString(R.string.PRIORITY_BLOCKING)
-                + " " + mHelper.getWaitTime(mBlockingTime, true);
+        return mHelper.getBlockingWaitTime(mBlockingTime);
     }
 
     public String getStretchWaitTime() {
-        return mContext.getResources().getString(R.string.PRIORITY_STRETCH)
-                + " " + mHelper.getWaitTime(mStretchTime, true);
+        return mHelper.getStretchWaitTime(mStretchTime);
     }
 
     public String getCuriosityWaitTime() {
-        return mContext.getResources().getString(R.string.PRIORITY_CURIOSITY)
-                + " " + mHelper.getWaitTime(mCuriosityTime, true);
+        return mHelper.getCuriosityWaitTime(mCuriosityTime);
     }
 
     // Return the wait time for one question.

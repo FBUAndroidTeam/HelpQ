@@ -109,7 +109,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                     return;
                 }
                 WaitTime waitTime = objects.get(0);
-                WaitTimeHelper helper = new WaitTimeHelper(getContext());
+                WaitTimeHelper helper = new WaitTimeHelper(getParentFragment().getContext());
                 tvBlockingWaitTime.setText(helper.getBlockingWaitTime(waitTime.getBlockingTime()));
                 tvStretchWaitTime.setText(helper.getStretchWaitTime(waitTime.getStretchTime()));
                 tvCuriosityWaitTime.setText(helper.getCuriosityWaitTime(waitTime.getStretchTime()));

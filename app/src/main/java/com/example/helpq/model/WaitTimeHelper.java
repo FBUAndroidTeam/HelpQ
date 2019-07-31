@@ -7,6 +7,9 @@ import com.example.helpq.R;
 public class WaitTimeHelper {
 
     private Context mContext;
+    public static final String BLOCKING = "\uD83D\uDED1";
+    public static final String STRETCH = "\uD83D\uDE80";
+    public static final String CURIOSITY = "\uD83D\uDD0D";
 
     public WaitTimeHelper(Context context) {
         mContext = context;
@@ -45,4 +48,25 @@ public class WaitTimeHelper {
         return time;
     }
 
+    // Calculate wait time for one question.
+    private long calculateWaitTime(Question question, String priority, WaitTime waitTime) {
+        long diff = System.currentTimeMillis() - question.getCreatedAt().getTime();
+        long time = 0;
+        switch (priority) {
+            case BLOCKING:
+                time = waitTime.getBlockingTime() - diff;
+                break;
+            case STRETCH:
+                time = waitTime.getStretchTime() - diff;
+                break;
+            case CURIOSITY:
+                time = waitTime.getCuriosityTime() - diff;
+                break;
+        }
+        return (time < 0 ? 0 : time);
+    }
+
+    public long updateWaitTime(long oldAverage, long oldSize, long newTime) {
+        return oldAverage + (newTime - oldAverage) / (oldSize + 1);
+    }
 }
