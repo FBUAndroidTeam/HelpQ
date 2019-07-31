@@ -2,15 +2,22 @@ package com.example.helpq.controller;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
+import com.example.helpq.view.InboxFragment;
+import com.example.helpq.view.ReplyQuestionFragment;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -20,11 +27,14 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
     private static final String TAG = "InboxAdapter";
     private Context mContext;
     private List<Question> mMessages;
+    private static ClickListener mClickListener;
+    private InboxFragment mInboxFragment;
 
     // Constructor
-    public InboxAdapter(Context context, List<Question> mMessages) {
+    public InboxAdapter(Context context, List<Question> mMessages, InboxFragment fragment) {
         this.mContext = context;
         this.mMessages = mMessages;
+        mInboxFragment = fragment;
     }
 
     @NonNull
@@ -56,7 +66,36 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    private void setLikeText(Question question, TextView view) {
+        int likeCount = question.getLikeCount();
+        if (likeCount == 1) view.setText(String.format("%d like", question.getLikeCount()));
+        else view.setText(String.format("%d likes", question.getLikeCount()));
+    }
+
+    public void setOnItemClickListener(ClickListener clickListener) {
+        InboxAdapter.mClickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+        void onItemLongClick(int position, View v);
+    }
+
+    private void replyToQuestion(Question question) {
+        ReplyQuestionFragment fragment = ReplyQuestionFragment.newInstance(question);
+        fragment.setTargetFragment(mInboxFragment, 300);
+        FragmentManager manager = mInboxFragment.getFragmentManager();
+        fragment.show(manager, ReplyQuestionFragment.TAG);
+    }
+
+    // sets the color of a button, depending on whether it is active
+    private void setButton(ImageView iv, boolean isActive, int strokeResId, int fillResId, int activeColor) {
+        iv.setImageResource(isActive ? fillResId : strokeResId);
+        iv.setColorFilter(ContextCompat.getColor(mContext, isActive ? activeColor : R.color.colorFBBlue));
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnLongClickListener {
 
         // Layout fields of item_message
         private TextView tvQuestion;
@@ -65,6 +104,9 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         private TextView tvAdminName;
         private TextView tvAnswer;
         private TextView tvLikes;
+        private ImageButton ibLike;
+        private ImageButton ibView;
+        private View vQuestionView;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -74,6 +116,12 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             tvAdminName = itemView.findViewById(R.id.tvAdminName);
             tvAnswer = itemView.findViewById(R.id.tvAnswer);
             tvLikes = itemView.findViewById(R.id.tvLikes);
+            ibLike = itemView.findViewById(R.id.ibLike);
+            ibView = itemView.findViewById(R.id.ibView);
+            vQuestionView = itemView.findViewById(R.id.clQuestion);
+
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         // Bind the view elements to the message.
@@ -90,11 +138,92 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             tvAnswer.setText(message.getAnswer());
             setLikeText(message, tvLikes);
         }
-    }
 
-    private void setLikeText(Question question, TextView view) {
-        int likeCount = question.getLikeCount();
-        if (likeCount == 1) view.setText(String.format("%d like", question.getLikeCount()));
-        else view.setText(String.format("%d likes", question.getLikeCount()));
+        private TranslateAnimation slideRecyclerCell(View v, int deltaX) {
+            TranslateAnimation animate = new TranslateAnimation(
+                    v.getX(),
+                    deltaX,
+                    0,
+                    0
+            );
+            animate.setDuration(300);
+            animate.setFillAfter(true);
+            return animate;
+        }
+
+        private void resetRecyclerCell() {
+            TranslateAnimation animate = new TranslateAnimation(
+                    itemView.getX(),
+                    0,
+                    0,
+                    0
+            );
+            animate.setDuration(400);
+            animate.setFillAfter(true);
+            vQuestionView.startAnimation(animate);
+            ibLike.setVisibility(View.GONE);
+            ibView.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onClick(View v) {
+            resetRecyclerCell();
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            mClickListener.onItemLongClick(getAdapterPosition(), v);
+            Question question = mMessages.get(getAdapterPosition());
+            if(User.isAdmin(ParseUser.getCurrentUser())) {
+                vQuestionView.startAnimation(slideRecyclerCell(v, -150));
+                adminMenu();
+            } else {
+                vQuestionView.startAnimation(slideRecyclerCell(v, -300));
+                studentMenu(question);
+            }
+
+            return true;
+        }
+
+        private void studentMenu(final Question question) {
+            ibView.setVisibility(View.VISIBLE);
+            ibLike.setVisibility(View.VISIBLE);
+            ibView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    replyToQuestion(question);
+                    resetRecyclerCell();
+                }
+            });
+
+            ibLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean isLiked = question.isLiked();
+                    if (!isLiked) {
+                        question.likeQuestion(ParseUser.getCurrentUser());
+                    } else {
+                        question.unlikeQuestion(ParseUser.getCurrentUser());
+                    }
+                    question.saveInBackground();
+                    setButton(ibLike, !isLiked,
+                            R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
+                    setLikeText(question, tvLikes);
+                }
+            });
+        }
+
+        private void adminMenu() {
+            ibLike.setVisibility(View.GONE);
+            ibView.setVisibility(View.VISIBLE);
+            ibView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Question message = mMessages.get(getAdapterPosition());
+                    replyToQuestion(message);
+                    resetRecyclerCell();
+                }
+            });
+        }
     }
 }
