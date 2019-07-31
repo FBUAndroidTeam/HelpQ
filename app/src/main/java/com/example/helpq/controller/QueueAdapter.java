@@ -224,67 +224,93 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private void studentSlideMenu(View v, ParseUser currentUser) {
             ibDelete.setVisibility(ibDelete.VISIBLE);
             final Question q = mQuestions.get(getAdapterPosition());
-            vQuestionView.startAnimation(slideRecyclerCell(v, -300));
             if(User.getFullName(currentUser)
-                    .equals(tvStudentName.getText().toString())) {
-                ibDelete.setVisibility(ibDelete.VISIBLE);
-                ibDelete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        q.setIsArchived(true);
-                        q.setAnsweredAt(Calendar.getInstance().getTime());
-                        q.saveInBackground();
-                        removeAt(getAdapterPosition());
-                        mQueueFragment.createSnackbar(getAdapterPosition(), q);
-                        ibDelete.setVisibility(ibDelete.INVISIBLE);
-                    }
-                });
-                if(q.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
-                    ibView.setVisibility(View.VISIBLE);
-                    ibView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            replyToQuestion(mQuestions.get(getAdapterPosition()));
-                            ibView.setVisibility(View.GONE);
-                        }
-                    });
-                }
+                    .equals(tvStudentName.getText().toString()) && q.getHelpType().equals("written")) {
+                currentUserWrittenMenu(v, q);
+            } else if(User.getFullName(currentUser)
+                    .equals(tvStudentName.getText().toString()) && q.getHelpType().equals("in-person")) {
+                currentUserInpersonMenu(v, q);
             } else {
-                ibReply.setVisibility(View.VISIBLE);
-                ibDelete.setVisibility(View.GONE);
-                ibLike.setVisibility(View.VISIBLE);
+                peerQuestionMenu(v, q);
+            }
+        }
 
-                ibLike.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Question question = mQuestions.get(getAdapterPosition());
-                        boolean isLiked = question.isLiked();
-                        if (!isLiked) {
-                            question.likeQuestion(ParseUser.getCurrentUser());
-                        } else {
-                            question.unlikeQuestion(ParseUser.getCurrentUser());
-                        }
-                        question.saveInBackground();
-                        setButton(ibLike, !isLiked,
-                                R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
-                        setLikeText(question, tvLikes);
+        private void currentUserWrittenMenu(View v, final Question q) {
+            vQuestionView.startAnimation(slideRecyclerCell(v, -300));
+            ibDelete.setVisibility(ibDelete.VISIBLE);
+            ibDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    q.setIsArchived(true);
+                    q.setAnsweredAt(Calendar.getInstance().getTime());
+                    q.saveInBackground();
+                    removeAt(getAdapterPosition());
+                    mQueueFragment.createSnackbar(getAdapterPosition(), q);
+                    ibDelete.setVisibility(ibDelete.INVISIBLE);
+                }
+            });
+            ibView.setVisibility(View.VISIBLE);
+            ibView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    replyToQuestion(mQuestions.get(getAdapterPosition()));
+                    ibView.setVisibility(View.GONE);
+                }
+            });
+        }
+
+        private void currentUserInpersonMenu(View v, final Question q) {
+            vQuestionView.startAnimation(slideRecyclerCell(v, -150));
+            ibDelete.setVisibility(ibDelete.VISIBLE);
+            ibDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    q.setIsArchived(true);
+                    q.setAnsweredAt(Calendar.getInstance().getTime());
+                    q.saveInBackground();
+                    removeAt(getAdapterPosition());
+                    mQueueFragment.createSnackbar(getAdapterPosition(), q);
+                    ibDelete.setVisibility(ibDelete.INVISIBLE);
+                }
+            });
+        }
+
+        private void peerQuestionMenu(View v, final Question q) {
+            vQuestionView.startAnimation(slideRecyclerCell(v, -300));
+            ibReply.setVisibility(View.VISIBLE);
+            ibDelete.setVisibility(View.GONE);
+            ibLike.setVisibility(View.VISIBLE);
+
+            ibLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Question question = mQuestions.get(getAdapterPosition());
+                    boolean isLiked = question.isLiked();
+                    if (!isLiked) {
+                        question.likeQuestion(ParseUser.getCurrentUser());
+                    } else {
+                        question.unlikeQuestion(ParseUser.getCurrentUser());
                     }
-                });
-                ibReply.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(q.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
-                            replyToQuestion(q);
-                            ibReply.setVisibility(ibReply.GONE);
-                        } else {
-                            Toast.makeText(mContext,
+                    question.saveInBackground();
+                    setButton(ibLike, !isLiked,
+                            R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
+                    setLikeText(question, tvLikes);
+                }
+            });
+            ibReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(q.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
+                        replyToQuestion(q);
+                        ibReply.setVisibility(ibReply.GONE);
+                    } else {
+                        Toast.makeText(mContext,
                                 mContext.getResources().getString(R.string.reply_in_person_help),
                                 Toast.LENGTH_LONG).show();
-                        }
-                        resetRecyclerCell();
                     }
-                });
-            }
+                    resetRecyclerCell();
+                }
+            });
         }
 
         private TranslateAnimation slideRecyclerCell(View v, int deltaX) {
