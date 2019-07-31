@@ -89,12 +89,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         tvStretchWaitTime = view.findViewById(R.id.tvStretchWaitTime);
         tvCuriosityWaitTime = view.findViewById(R.id.tvCuriosityWaitTime);
 
-        ParseUser user = ParseUser.getCurrentUser();
-        String adminName = "";
-        if (User.isAdmin(user)) adminName = user.getUsername();
-        else adminName = adminName = User.getAdminName(user);
-        final ParseQuery<WaitTime> query = new ParseQuery<WaitTime>(WaitTime.class);
-        query.whereEqualTo(WaitTime.KEY_ADMIN_NAME, adminName);
+        final ParseQuery<WaitTime> query = QueryFactory.WaitTimeQuery.getAdminWaitTimes();
         query.findInBackground(new FindCallback<WaitTime>() {
             @Override
             public void done(List<WaitTime> objects, ParseException e) {
@@ -108,9 +103,12 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                 }
                 WaitTime waitTime = objects.get(0);
                 WaitTimeHelper helper = new WaitTimeHelper(getParentFragment().getContext());
-                tvBlockingWaitTime.setText(helper.getBlockingWaitTime(waitTime.getBlockingTime()));
-                tvStretchWaitTime.setText(helper.getStretchWaitTime(waitTime.getStretchTime()));
-                tvCuriosityWaitTime.setText(helper.getCuriosityWaitTime(waitTime.getStretchTime()));
+                tvBlockingWaitTime.setText(
+                        helper.getBlockingWaitTime(waitTime.getBlockingTime()));
+                tvStretchWaitTime.setText(
+                        helper.getStretchWaitTime(waitTime.getStretchTime()));
+                tvCuriosityWaitTime.setText(
+                        helper.getCuriosityWaitTime(waitTime.getCuriosityTime()));
             }
         });
     }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.helpq.R;
+import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
 import com.example.helpq.model.WaitTime;
@@ -406,13 +407,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         else view.setText(String.format("%d likes", question.getLikeCount()));
     }
 
+    // Add the wait time of the newly archived question to the weighted average.
     private void updateWaitTime(final Question question) {
-        ParseUser user = ParseUser.getCurrentUser();
-        String adminName = "";
-        if (User.isAdmin(user)) adminName = user.getUsername();
-        else adminName = User.getAdminName(user);
-        final ParseQuery<WaitTime> query = new ParseQuery<WaitTime>(WaitTime.class);
-        query.whereEqualTo(WaitTime.KEY_ADMIN_NAME, adminName);
+        ParseQuery<WaitTime> query = QueryFactory.WaitTimeQuery.getAdminWaitTimes();
         query.findInBackground(new FindCallback<WaitTime>() {
             @Override
             public void done(List<WaitTime> objects, ParseException e) {
@@ -431,6 +428,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         });
     }
 
+    // Set the wait time by priority, and increment the corresponding question count.
     private void updateWaitTimeByPriority(WaitTime waitTime, Question question) {
         WaitTimeHelper helper = new WaitTimeHelper(mContext);
         long newWaitTime;
