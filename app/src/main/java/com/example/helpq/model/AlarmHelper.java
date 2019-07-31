@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import com.example.helpq.R;
 import com.parse.ParseUser;
 
+import static android.app.Notification.PRIORITY_HIGH;
 import static android.app.Notification.VISIBILITY_PUBLIC;
 
 public class AlarmHelper extends ContextWrapper {
@@ -31,8 +32,9 @@ public class AlarmHelper extends ContextWrapper {
     @TargetApi(Build.VERSION_CODES.O)
     private void createChannel() {
         NotificationChannel channel = new NotificationChannel(channelID,
-                channelName, NotificationManager.IMPORTANCE_DEFAULT);
+                channelName, NotificationManager.IMPORTANCE_HIGH);
         channel.enableVibration(true);
+        channel.setShowBadge(true);
         channel.setLockscreenVisibility(VISIBILITY_PUBLIC);
         getManager().createNotificationChannel(channel);
     }
@@ -51,6 +53,7 @@ public class AlarmHelper extends ContextWrapper {
                 .setContentTitle(getResources().getString(R.string.workshop_alarm))
                 .setContentText(getResources().getString(R.string.workshop_alarm_description))
                 .setSmallIcon(R.drawable.com_facebook_button_login_logo)
+                .setPriority(PRIORITY_HIGH)
                 .setAutoCancel(true);
     }
 }

@@ -166,6 +166,11 @@ public class CreateQuestionFragment extends DialogFragment {
                             R.string.edge_case_enter_question,
                             Toast.LENGTH_LONG).show();
                     return;
+                } else if (tbBlocker.isChecked() && tbInPerson.isChecked()) {
+                    togglePrioritySelected = tbBlocker;
+                    toggleHelpSelected = tbInPerson;
+                    submitQuestion();
+                    notifyAdmin();
                 } else if (togglePrioritySelected == null) {
                     Toast.makeText(getContext(),
                             R.string.edge_case_enter_priority,
