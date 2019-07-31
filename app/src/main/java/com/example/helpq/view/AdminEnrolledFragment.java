@@ -49,7 +49,7 @@ public class AdminEnrolledFragment extends Fragment {
         tvNotice.setVisibility(View.GONE);
         rvEnrolledStudents = view.findViewById(R.id.rvEnrolledStudents);
         mStudents = new ArrayList<>();
-        adapter = new EnrolledStudentsAdapter(getContext(), mStudents);
+        adapter = new EnrolledStudentsAdapter(getContext(), mStudents, this);
         rvEnrolledStudents.setAdapter(adapter);
         rvEnrolledStudents.setLayoutManager(new LinearLayoutManager(getContext()));
 

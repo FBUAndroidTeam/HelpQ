@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
@@ -19,6 +20,11 @@ public class AdminIndividualQuestionsAdapter extends
 
     private List<Question> mQuestions;
     private Context mContext;
+
+    public AdminIndividualQuestionsAdapter(Context context, List<Question> questions) {
+        this.mContext = context;
+        this.mQuestions = questions;
+    }
 
     @NonNull
     @Override
@@ -45,10 +51,7 @@ public class AdminIndividualQuestionsAdapter extends
         private TextView tvDescription;
         private TextView tvStartTime;
         private TextView tvLikes;
-        private ImageButton ibView;
         private TextView tvSeeMore;
-        private String questionText;
-        private int originalLines;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,11 +63,21 @@ public class AdminIndividualQuestionsAdapter extends
             tvStartTime = itemView.findViewById(R.id.tvAnswerTime);
             tvLikes = itemView.findViewById(R.id.tvLikes);
             tvSeeMore = itemView.findViewById(R.id.tvSeeMore);
-            ibView = itemView.findViewById(R.id.ibView);
         }
 
         public void bind(Question q) {
-
+            if(getItemCount() == 0) {
+                Toast.makeText(mContext, R.string.no_questions_student, Toast.LENGTH_LONG).show();
+            } else {
+                tvStudentName.setVisibility(tvStudentName.INVISIBLE);
+                tvPriorityEmoji.setText(q.getPriority());
+                tvHelpEmoji.setText(q.getHelpType());
+                tvDescription.setText(q.getText());
+                tvStartTime.setText(q.getCreatedTimeAgo());
+                tvLikes.setText(Integer.toString(q.getLikeCount()) + " " +
+                        mContext.getResources().getString(R.string.likes));
+                tvSeeMore.setVisibility(tvSeeMore.INVISIBLE);
+            }
         }
     }
 }
