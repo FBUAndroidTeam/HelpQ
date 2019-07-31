@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/item_question_rounded"
+    android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    android:layout_height="wrap_content">
+    android:background="@drawable/item_question_rounded">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/clQuestion"
@@ -17,6 +16,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Likes"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/tvSeeMore"
+            app:layout_constraintTop_toBottomOf="@+id/tvHelpEmoji"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/tvSeeMore"
@@ -41,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
@@ -62,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
@@ -91,7 +109,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tvHelpEmoji"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPriorityEmoji"
+            app:layout_constraintTop_toBottomOf="@+id/tvStudentName"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
@@ -100,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
@@ -143,9 +161,21 @@
         tools:ignore="VectorDrawableCompat" />
 
     <ImageButton
+        android:id="@+id/ibView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/ibReply"
+        app:layout_constraintTop_toTopOf="@+id/ibReply"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_view"
+        tools:ignore="VectorDrawableCompat" />
+
+    <ImageButton
         android:id="@+id/ibReply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:visibility="invisible"
@@ -156,7 +186,7 @@
         app:srcCompat="@android:drawable/ic_menu_send" />
 
     <ImageButton
-        android:id="@+id/ibLike6"
+        android:id="@+id/ibLike"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"

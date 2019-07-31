@@ -14,14 +14,14 @@ public class WaitTimeCalculator {
     private static final String STRETCH = "\uD83D\uDE80";
     private static final String CURIOSITY = "\uD83D\uDD0D";
 
-    private Context mContext;
+    private static Context mContext;
     private List<Question> mBlockingQuestions;
     private List<Question> mStretchQuestions;
     private List<Question> mCuriosityQuestions;
 
-    private String mBlockingTime;
-    private String mStretchTime;
-    private String mCuriosityTime;
+    private long mBlockingTime;
+    private long mStretchTime;
+    private long mCuriosityTime;
 
     public WaitTimeCalculator(Context context, List<Question> questions) {
         mContext = context;
@@ -45,33 +45,28 @@ public class WaitTimeCalculator {
             }
         }
 
-        mBlockingTime = getWaitTime(mBlockingQuestions);
-        mStretchTime = getWaitTime(mStretchQuestions);
-        mCuriosityTime = getWaitTime(mCuriosityQuestions);
+        mBlockingTime = calculateWaitTime(mBlockingQuestions);
+        mStretchTime = calculateWaitTime(mStretchQuestions);
+        mCuriosityTime = calculateWaitTime(mCuriosityQuestions);
     }
 
     public String getBlockingWaitTime() {
         return mContext.getResources().getString(R.string.PRIORITY_BLOCKING)
-                + " " + mBlockingTime;
+                + " " + getWaitTime(mBlockingTime, true);
     }
 
     public String getStretchWaitTime() {
         return mContext.getResources().getString(R.string.PRIORITY_STRETCH)
-                + " " + mStretchTime;
+                + " " + getWaitTime(mStretchTime, true);
     }
 
     public String getCuriosityWaitTime() {
         return mContext.getResources().getString(R.string.PRIORITY_CURIOSITY)
-                + " " + mCuriosityTime;
+                + " " + getWaitTime(mCuriosityTime, true);
     }
 
-    private String getWaitTime(List<Question> questions) {
-        long averageTime = calculateWaitTime(questions);
-        return getWaitTime(averageTime);
-    }
-
-    private String getWaitTime(long averageTime) {
-        if (averageTime == 0) {
+    public String getWaitTime(long averageTime, boolean showDefault) {
+        if (averageTime == 0 && showDefault) {
             return mContext.getResources().getString(R.string.default_wait_time);
         }
         // Convert the time to average time to hours and minutes
@@ -86,6 +81,29 @@ public class WaitTimeCalculator {
                     averageMinutes);
         }
         return time;
+    }
+
+    // Return the wait time for one question.
+    public String getQuestionWaitTime(Question question, String priority) {
+        return getWaitTime(calculateWaitTime(question, priority), false);
+    }
+
+    // Calculate wait time for one question.
+    private long calculateWaitTime(Question question, String priority) {
+        long diff = System.currentTimeMillis() - question.getCreatedAt().getTime();
+        long waitTime = 0;
+        switch (priority) {
+            case BLOCKING:
+                waitTime = mBlockingTime - diff;
+                break;
+            case STRETCH:
+                waitTime = mStretchTime - diff;
+                break;
+            case CURIOSITY:
+                waitTime = mCuriosityTime - diff;
+                break;
+        }
+        return (waitTime < 0 ? 0 : waitTime);
     }
 
     // Calculate the average wait time over all questions.

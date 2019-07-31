@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -57,16 +59,21 @@ public class ReplyQuestionFragment extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        setRetainInstance(true);
         return inflater.inflate(R.layout.fragment_reply_question, container, false);
     }
 
+    //deals with configuration change by switching to new horizontal layout; recreates itself
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ||
                 newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            getRetainInstance();
+            FragmentManager m = getParentFragment().getChildFragmentManager();
+            FragmentTransaction transaction = m.beginTransaction();
+            ReplyQuestionFragment frag =
+                    ReplyQuestionFragment.newInstance((Question) getArguments().get("Question"));
+            transaction.detach(this).attach(this).show(this);
+            frag.show(transaction, TAG);
         }
     }
 
@@ -122,7 +129,7 @@ public class ReplyQuestionFragment extends DialogFragment {
                                 //hide keyboard
                                 mReplies.add(newReply);
                                 adapter.notifyDataSetChanged();
-                                rvReplies.getLayoutManager().scrollToPosition(0);
+                                rvReplies.getLayoutManager().scrollToPosition(mReplies.size() - 1);
                             } else {
                                 Log.d(TAG, "error creating reply");
                                 e.printStackTrace();
