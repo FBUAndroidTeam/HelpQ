@@ -26,6 +26,7 @@
             android:clickable="true"
             android:iconTint="@android:color/black"
             android:src="@drawable/ic_add_question"
+            app:layout_behavior=".model.HideFabOnScroll"
             app:borderWidth="0dp"
             app:elevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
