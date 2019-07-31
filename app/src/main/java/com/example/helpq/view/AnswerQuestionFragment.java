@@ -196,6 +196,7 @@ public class AnswerQuestionFragment extends DialogFragment {
         });
     }
 
+    // Add the wait time of the question that has just been answered to the weighted average.
     private void updateWaitTime() {
         ParseUser user = ParseUser.getCurrentUser();
         String adminName = "";
@@ -221,6 +222,7 @@ public class AnswerQuestionFragment extends DialogFragment {
         });
     }
 
+    // Set the wait time by priority, and increment the corresponding question count.
     private void updateWaitTimeByPriority(WaitTime waitTime) {
         WaitTimeHelper helper = new WaitTimeHelper(getContext());
         long newWaitTime;
