@@ -215,30 +215,37 @@ public class AnswerQuestionFragment extends DialogFragment {
                     return;
                 }
                 WaitTime waitTime = objects.get(0);
-                WaitTimeHelper helper = new WaitTimeHelper(getContext());
-                long newWaitTime;
-                switch (mQuestion.getPriority()) {
-                    case WaitTimeHelper.BLOCKING:
-                        newWaitTime = helper.updateWaitTime(waitTime.getBlockingTime(),
-                                waitTime.getBlockingSize(), mQuestion.getTimeDifference());
-                        waitTime.setBlockingTime(newWaitTime);
-                        waitTime.setBlockingSize(waitTime.getBlockingSize() + 1);
-                        break;
-                    case WaitTimeHelper.STRETCH:
-                        newWaitTime = helper.updateWaitTime(waitTime.getStretchTime(),
-                                waitTime.getStretchSize(), mQuestion.getTimeDifference());
-                        waitTime.setStretchTime(newWaitTime);
-                        waitTime.setStretchSize(waitTime.getStretchSize() + 1);
-                        break;
-                    case WaitTimeHelper.CURIOSITY:
-                        newWaitTime = helper.updateWaitTime(waitTime.getCuriosityTime(),
-                                waitTime.getCuriositySize(), mQuestion.getTimeDifference());
-                        waitTime.setCuriosityTime(newWaitTime);
-                        waitTime.setCuriositySize(waitTime.getCuriositySize() + 1);
-                        break;
-                }
+                updateWaitTimeByPriority(waitTime);
                 waitTime.saveInBackground();
             }
         });
+    }
+
+    private void updateWaitTimeByPriority(WaitTime waitTime) {
+        WaitTimeHelper helper = new WaitTimeHelper(getContext());
+        long newWaitTime;
+        switch (mQuestion.getPriority()) {
+
+            case WaitTimeHelper.BLOCKING:
+                newWaitTime = helper.updateWaitTime(waitTime.getBlockingTime(),
+                        waitTime.getBlockingSize(), mQuestion.getTimeDifference());
+                waitTime.setBlockingTime(newWaitTime);
+                waitTime.setBlockingSize(waitTime.getBlockingSize() + 1);
+                break;
+
+            case WaitTimeHelper.STRETCH:
+                newWaitTime = helper.updateWaitTime(waitTime.getStretchTime(),
+                        waitTime.getStretchSize(), mQuestion.getTimeDifference());
+                waitTime.setStretchTime(newWaitTime);
+                waitTime.setStretchSize(waitTime.getStretchSize() + 1);
+                break;
+
+            case WaitTimeHelper.CURIOSITY:
+                newWaitTime = helper.updateWaitTime(waitTime.getCuriosityTime(),
+                        waitTime.getCuriositySize(), mQuestion.getTimeDifference());
+                waitTime.setCuriosityTime(newWaitTime);
+                waitTime.setCuriositySize(waitTime.getCuriositySize() + 1);
+                break;
+        }
     }
 }
