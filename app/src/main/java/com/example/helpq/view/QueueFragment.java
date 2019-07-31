@@ -20,7 +20,9 @@ import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
+import com.example.helpq.model.WaitTime;
 import com.example.helpq.model.WaitTimeCalculator;
+import com.example.helpq.model.WaitTimeHelper;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -67,7 +69,8 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvQuestions.setLayoutManager(layoutManager);
 
-        setupWaitTimeCalculation(view);
+        setupWaitTimes(view);
+        //setupWaitTimeCalculation(view);
         queryQuestions();
         setupSwipeRefreshing(view);
 
@@ -79,6 +82,37 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
             @Override
             public void onItemLongClick(int position, View v) {
                 Log.d(TAG, "onItemLongClick position: " + position);
+            }
+        });
+    }
+
+    private void setupWaitTimes(@NonNull View view) {
+        tvBlockingWaitTime = view.findViewById(R.id.tvBlockingWaitTime);
+        tvStretchWaitTime = view.findViewById(R.id.tvStretchWaitTime);
+        tvCuriosityWaitTime = view.findViewById(R.id.tvCuriosityWaitTime);
+
+        ParseUser user = ParseUser.getCurrentUser();
+        String adminName = "";
+        if (User.isAdmin(user)) adminName = user.getUsername();
+        else adminName = adminName = User.getAdminName(user);
+        final ParseQuery<WaitTime> query = new ParseQuery<WaitTime>(WaitTime.class);
+        query.whereEqualTo(WaitTime.KEY_ADMIN_NAME, adminName);
+        query.findInBackground(new FindCallback<WaitTime>() {
+            @Override
+            public void done(List<WaitTime> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error querying for wait times");
+                    return;
+                }
+                if (objects.size() > 1) {
+                    Log.e(TAG, "Every admin should only have one WaitTime dataset!");
+                    return;
+                }
+                WaitTime waitTime = objects.get(0);
+                WaitTimeHelper helper = new WaitTimeHelper(getContext());
+                tvBlockingWaitTime.setText(helper.getBlockingWaitTime(waitTime.getBlockingTime()));
+                tvStretchWaitTime.setText(helper.getStretchWaitTime(waitTime.getStretchTime()));
+                tvCuriosityWaitTime.setText(helper.getCuriosityWaitTime(waitTime.getStretchTime()));
             }
         });
     }

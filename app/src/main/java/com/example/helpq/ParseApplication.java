@@ -5,6 +5,7 @@ import android.app.Application;
 import com.example.helpq.model.Notification;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Reply;
+import com.example.helpq.model.WaitTime;
 import com.example.helpq.model.Workshop;
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
@@ -18,6 +19,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Workshop.class);
         ParseObject.registerSubclass(Notification.class);
         ParseObject.registerSubclass(Reply.class);
+        ParseObject.registerSubclass(WaitTime.class);
         Parse.Configuration configuration = new Parse.Configuration.Builder(this)
                 .applicationId("help-q-id-secretsss")
                 .clientKey("fbu-cass-julie-loni-keyy")

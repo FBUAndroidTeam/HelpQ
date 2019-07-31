@@ -23,11 +23,14 @@ public class WaitTimeCalculator {
     private long mStretchTime;
     private long mCuriosityTime;
 
+    private WaitTimeHelper mHelper;
+
     public WaitTimeCalculator(Context context, List<Question> questions) {
         mContext = context;
         mBlockingQuestions = new ArrayList<>();
         mStretchQuestions = new ArrayList<>();
         mCuriosityQuestions = new ArrayList<>();
+        mHelper = new WaitTimeHelper(context);
 
         for (Question question : questions) {
             switch (question.getPriority()) {
@@ -52,40 +55,22 @@ public class WaitTimeCalculator {
 
     public String getBlockingWaitTime() {
         return mContext.getResources().getString(R.string.PRIORITY_BLOCKING)
-                + " " + getWaitTime(mBlockingTime, true);
+                + " " + mHelper.getWaitTime(mBlockingTime, true);
     }
 
     public String getStretchWaitTime() {
         return mContext.getResources().getString(R.string.PRIORITY_STRETCH)
-                + " " + getWaitTime(mStretchTime, true);
+                + " " + mHelper.getWaitTime(mStretchTime, true);
     }
 
     public String getCuriosityWaitTime() {
         return mContext.getResources().getString(R.string.PRIORITY_CURIOSITY)
-                + " " + getWaitTime(mCuriosityTime, true);
-    }
-
-    public String getWaitTime(long averageTime, boolean showDefault) {
-        if (averageTime == 0 && showDefault) {
-            return mContext.getResources().getString(R.string.default_wait_time);
-        }
-        // Convert the time to average time to hours and minutes
-        long averageMinutes = averageTime / (60 * 1000) % 60;
-        long averageHours = averageTime / (60 * 60 * 1000);
-        String time = null;
-        if (averageHours != 0) {
-            time = String.format(mContext.getResources().getString(R.string.format_hours),
-                    averageHours, averageMinutes);
-        } else {
-            time = String.format(mContext.getResources().getString(R.string.format_minutes),
-                    averageMinutes);
-        }
-        return time;
+                + " " + mHelper.getWaitTime(mCuriosityTime, true);
     }
 
     // Return the wait time for one question.
     public String getQuestionWaitTime(Question question, String priority) {
-        return getWaitTime(calculateWaitTime(question, priority), false);
+        return mHelper.getWaitTime(calculateWaitTime(question, priority), false);
     }
 
     // Calculate wait time for one question.
