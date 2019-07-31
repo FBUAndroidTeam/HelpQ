@@ -173,30 +173,32 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         @Override
         public boolean onLongClick(View v) {
             mClickListener.onItemLongClick(getAdapterPosition(), v);
-            vQuestionView.startAnimation(slideRecyclerCell(v, -300));
-            studentMenu();
+            Question question = mMessages.get(getAdapterPosition());
+            if(User.isAdmin(ParseUser.getCurrentUser())) {
+                vQuestionView.startAnimation(slideRecyclerCell(v, -150));
+                adminMenu();
+            } else {
+                vQuestionView.startAnimation(slideRecyclerCell(v, -300));
+                studentMenu(question);
+            }
 
             return true;
         }
 
-        private void studentMenu() {
+        private void studentMenu(final Question question) {
             ibView.setVisibility(View.VISIBLE);
             ibLike.setVisibility(View.VISIBLE);
             ibView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Question message = mMessages.get(getAdapterPosition());
-                    replyToQuestion(message);
+                    replyToQuestion(question);
                     resetRecyclerCell();
-                    ibView.setVisibility(View.GONE);
-                    ibLike.setVisibility(View.GONE);
                 }
             });
 
             ibLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Question question = mMessages.get(getAdapterPosition());
                     boolean isLiked = question.isLiked();
                     if (!isLiked) {
                         question.likeQuestion(ParseUser.getCurrentUser());
@@ -207,6 +209,19 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                     setButton(ibLike, !isLiked,
                             R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
                     setLikeText(question, tvLikes);
+                }
+            });
+        }
+
+        private void adminMenu() {
+            ibLike.setVisibility(View.GONE);
+            ibView.setVisibility(View.VISIBLE);
+            ibView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Question message = mMessages.get(getAdapterPosition());
+                    replyToQuestion(message);
+                    resetRecyclerCell();
                 }
             });
         }
