@@ -185,17 +185,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         }
 
         private void adminSlideMenu(View v) {
-            TranslateAnimation animate = new TranslateAnimation(
-                    v.getX(),
-                    -425,
-                    0,
-                    0
-            );
-            animate.setDuration(300);
-            animate.setFillAfter(true);
-            vQuestionView.startAnimation(animate);
-            ibDelete.setVisibility(View.VISIBLE);
-            ibReply.setVisibility(View.VISIBLE);
+            vQuestionView.startAnimation(slideRecyclerCell(v, -425));
+            ibDelete.setVisibility(ibDelete.VISIBLE);
+            ibReply.setVisibility(ibReply.VISIBLE);
             ibView.setVisibility(ibView.VISIBLE);
             ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -224,26 +216,34 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         }
 
         private void studentSlideMenu(View v, ParseUser currentUser) {
-            vQuestionView.startAnimation(slideRecyclerCell(v));
-            ibDelete.setVisibility(View.VISIBLE);
-            if (User.getFullName(currentUser)
+            ibDelete.setVisibility(ibDelete.VISIBLE);
+            final Question q = mQuestions.get(getAdapterPosition());
+            vQuestionView.startAnimation(slideRecyclerCell(v, -300));
+            if(User.getFullName(currentUser)
                     .equals(tvStudentName.getText().toString())) {
-                ibDelete.setVisibility(View.VISIBLE);
+                ibDelete.setVisibility(ibDelete.VISIBLE);
                 ibDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int position = getAdapterPosition();
-                        Question q = mQuestions.get(position);
                         q.setIsArchived(true);
                         q.setAnsweredAt(Calendar.getInstance().getTime());
                         q.saveInBackground();
-                        removeAt(position);
-                        mQueueFragment.createSnackbar(position, q);
-                        ibDelete.setVisibility(View.INVISIBLE);
+                        removeAt(getAdapterPosition());
+                        mQueueFragment.createSnackbar(getAdapterPosition(), q);
+                        ibDelete.setVisibility(ibDelete.INVISIBLE);
                     }
                 });
+                if(q.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
+                    ibView.setVisibility(View.VISIBLE);
+                    ibView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            replyToQuestion(mQuestions.get(getAdapterPosition()));
+                            ibView.setVisibility(View.GONE);
+                        }
+                    });
+                }
             } else {
-
                 ibReply.setVisibility(View.VISIBLE);
                 ibDelete.setVisibility(View.GONE);
                 ibLike.setVisibility(View.VISIBLE);
@@ -267,10 +267,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 ibReply.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Question question = mQuestions.get(getAdapterPosition());
-                        if (question.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
-                            replyToQuestion(question);
-                            ibReply.setVisibility(View.GONE);
+                        if(q.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
+                            replyToQuestion(q);
+                            ibReply.setVisibility(ibReply.GONE);
                         } else {
                             Toast.makeText(mContext,
                                 mContext.getResources().getString(R.string.reply_in_person_help),
@@ -282,10 +281,10 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             }
         }
 
-        private TranslateAnimation slideRecyclerCell(View v) {
+        private TranslateAnimation slideRecyclerCell(View v, int deltaX) {
             TranslateAnimation animate = new TranslateAnimation(
                     v.getX(),
-                    -325,
+                    deltaX,
                     0,
                     0
             );
