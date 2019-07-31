@@ -179,15 +179,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         }
 
         private void adminSlideMenu(View v) {
-            TranslateAnimation animate = new TranslateAnimation(
-                    v.getX(),
-                    -425,
-                    0,
-                    0
-            );
-            animate.setDuration(300);
-            animate.setFillAfter(true);
-            vQuestionView.startAnimation(animate);
+            vQuestionView.startAnimation(slideRecyclerCell(v, -425));
             ibDelete.setVisibility(ibDelete.VISIBLE);
             ibReply.setVisibility(ibReply.VISIBLE);
             ibView.setVisibility(ibView.VISIBLE);
@@ -218,33 +210,42 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         }
 
         private void studentSlideMenu(View v, ParseUser currentUser) {
-            vQuestionView.startAnimation(slideRecyclerCell(v));
             ibDelete.setVisibility(ibDelete.VISIBLE);
+            final Question q = mQuestions.get(getAdapterPosition());
             if(User.getFullName(currentUser)
                     .equals(tvStudentName.getText().toString())) {
+                vQuestionView.startAnimation(slideRecyclerCell(v, -300));
                 ibDelete.setVisibility(ibDelete.VISIBLE);
                 ibDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int position = getAdapterPosition();
-                        Question q = mQuestions.get(position);
                         q.setIsArchived(true);
                         q.setAnsweredAt(Calendar.getInstance().getTime());
                         q.saveInBackground();
-                        removeAt(position);
-                        mQueueFragment.createSnackbar(position, q);
+                        removeAt(getAdapterPosition());
+                        mQueueFragment.createSnackbar(getAdapterPosition(), q);
                         ibDelete.setVisibility(ibDelete.INVISIBLE);
                     }
                 });
+                if(q.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
+                    ibView.setVisibility(View.VISIBLE);
+                    ibView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            replyToQuestion(mQuestions.get(getAdapterPosition()));
+                            ibView.setVisibility(View.GONE);
+                        }
+                    });
+                }
             } else {
+                vQuestionView.startAnimation(slideRecyclerCell(v, -150));
                 ibReply.setVisibility(View.VISIBLE);
                 ibDelete.setVisibility(View.GONE);
                 ibReply.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Question question = mQuestions.get(getAdapterPosition());
-                        if(question.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
-                            replyToQuestion(question);
+                        if(q.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
+                            replyToQuestion(q);
                             ibReply.setVisibility(ibReply.GONE);
                         } else {
                             Toast.makeText(mContext,
@@ -257,10 +258,10 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             }
         }
 
-        private TranslateAnimation slideRecyclerCell(View v) {
+        private TranslateAnimation slideRecyclerCell(View v, int deltaX) {
             TranslateAnimation animate = new TranslateAnimation(
                     v.getX(),
-                    -150,
+                    deltaX,
                     0,
                     0
             );

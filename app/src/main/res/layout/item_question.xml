@@ -136,11 +136,15 @@
         android:id="@+id/ibDelete"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="12dp"
         android:layout_marginRight="12dp"
+        android:layout_marginBottom="8dp"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ibReply"
+        app:layout_constraintVertical_bias="0.51"
         app:srcCompat="@drawable/ic_menu_delete"
         tools:ignore="VectorDrawableCompat" />
 
@@ -150,7 +154,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ibDelete"
         app:layout_constraintTop_toTopOf="parent"
@@ -159,7 +163,7 @@
 
     <ImageButton
         android:id="@+id/ibView"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
