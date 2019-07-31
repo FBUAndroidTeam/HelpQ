@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.helpq.R;
@@ -27,6 +28,7 @@ public class InboxFragment extends Fragment {
     protected List<Question> mMessages;
     protected InboxAdapter mAdapter;
     protected TextView tvNotice;
+    protected SearchView svSearch;
 
     public static InboxFragment newInstance() {
         return new InboxFragment();
@@ -44,6 +46,7 @@ public class InboxFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         tvNotice = view.findViewById(R.id.tvNotice);
         tvNotice.setVisibility(View.GONE);
+        svSearch = view.findViewById(R.id.svSearch);
 
         // Create data source, adapter, and layout manager
         mMessages = new ArrayList<>();
@@ -55,6 +58,7 @@ public class InboxFragment extends Fragment {
 
         setupSwipeToRefresh(view);
         queryMessages();
+        search();
     }
 
     // Handle logic for swipe to refresh.
@@ -74,6 +78,9 @@ public class InboxFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
+    }
+
+    protected void search() {
     }
 
     // Reload inbox.
