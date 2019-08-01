@@ -95,6 +95,6 @@
         app:layout_constraintStart_toStartOf="@+id/clWorkshop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_menu_delete" />
+        android:background="@drawable/delete_icon" />
 
 </android.support.constraint.ConstraintLayout>
