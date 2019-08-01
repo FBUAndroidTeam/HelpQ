@@ -21,7 +21,6 @@ import com.parse.ParseUser;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -57,11 +56,8 @@ public class LoginActivity extends AppCompatActivity {
         btnFacebookLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            ArrayList<String> permissions = new ArrayList();
-            permissions.add("email");
-            permissions.add("public_profile");
             ParseFacebookUtils.logInWithReadPermissionsInBackground(LoginActivity.this,
-                permissions, new LogInCallback() {
+                null, new LogInCallback() {
                     @Override
                     public void done(ParseUser user, ParseException err) {
                         if (err != null) {
@@ -89,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this,
                     MainActivity.class));
         }
+        finish();
     }
 
     private void printKeyHash() {

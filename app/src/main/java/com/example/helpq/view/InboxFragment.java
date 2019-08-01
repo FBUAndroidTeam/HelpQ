@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.helpq.R;
 import com.example.helpq.controller.InboxAdapter;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.Search;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,7 @@ public class InboxFragment extends Fragment {
         tvNotice = view.findViewById(R.id.tvNotice);
         tvNotice.setVisibility(View.GONE);
         svSearch = view.findViewById(R.id.svSearch);
+        Search.setSearchUi(svSearch, getContext());
 
         // Create data source, adapter, and layout manager
         mMessages = new ArrayList<>();

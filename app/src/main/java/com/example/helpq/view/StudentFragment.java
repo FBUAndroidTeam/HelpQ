@@ -57,7 +57,6 @@ public class StudentFragment extends Fragment {
         vpPager.setOnPageChangeListener(new StudentPageChanger());
 
         mHelper = new NotificationHelper(mNavigationView, getContext());
-
         addNotificationBadges();
         setupNavigationView();
     }
