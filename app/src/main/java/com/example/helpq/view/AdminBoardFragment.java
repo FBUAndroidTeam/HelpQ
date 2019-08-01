@@ -35,6 +35,7 @@ public class AdminBoardFragment extends InboxFragment {
                     e.printStackTrace();
                     return;
                 }
+                mMessages.clear();
                 tvNotice.setVisibility(View.GONE);
                 mMessages.addAll(getBoardMessages(objects));
                 mAdapter.notifyDataSetChanged();
