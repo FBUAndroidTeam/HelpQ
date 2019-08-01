@@ -13,6 +13,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentBoardFragment extends InboxFragment {
@@ -35,16 +36,7 @@ public class StudentBoardFragment extends InboxFragment {
                     return;
                 }
                 tvNotice.setVisibility(View.GONE);
-                for (Question question : objects) {
-                    // Admin of current user
-                    String userAdmin = User.getAdminName(ParseUser.getCurrentUser());
-                    // Admin of asker
-                    String askerAdmin = User.getAdminName(question.getAsker());
-
-                    if (askerAdmin.equals(userAdmin) && question.getAnswer() != null) {
-                        mMessages.add(question);
-                    }
-                }
+                mMessages.addAll(getBoardMessages(objects));
                 mAdapter.notifyDataSetChanged();
                 if (mMessages.size() == 0) {
                     tvNotice.setVisibility(View.VISIBLE);
@@ -62,7 +54,7 @@ public class StudentBoardFragment extends InboxFragment {
                 boardQuestions.findInBackground(new FindCallback<Question>() {
                     @Override
                     public void done(List<Question> objects, ParseException e) {
-                        List<Question> result = Search.mSearch(objects, query);
+                        List<Question> result = Search.mSearch(getBoardMessages(objects), query);
                         mMessages.clear();
                         mMessages.addAll(result);
                         mAdapter.notifyDataSetChanged();
@@ -80,5 +72,22 @@ public class StudentBoardFragment extends InboxFragment {
                 return false;
             }
         });
+    }
+
+    // Return the list of questions that have been asked by the current user or by a
+    // classmate of the current user from the given list of Question objects.
+    private List<Question> getBoardMessages(List<Question> objects) {
+        List<Question> messages = new ArrayList<>();
+        for (Question question : objects) {
+            // Admin of current user
+            String userAdmin = User.getAdminName(ParseUser.getCurrentUser());
+            // Admin of asker
+            String askerAdmin = User.getAdminName(question.getAsker());
+
+            if (askerAdmin.equals(userAdmin) && question.getAnswer() != null) {
+                messages.add(question);
+            }
+        }
+        return messages;
     }
 }

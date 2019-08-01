@@ -35,16 +35,7 @@ public class StudentInboxFragment extends InboxFragment {
                     return;
                 }
                 tvNotice.setVisibility(View.GONE);
-                for (Question question : objects) {
-                    // Check if the current user asked or liked this question
-                    boolean forCurrentUser =
-                            question.getAsker().getUsername()
-                                    .equals(ParseUser.getCurrentUser().getUsername()) ||
-                                    question.isLiked();
-                    if (question.getAnswer() != null && forCurrentUser) {
-                        mMessages.add(question);
-                    }
-                }
+                mMessages.addAll(getInboxMessages(objects));
                 mAdapter.notifyDataSetChanged();
                 if (mMessages.size() == 0) {
                     tvNotice.setVisibility(View.VISIBLE);
@@ -62,20 +53,7 @@ public class StudentInboxFragment extends InboxFragment {
                 boardQuestions.findInBackground(new FindCallback<Question>() {
                     @Override
                     public void done(List<Question> objects, ParseException e) {
-
-                        List<Question> questions = new ArrayList<>();
-                        for (Question question : objects) {
-                            // Check if the current user asked or liked this question
-                            boolean forCurrentUser =
-                                    question.getAsker().getUsername()
-                                            .equals(ParseUser.getCurrentUser().getUsername()) ||
-                                            question.isLiked();
-                            if (question.getAnswer() != null && forCurrentUser) {
-                                questions.add(question);
-                            }
-                        }
-
-                        List<Question> result = Search.mSearch(questions, query);
+                        List<Question> result = Search.mSearch(getInboxMessages(objects), query);
                         mMessages.clear();
                         mMessages.addAll(result);
                         mAdapter.notifyDataSetChanged();
@@ -93,5 +71,21 @@ public class StudentInboxFragment extends InboxFragment {
                 return false;
             }
         });
+    }
+
+    // Return the list of questions that have been asked or liked by the current user
+    // from the given list of Question objects.
+    private List<Question> getInboxMessages(List<Question> objects) {
+        List<Question> messages = new ArrayList<>();
+        for (Question question : objects) {
+            boolean forCurrentUser =
+                    question.getAsker().getUsername()
+                            .equals(ParseUser.getCurrentUser().getUsername()) ||
+                            question.isLiked();
+            if (question.getAnswer() != null && forCurrentUser) {
+                messages.add(question);
+            }
+        }
+        return messages;
     }
 }
