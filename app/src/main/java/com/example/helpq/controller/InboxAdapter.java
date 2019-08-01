@@ -3,14 +3,12 @@ package com.example.helpq.controller;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.helpq.R;
@@ -88,10 +86,9 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         fragment.show(manager, ReplyQuestionFragment.TAG);
     }
 
-    // sets the color of a button, depending on whether it is active
-    private void setButton(ImageView iv, boolean isActive, int strokeResId, int fillResId, int activeColor) {
-        iv.setImageResource(isActive ? fillResId : strokeResId);
-        iv.setColorFilter(ContextCompat.getColor(mContext, isActive ? activeColor : R.color.colorFBBlue));
+    // Set the like button, depending on whether it is active.
+    private void setLikeButton(ImageButton ib, boolean isActive) {
+        ib.setBackgroundResource(isActive ? R.drawable.heart_icon_active : R.drawable.heart_icon);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
@@ -137,6 +134,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             }
             tvAnswer.setText(message.getAnswer());
             setLikeText(message, tvLikes);
+            setLikeButton(ibLike, message.isLiked());
         }
 
         private TranslateAnimation slideRecyclerCell(View v, int deltaX) {
@@ -206,8 +204,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                         question.unlikeQuestion(ParseUser.getCurrentUser());
                     }
                     question.saveInBackground();
-                    setButton(ibLike, !isLiked,
-                            R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
+                    setLikeButton(ibLike, !isLiked);
                     setLikeText(question, tvLikes);
                 }
             });
