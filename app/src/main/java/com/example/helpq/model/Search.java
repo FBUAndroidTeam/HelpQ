@@ -15,6 +15,7 @@ import me.xdrop.fuzzywuzzy.model.ExtractedResult;
 public class Search {
 
     private static final int MAX_RESULTS = 10;
+    private static final int MIN_SCORE = 50;
 
     public static List<Question> mSearch(List<Question> objects, String query) {
         List<Question> result = new ArrayList<>();
@@ -27,7 +28,9 @@ public class Search {
         List<ExtractedResult> extractList =
                 FuzzySearch.extractTop(query, boardQuestionText, MAX_RESULTS);
         for(ExtractedResult extracted : extractList) {
-            result.add(map.get(extracted.getString()));
+            if (extracted.getScore() > MIN_SCORE) {
+                result.add(map.get(extracted.getString()));
+            }
         }
         return result;
     }
