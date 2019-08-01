@@ -167,6 +167,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvQuestion" />
 
+        <ImageView
+            android:id="@+id/ivBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:elevation="-1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@color/colorStrongGreen" />
+
     </android.support.constraint.ConstraintLayout>
 
     <ImageButton
@@ -179,6 +194,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/delete_icon"
         android:visibility="gone"
+        android:elevation="-2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/ibLike"
         app:layout_constraintTop_toTopOf="parent"
@@ -193,6 +209,7 @@
         android:layout_marginRight="12dp"
         android:background="@drawable/telegram_icon"
         android:visibility="gone"
+        android:elevation="-2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/clQuestion"
         app:layout_constraintTop_toTopOf="parent" />
@@ -209,6 +226,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/reply_icon"
         android:visibility="gone"
+        android:elevation="-2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ibDelete"
         app:layout_constraintHorizontal_bias="1.0"
@@ -229,6 +247,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/heart_icon"
         android:visibility="gone"
+        android:elevation="-2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ibReply"
         app:layout_constraintHorizontal_bias="1.0"

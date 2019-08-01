@@ -169,26 +169,34 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
 
     private void addQuestionsToAdapter(List<Question> objects) {
             tvNotice.setVisibility(View.GONE);
-            for (Question question : objects) {
-                // who asked the question
-                ParseUser asker = question.getAsker();
-                // user of who is currently logged in
-                String currUser = ParseUser.getCurrentUser().getUsername();
-                String currUserAdmin = "";
-                if (!User.isAdmin(ParseUser.getCurrentUser())) {
-                    currUserAdmin = User.getAdminName(ParseUser.getCurrentUser());
-                }
-                // admin of asker
-                String askerAdmin = User.getAdminName(asker);
-                if (currUser.equals(askerAdmin) || askerAdmin.equals(currUserAdmin)) {
-                    mQuestions.add(question);
-                }
-            }
+            mQuestions.addAll(getQueueQuestions(objects));
             Collections.sort(mQuestions);
             mAdapter.notifyDataSetChanged();
             if(mQuestions.size() == 0) {
                 tvNotice.setVisibility(View.VISIBLE);
             }
+    }
+
+    // Return the list of questions that should appear on the current user's queue
+    // from the given list of objects.
+    private List<Question> getQueueQuestions(List<Question> objects) {
+        List<Question> questions = new ArrayList<>();
+        for (Question question : objects) {
+            // who asked the question
+            ParseUser asker = question.getAsker();
+            // user of who is currently logged in
+            String currUser = ParseUser.getCurrentUser().getUsername();
+            String currUserAdmin = "";
+            if (!User.isAdmin(ParseUser.getCurrentUser())) {
+                currUserAdmin = User.getAdminName(ParseUser.getCurrentUser());
+            }
+            // admin of asker
+            String askerAdmin = User.getAdminName(asker);
+            if (currUser.equals(askerAdmin) || askerAdmin.equals(currUserAdmin)) {
+                questions.add(question);
+            }
+        }
+        return questions;
     }
 
     @Override
@@ -233,7 +241,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                 queueQuestions.findInBackground(new FindCallback<Question>() {
                     @Override
                     public void done(List<Question> objects, ParseException e) {
-                        List<Question> result = Search.mSearch(objects, query);
+                        List<Question> result = Search.mSearch(getQueueQuestions(objects), query);
                         mQuestions.clear();
                         mQuestions.addAll(result);
                         mAdapter.notifyDataSetChanged();
