@@ -1,5 +1,10 @@
 package com.example.helpq.model;
 
+import android.graphics.Color;
+import android.widget.ImageView;
+import android.widget.SearchView;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -25,5 +30,20 @@ public class Search {
             result.add(map.get(extracted.getString()));
         }
         return result;
+    }
+
+    public static void setSearchUi(SearchView svSearch) {
+        int closeId = svSearch.getContext().getResources()
+                .getIdentifier("android:id/search_close_btn", null, null);
+        ((ImageView) svSearch.findViewById(closeId)).setColorFilter(Color.WHITE);
+        int searchIconId = svSearch.getContext().getResources()
+                .getIdentifier("android:id/search_button", null, null);
+        ((ImageView) svSearch.findViewById(searchIconId)).setColorFilter(Color.WHITE);
+        int searchTextId = svSearch.getContext().getResources()
+                .getIdentifier("android:id/search_src_text", null, null);
+        TextView searchText = (TextView) svSearch.findViewById(searchTextId);
+        searchText.setHint("Find a question...");
+        searchText.setHintTextColor(Color.WHITE);
+        searchText.setTextColor(Color.WHITE);
     }
 }

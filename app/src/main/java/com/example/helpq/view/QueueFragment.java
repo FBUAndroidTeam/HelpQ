@@ -1,5 +1,6 @@
 package com.example.helpq.view;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -55,6 +56,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
         return inflater.inflate(R.layout.fragment_queue, container, false);
     }
 
@@ -71,6 +73,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvQuestions.setLayoutManager(layoutManager);
         svQueueSearch = view.findViewById(R.id.svQueueSearch);
+        Search.setSearchUi(svQueueSearch);
 
         setupWaitTimes(view);
         queryQuestions();
@@ -141,6 +144,12 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         mAdapter.clear();
         queryQuestions();
         mSwipeContainer.setRefreshing(false);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        getRetainInstance();
     }
 
     private void queryQuestions() {

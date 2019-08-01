@@ -67,4 +67,5 @@
     <string name="verfication">Verified</string>
     <string name="likes">likes</string>
     <string name="no_questions_student">This student has not asked any questions.</string>
+    <string name="search_hint">Find a question...</string>
 </resources>

@@ -140,7 +140,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_view"
+        android:background="@drawable/reply_icon"
         tools:ignore="VectorDrawableCompat" />
 
     <ImageButton
@@ -157,7 +157,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_star_big_off" />
+        android:background="@drawable/like_icon" />
 
 </android.support.constraint.ConstraintLayout>
 
