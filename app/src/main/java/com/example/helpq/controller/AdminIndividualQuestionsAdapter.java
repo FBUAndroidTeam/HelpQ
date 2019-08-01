@@ -2,28 +2,41 @@ package com.example.helpq.controller;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.User;
+import com.example.helpq.view.AdminEnrolledFragment;
+import com.example.helpq.view.AdminIndividualQuestionsFragment;
+import com.example.helpq.view.QueueFragment;
+import com.example.helpq.view.ReplyQuestionFragment;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.util.List;
 
 public class AdminIndividualQuestionsAdapter extends
         RecyclerView.Adapter<AdminIndividualQuestionsAdapter.ViewHolder> {
 
+    private String TAG = "AdminIndividualQuestionsAdapter";
     private List<Question> mQuestions;
+    private AdminIndividualQuestionsFragment mAdminQuestionsFragment;
     private Context mContext;
 
-    public AdminIndividualQuestionsAdapter(Context context, List<Question> questions) {
+    public AdminIndividualQuestionsAdapter(Context context, List<Question> questions,
+                                           AdminIndividualQuestionsFragment fragment) {
         this.mContext = context;
         this.mQuestions = questions;
+        this.mAdminQuestionsFragment = fragment;
     }
 
     @NonNull
@@ -35,7 +48,11 @@ public class AdminIndividualQuestionsAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.bind(mQuestions.get(i));
+        try {
+            viewHolder.bind(mQuestions.get(i));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -43,7 +60,7 @@ public class AdminIndividualQuestionsAdapter extends
         return mQuestions.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView tvStudentName;
         private TextView tvPriorityEmoji;
@@ -52,9 +69,11 @@ public class AdminIndividualQuestionsAdapter extends
         private TextView tvStartTime;
         private TextView tvLikes;
         private TextView tvSeeMore;
+        private TextView tvWaitTime;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
 
             tvStudentName = itemView.findViewById(R.id.tvStudentName);
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
@@ -63,20 +82,36 @@ public class AdminIndividualQuestionsAdapter extends
             tvStartTime = itemView.findViewById(R.id.tvAnswerTime);
             tvLikes = itemView.findViewById(R.id.tvLikes);
             tvSeeMore = itemView.findViewById(R.id.tvSeeMore);
+            tvWaitTime = itemView.findViewById(R.id.tvWaitTime);
         }
 
-        public void bind(Question q) {
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            Log.d(TAG, "clicked: " + position);
+            ReplyQuestionFragment fragment = ReplyQuestionFragment
+                    .newInstance(mQuestions.get(position));
+            fragment.setTargetFragment(mAdminQuestionsFragment, 300);
+            FragmentManager manager = mAdminQuestionsFragment.getFragmentManager();
+            fragment.show(manager, ReplyQuestionFragment.TAG);
+        }
+
+        public void bind(Question q) throws ParseException {
             if(getItemCount() == 0) {
-                Toast.makeText(mContext, R.string.no_questions_student, Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, R.string.no_questions_student,
+                        Toast.LENGTH_LONG).show();
             } else {
+                ParseUser student = q.getAsker();
+                tvStudentName.setText(User.getFullName(student.fetchIfNeeded()));
                 tvStudentName.setVisibility(tvStudentName.INVISIBLE);
+                tvSeeMore.setVisibility(tvSeeMore.INVISIBLE);
+                tvWaitTime.setVisibility(tvWaitTime.INVISIBLE);
                 tvPriorityEmoji.setText(q.getPriority());
                 setHelpType(q.getHelpType());
                 tvDescription.setText(q.getText());
                 tvStartTime.setText(q.getCreatedTimeAgo());
                 tvLikes.setText(Integer.toString(q.getLikeCount()) + " " +
                         mContext.getResources().getString(R.string.likes));
-                tvSeeMore.setVisibility(tvSeeMore.INVISIBLE);
             }
         }
 

@@ -56,7 +56,7 @@ public class AdminIndividualQuestionsFragment extends DialogFragment {
         rvQuestions = view.findViewById(R.id.rvIndividualQuestions);
         mQuestions = new ArrayList<>();
         mStudent = getArguments().getParcelable(KEY_USERNAME);
-        mAdapter = new AdminIndividualQuestionsAdapter(getContext(), mQuestions);
+        mAdapter = new AdminIndividualQuestionsAdapter(getContext(), mQuestions, this);
         rvQuestions.setAdapter(mAdapter);
         rvQuestions.setLayoutManager(new LinearLayoutManager(getContext()));
 
