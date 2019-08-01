@@ -2,14 +2,17 @@ package com.example.helpq.view;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.SearchView;
 
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.Search;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentInboxFragment extends InboxFragment {
@@ -46,6 +49,48 @@ public class StudentInboxFragment extends InboxFragment {
                 if (mMessages.size() == 0) {
                     tvNotice.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+    }
+
+    protected void search() {
+        svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(final String query) {
+                final ParseQuery<Question> boardQuestions =
+                        QueryFactory.QuestionQuery.getStudentInboxMessages();
+                boardQuestions.findInBackground(new FindCallback<Question>() {
+                    @Override
+                    public void done(List<Question> objects, ParseException e) {
+
+                        List<Question> questions = new ArrayList<>();
+                        for (Question question : objects) {
+                            // Check if the current user asked or liked this question
+                            boolean forCurrentUser =
+                                    question.getAsker().getUsername()
+                                            .equals(ParseUser.getCurrentUser().getUsername()) ||
+                                            question.isLiked();
+                            if (question.getAnswer() != null && forCurrentUser) {
+                                questions.add(question);
+                            }
+                        }
+
+                        List<Question> result = Search.mSearch(questions, query);
+                        mMessages.clear();
+                        mMessages.addAll(result);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    mMessages.clear();
+                    queryMessages();
+                }
+                return false;
             }
         });
     }
