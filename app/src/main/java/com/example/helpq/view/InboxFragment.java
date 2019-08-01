@@ -30,6 +30,7 @@ public class InboxFragment extends Fragment {
     protected List<Question> mMessages;
     protected InboxAdapter mAdapter;
     protected TextView tvNotice;
+    protected TextView tvSearchNotice;
     protected SearchView svSearch;
 
     public static InboxFragment newInstance() {
@@ -47,7 +48,9 @@ public class InboxFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         tvNotice = view.findViewById(R.id.tvNotice);
+        tvSearchNotice = view.findViewById(R.id.tvSearchNotice);
         tvNotice.setVisibility(View.GONE);
+        tvSearchNotice.setVisibility(View.GONE);
         svSearch = view.findViewById(R.id.svSearch);
         Search.setSearchUi(svSearch, getContext());
 

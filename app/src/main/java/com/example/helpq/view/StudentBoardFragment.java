@@ -37,6 +37,7 @@ public class StudentBoardFragment extends InboxFragment {
                 }
                 mMessages.clear();
                 tvNotice.setVisibility(View.GONE);
+                tvSearchNotice.setVisibility(View.GONE);
                 mMessages.addAll(getBoardMessages(objects));
                 mAdapter.notifyDataSetChanged();
                 if (mMessages.size() == 0) {
@@ -59,6 +60,9 @@ public class StudentBoardFragment extends InboxFragment {
                         mMessages.clear();
                         mMessages.addAll(result);
                         mAdapter.notifyDataSetChanged();
+                        if (mMessages.size() == 0) {
+                            tvSearchNotice.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
                 return false;
