@@ -86,7 +86,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         if (question.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
             AnswerQuestionFragment fragment = AnswerQuestionFragment.newInstance(question);
             fragment.setTargetFragment(mQueueFragment, 300);
-            FragmentManager manager = mQueueFragment.getParentFragment().getChildFragmentManager();
+            FragmentManager manager = mQueueFragment.getFragmentManager();
             //((MainActivity) mContext).getSupportFragmentManager();
             //List<Fragment> fragmentList = manager.getFragments();
             //FragmentManager queueFragManager = fragmentList.get(1).getChildFragmentManager();
@@ -100,7 +100,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     private void replyToQuestion(Question question) {
         ReplyQuestionFragment fragment = ReplyQuestionFragment.newInstance(question);
         fragment.setTargetFragment(mQueueFragment, 300);
-        FragmentManager manager = mQueueFragment.getParentFragment().getChildFragmentManager();
+        FragmentManager manager = mQueueFragment.getFragmentManager();
         fragment.show(manager, ReplyQuestionFragment.TAG);
     }
 
@@ -263,6 +263,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     removeAt(getAdapterPosition());
                     mQueueFragment.createSnackbar(getAdapterPosition(), q);
                     ibDelete.setVisibility(ibDelete.INVISIBLE);
+                    resetRecyclerCell();
                 }
             });
             ibView.setVisibility(View.VISIBLE);
@@ -271,6 +272,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 public void onClick(View v) {
                     replyToQuestion(mQuestions.get(getAdapterPosition()));
                     ibView.setVisibility(View.GONE);
+                    resetRecyclerCell();
                 }
             });
         }
@@ -287,6 +289,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     removeAt(getAdapterPosition());
                     mQueueFragment.createSnackbar(getAdapterPosition(), q);
                     ibDelete.setVisibility(ibDelete.INVISIBLE);
+                    resetRecyclerCell();
                 }
             });
         }
