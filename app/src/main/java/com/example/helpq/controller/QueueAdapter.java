@@ -200,8 +200,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             setInitialQuestionText();
             tvStartTime.setText(question.getCreatedTimeAgo());
             setHelpType(question.getHelpType());
-            setButton(ibLike, question.isLiked(),
-                    R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
+            setLikeButton(ibLike, question.isLiked());
             setLikeText(question, tvLikes);
             setWaitTimeText(question, tvWaitTime);
         }
@@ -221,8 +220,8 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     answerQuestion(getAdapterPosition());
-                    ibDelete.setVisibility(View.INVISIBLE);
-                    ibReply.setVisibility(View.INVISIBLE);
+                    ibDelete.setVisibility(View.GONE);
+                    ibReply.setVisibility(View.GONE);
                     resetRecyclerCell();
                 }
             });
@@ -262,7 +261,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     q.saveInBackground();
                     removeAt(getAdapterPosition());
                     mQueueFragment.createSnackbar(getAdapterPosition(), q);
-                    ibDelete.setVisibility(ibDelete.INVISIBLE);
+                    ibDelete.setVisibility(ibDelete.GONE);
                 }
             });
             ibView.setVisibility(View.VISIBLE);
@@ -286,7 +285,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     q.saveInBackground();
                     removeAt(getAdapterPosition());
                     mQueueFragment.createSnackbar(getAdapterPosition(), q);
-                    ibDelete.setVisibility(ibDelete.INVISIBLE);
+                    ibDelete.setVisibility(ibDelete.GONE);
                 }
             });
         }
@@ -308,8 +307,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                         question.unlikeQuestion(ParseUser.getCurrentUser());
                     }
                     question.saveInBackground();
-                    setButton(ibLike, !isLiked,
-                            R.drawable.ic_like, R.drawable.ic_like_active, R.color.colorRed);
+                    setLikeButton(ibLike, !isLiked);
                     setLikeText(question, tvLikes);
                 }
             });
@@ -424,10 +422,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         }
     }
 
-    // sets the color of a button, depending on whether it is active
-    private void setButton(ImageView iv, boolean isActive, int strokeResId, int fillResId, int activeColor) {
-        iv.setImageResource(isActive ? fillResId : strokeResId);
-        iv.setColorFilter(ContextCompat.getColor(mContext, isActive ? activeColor : R.color.colorFBBlue));
+    // Set the like button, depending on whether it is active.
+    private void setLikeButton(ImageButton ib, boolean isActive) {
+        ib.setBackgroundResource(isActive ? R.drawable.heart_icon_active : R.drawable.heart_icon);
     }
 
     private void setLikeText(Question question, TextView view) {
