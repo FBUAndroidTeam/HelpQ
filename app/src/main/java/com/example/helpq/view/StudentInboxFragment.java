@@ -34,6 +34,7 @@ public class StudentInboxFragment extends InboxFragment {
                     e.printStackTrace();
                     return;
                 }
+                mMessages.clear();
                 tvNotice.setVisibility(View.GONE);
                 mMessages.addAll(getInboxMessages(objects));
                 mAdapter.notifyDataSetChanged();
