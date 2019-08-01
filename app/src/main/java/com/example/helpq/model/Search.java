@@ -1,9 +1,12 @@
 package com.example.helpq.model;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
+
+import com.example.helpq.R;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -32,7 +35,7 @@ public class Search {
         return result;
     }
 
-    public static void setSearchUi(SearchView svSearch) {
+    public static void setSearchUi(SearchView svSearch, Context context) {
         int closeId = svSearch.getContext().getResources()
                 .getIdentifier("android:id/search_close_btn", null, null);
         ((ImageView) svSearch.findViewById(closeId)).setColorFilter(Color.WHITE);
@@ -42,7 +45,7 @@ public class Search {
         int searchTextId = svSearch.getContext().getResources()
                 .getIdentifier("android:id/search_src_text", null, null);
         TextView searchText = (TextView) svSearch.findViewById(searchTextId);
-        searchText.setHint("Find a question...");
+        searchText.setHint(context.getResources().getString(R.string.search_hint));
         searchText.setHintTextColor(Color.WHITE);
         searchText.setTextColor(Color.WHITE);
     }

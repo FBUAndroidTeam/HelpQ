@@ -49,7 +49,7 @@ public class InboxFragment extends Fragment {
         tvNotice = view.findViewById(R.id.tvNotice);
         tvNotice.setVisibility(View.GONE);
         svSearch = view.findViewById(R.id.svSearch);
-        Search.setSearchUi(svSearch);
+        Search.setSearchUi(svSearch, getContext());
 
         // Create data source, adapter, and layout manager
         mMessages = new ArrayList<>();

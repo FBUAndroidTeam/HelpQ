@@ -73,7 +73,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvQuestions.setLayoutManager(layoutManager);
         svQueueSearch = view.findViewById(R.id.svQueueSearch);
-        Search.setSearchUi(svQueueSearch);
+        Search.setSearchUi(svQueueSearch, getContext());
 
         setupWaitTimes(view);
         queryQuestions();
