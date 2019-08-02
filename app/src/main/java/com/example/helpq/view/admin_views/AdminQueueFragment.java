@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.admin_views;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.helpq.R;
+import com.example.helpq.view.QueueFragment;
 
 public class AdminQueueFragment extends Fragment {
 

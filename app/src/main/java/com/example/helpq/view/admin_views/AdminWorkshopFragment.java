@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.admin_views;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -61,7 +61,7 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
             @Override
             public void onClick(View v) {
                 CreateWorkshopFragment createWorkshopFragment =
-                        com.example.helpq.view.CreateWorkshopFragment.newInstance("Some Title");
+                        CreateWorkshopFragment.newInstance("Some Title");
                 createWorkshopFragment.setTargetFragment(AdminWorkshopFragment.this,
                         300);
                 createWorkshopFragment.show(fm, createWorkshopFragment.TAG);

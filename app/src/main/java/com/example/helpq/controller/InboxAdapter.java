@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
-import com.example.helpq.view.InboxFragment;
+import com.example.helpq.view.student_views.InboxFragment;
 import com.example.helpq.view.ReplyQuestionFragment;
 import com.parse.ParseUser;
 

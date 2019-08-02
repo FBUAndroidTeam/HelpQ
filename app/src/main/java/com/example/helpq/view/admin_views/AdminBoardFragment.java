@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.admin_views;
 
 import android.util.Log;
 import android.view.View;
@@ -6,6 +6,7 @@ import android.view.View;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
+import com.example.helpq.view.student_views.InboxFragment;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;

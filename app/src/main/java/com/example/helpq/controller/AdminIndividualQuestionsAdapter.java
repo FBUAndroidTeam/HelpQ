@@ -14,11 +14,8 @@ import android.widget.Toast;
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
-import com.example.helpq.view.AdminEnrolledFragment;
-import com.example.helpq.view.AdminIndividualQuestionsFragment;
-import com.example.helpq.view.QueueFragment;
+import com.example.helpq.view.admin_views.AdminIndividualQuestionsFragment;
 import com.example.helpq.view.ReplyQuestionFragment;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 

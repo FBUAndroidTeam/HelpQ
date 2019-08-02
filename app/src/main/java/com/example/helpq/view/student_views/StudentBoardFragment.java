@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.student_views;
 
 import android.util.Log;
 import android.view.View;

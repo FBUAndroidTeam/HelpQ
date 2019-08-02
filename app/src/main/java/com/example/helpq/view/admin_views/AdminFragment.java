@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.admin_views;
 
 import android.content.Context;
 import android.os.Bundle;

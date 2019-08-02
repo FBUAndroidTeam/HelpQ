@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.admin_views;
 
 import android.net.Uri;
 import android.os.Bundle;

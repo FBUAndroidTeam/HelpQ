@@ -2,7 +2,6 @@ package com.example.helpq.controller;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +11,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.helpq.R;
-import com.example.helpq.model.Question;
-import com.example.helpq.model.User;
 import com.example.helpq.model.Workshop;
-import com.example.helpq.view.AdminWorkshopFragment;
-import com.example.helpq.view.AnswerQuestionFragment;
-import com.example.helpq.view.CreateWorkshopFragment;
+import com.example.helpq.view.admin_views.AdminWorkshopFragment;
 import com.parse.ParseException;
-import com.parse.ParseUser;
 
 import java.util.List;
 
