@@ -2,24 +2,17 @@ package com.example.helpq.controller;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.helpq.R;
-import com.example.helpq.model.Question;
-import com.example.helpq.model.User;
 import com.example.helpq.model.Workshop;
 import com.example.helpq.view.AdminWorkshopFragment;
-import com.example.helpq.view.AnswerQuestionFragment;
-import com.example.helpq.view.CreateWorkshopFragment;
 import com.parse.ParseException;
-import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -85,27 +78,28 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
         void onItemLongClick(int position, View v);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder  implements
-            View.OnClickListener, View.OnLongClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvTitle;
         private TextView tvStartTime;
         private TextView tvLocation;
         private TextView tvAttendees;
-        private View vAdminWorkshopView;
         private ImageButton ibDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
-
             tvAttendees = itemView.findViewById(R.id.tvAttendees);
             tvLocation = itemView.findViewById(R.id.tvLocation);
             tvStartTime = itemView.findViewById(R.id.tvAnswerTime);
             tvTitle = itemView.findViewById(R.id.tvTitle);
-            vAdminWorkshopView = itemView.findViewById(R.id.clWorkshop);
             ibDelete = itemView.findViewById(R.id.ibAdminDeleteWorkshop);
+            ibDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteWorkshop(mWorkshops.get(getAdapterPosition()));
+                    removeAt(getAdapterPosition());
+                }
+        });
         }
 
         public void bind(Workshop workshop) {
@@ -122,44 +116,6 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
                 tvAttendees.setText(attendees + " " +
                         mContext.getResources().getString(R.string.attendees));
             }
-        }
-
-        @Override
-        public void onClick(View v) {
-            TranslateAnimation animate = new TranslateAnimation(
-                    itemView.getX(),
-                    0,
-                    0,
-                    0
-            );
-            animate.setDuration(300);
-            animate.setFillAfter(true);
-            vAdminWorkshopView.startAnimation(animate);
-            ibDelete.setVisibility(ibDelete.GONE);
-        }
-
-
-        @Override
-        public boolean onLongClick(View v) {
-            mClickListener.onItemLongClick(getAdapterPosition(), v);
-            TranslateAnimation animate = new TranslateAnimation(
-                    v.getX(),
-                    -150,
-                    0,
-                    0
-            );
-            animate.setDuration(300);
-            animate.setFillAfter(true);
-            vAdminWorkshopView.startAnimation(animate);
-            ibDelete.setVisibility(ibDelete.VISIBLE);
-            ibDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    deleteWorkshop(mWorkshops.get(getAdapterPosition()));
-                    removeAt(getAdapterPosition());
-                }
-            });
-            return true;
         }
     }
 }
