@@ -88,7 +88,7 @@ public class InboxFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchInboxAsync();
+                fetchInboxAsync(svSearch.getQuery().toString());
             }
         });
         // Configure the refreshing colors
@@ -132,9 +132,12 @@ public class InboxFragment extends Fragment {
     }
 
     // Reload inbox.
-    protected void fetchInboxAsync() {
+    protected void fetchInboxAsync(String query) {
         mAdapter.clear();
-        queryMessages();
+        tvNotice.setVisibility(View.GONE);
+        tvSearchNotice.setVisibility(View.GONE);
+        if ((query.isEmpty())) queryMessages();
+        else findMatches(query);
         swipeContainer.setRefreshing(false);
     }
 
