@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#55000000">
+    android:background="@color/colorSubtleGray">
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/ivProfilePic"
@@ -33,7 +33,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
         android:text="TextView"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorFBBlue"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/rvIndividualQuestions"
