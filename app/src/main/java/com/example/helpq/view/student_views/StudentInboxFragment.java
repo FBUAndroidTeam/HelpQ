@@ -1,11 +1,10 @@
-package com.example.helpq.view;
+package com.example.helpq.view.student_views;
 
 import android.util.Log;
 import android.view.View;
 
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
-import com.example.helpq.model.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -14,17 +13,17 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentBoardFragment extends InboxFragment {
+public class StudentInboxFragment extends InboxFragment {
 
-    public static final String TAG = "StudentBoardFragment";
+    public static final String TAG = "StudentInboxFragment";
 
-    public static StudentBoardFragment newInstance() {
-        return new StudentBoardFragment();
+    public static StudentInboxFragment newInstance() {
+        return new StudentInboxFragment();
     }
 
-    // Query for public messages intended for all students
+    // Query for messages intended for this student
     protected void queryMessages() {
-        final ParseQuery<Question> query = QueryFactory.QuestionQuery.getStudentBoardMessages();
+        final ParseQuery<Question> query = QueryFactory.Questions.getStudentInboxMessages();
         query.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> objects, ParseException e) {
@@ -41,7 +40,7 @@ public class StudentBoardFragment extends InboxFragment {
                 mAllMessages.clear();
 
                 // Retrieve the messages that should be displayed
-                List<Question> messages = getBoardMessages(objects);
+                List<Question> messages = getInboxMessages(objects);
                 mMessages.addAll(messages);
                 mAllMessages.addAll(messages);
                 mAdapter.notifyDataSetChanged();
@@ -54,17 +53,16 @@ public class StudentBoardFragment extends InboxFragment {
         });
     }
 
-    // Return the list of questions that have been asked by the current user or by a
-    // classmate of the current user from the given list of Question objects.
-    private List<Question> getBoardMessages(List<Question> objects) {
+    // Return the list of questions that have been asked or liked by the current user
+    // from the given list of Question objects.
+    private List<Question> getInboxMessages(List<Question> objects) {
         List<Question> messages = new ArrayList<>();
         for (Question question : objects) {
-            // Admin of current user
-            String userAdmin = User.getAdminName(ParseUser.getCurrentUser());
-            // Admin of asker
-            String askerAdmin = User.getAdminName(question.getAsker());
-
-            if (askerAdmin.equals(userAdmin) && question.getAnswer() != null) {
+            boolean forCurrentUser =
+                    question.getAsker().getUsername()
+                            .equals(ParseUser.getCurrentUser().getUsername()) ||
+                            question.isLiked();
+            if (question.getAnswer() != null && forCurrentUser) {
                 messages.add(question);
             }
         }

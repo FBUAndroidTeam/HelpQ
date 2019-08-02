@@ -457,7 +457,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     }
 
     private void setWaitTimeText(final Question question, final TextView view) {
-        final ParseQuery<WaitTime> query = QueryFactory.WaitTimeQuery.getAdminWaitTimes();
+        final ParseQuery<WaitTime> query = QueryFactory.WaitTimes.getAdminWaitTimes();
         query.findInBackground(new FindCallback<WaitTime>() {
             @Override
             public void done(List<WaitTime> objects, ParseException e) {
@@ -478,7 +478,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
     // Add the wait time of the newly archived question to the weighted average.
     private void updateWaitTime(final Question question) {
-        ParseQuery<WaitTime> query = QueryFactory.WaitTimeQuery.getAdminWaitTimes();
+        ParseQuery<WaitTime> query = QueryFactory.WaitTimes.getAdminWaitTimes();
         query.findInBackground(new FindCallback<WaitTime>() {
             @Override
             public void done(List<WaitTime> objects, ParseException e) {

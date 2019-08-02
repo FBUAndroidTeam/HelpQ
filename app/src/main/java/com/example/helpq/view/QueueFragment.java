@@ -120,7 +120,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     }
 
     private void queryQuestions() {
-        final ParseQuery<Question> query = QueryFactory.QuestionQuery.getQuestionsForQueue();
+        final ParseQuery<Question> query = QueryFactory.Questions.getQuestionsForQueue();
         query.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> objects, ParseException e) {
@@ -214,7 +214,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
             public boolean onQueryTextSubmit(final String query) {
                 tvNotice.setVisibility(View.GONE);
                 final ParseQuery<Question> queueQuestions =
-                        QueryFactory.QuestionQuery.getQuestionsForQueue();
+                        QueryFactory.Questions.getQuestionsForQueue();
                 queueQuestions.findInBackground(new FindCallback<Question>() {
                     @Override
                     public void done(List<Question> objects, ParseException e) {

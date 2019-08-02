@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.student_views;
 
 import android.util.Log;
 import android.view.View;
@@ -14,17 +14,17 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminBoardFragment extends InboxFragment {
+public class StudentBoardFragment extends InboxFragment {
 
-    public static final String TAG = "AdminBoardFragment";
+    public static final String TAG = "StudentBoardFragment";
 
-    public static AdminBoardFragment newInstance() {
-        return new AdminBoardFragment();
+    public static StudentBoardFragment newInstance() {
+        return new StudentBoardFragment();
     }
 
-    // Query for all questions answered by this admin
+    // Query for public messages intended for all students
     protected void queryMessages() {
-        final ParseQuery<Question> query = QueryFactory.QuestionQuery.getAdminBoardMessages();
+        final ParseQuery<Question> query = QueryFactory.Questions.getStudentBoardMessages();
         query.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> objects, ParseException e) {
@@ -54,16 +54,17 @@ public class AdminBoardFragment extends InboxFragment {
         });
     }
 
-    // Return the list of questions that have been answered by the current user
-    // from the given list of Question objects.
+    // Return the list of questions that have been asked by the current user or by a
+    // classmate of the current user from the given list of Question objects.
     private List<Question> getBoardMessages(List<Question> objects) {
         List<Question> messages = new ArrayList<>();
         for (Question question : objects) {
+            // Admin of current user
+            String userAdmin = User.getAdminName(ParseUser.getCurrentUser());
             // Admin of asker
             String askerAdmin = User.getAdminName(question.getAsker());
 
-            if (askerAdmin.equals(ParseUser.getCurrentUser().getUsername())
-                    && question.getAnswer() != null) {
+            if (askerAdmin.equals(userAdmin) && question.getAnswer() != null) {
                 messages.add(question);
             }
         }

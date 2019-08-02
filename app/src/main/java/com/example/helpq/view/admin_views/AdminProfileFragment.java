@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.admin_views;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -15,8 +15,9 @@ import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.model.User;
+import com.example.helpq.view.LoginActivity;
+import com.example.helpq.view.MainActivity;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.login.widget.ProfilePictureView;
 import com.parse.ParseUser;
 
 public class AdminProfileFragment extends Fragment {

@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.admin_views;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -76,7 +76,7 @@ public class AdminIndividualQuestionsFragment extends DialogFragment {
     }
 
     private void populateQuestions(){
-        ParseQuery<Question> query = QueryFactory.QuestionQuery.getQuestionsForQueue();
+        ParseQuery<Question> query = QueryFactory.Questions.getQuestionsForQueue();
         query.whereEqualTo("student", mStudent);
         query.findInBackground(new FindCallback<Question>() {
             @Override

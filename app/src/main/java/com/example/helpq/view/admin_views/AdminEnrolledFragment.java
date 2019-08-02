@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.admin_views;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -57,7 +57,7 @@ public class AdminEnrolledFragment extends Fragment {
     }
 
     private void queryEnrolledStudents() {
-        ParseQuery<ParseUser> query = QueryFactory.UserQuery.getStudentList();
+        ParseQuery<ParseUser> query = QueryFactory.Users.getStudentList();
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {

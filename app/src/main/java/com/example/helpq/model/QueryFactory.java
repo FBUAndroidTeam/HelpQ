@@ -9,7 +9,7 @@ public class QueryFactory {
 
     private static String KEY_WRITTEN = "written";
 
-    public static class QuestionQuery {
+    public static class Questions {
 
         // Query for all archived questions.
         public static ParseQuery<Question> getArchivedQuestions() {
@@ -59,7 +59,7 @@ public class QueryFactory {
         }
     }
 
-    public static class UserQuery {
+    public static class Users {
 
         // Query for all students whose admin is the current user.
         public static ParseQuery<ParseUser> getStudentList() {
@@ -96,7 +96,7 @@ public class QueryFactory {
         }
     }
 
-    public static class WorkshopQuery {
+    public static class Workshops {
 
         // Query for all workshops created by the current user.
         public static ParseQuery<Workshop> getWorkshopsForAdmin() {
@@ -117,7 +117,7 @@ public class QueryFactory {
         }
     }
 
-    public static class NotificationQuery {
+    public static class Notifications {
 
         // Query for all of the current user's notifications.
         public static ParseQuery<Notification> getNotifications() {
@@ -135,7 +135,7 @@ public class QueryFactory {
         }
     }
 
-    public static class WaitTimeQuery {
+    public static class WaitTimes {
 
         // Get the wait times that correspond to the current user's admin,
         // or, get the current user's wait times, if they are an admin.

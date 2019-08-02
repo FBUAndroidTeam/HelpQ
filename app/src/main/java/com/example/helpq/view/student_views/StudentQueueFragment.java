@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.student_views;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.helpq.R;
+import com.example.helpq.view.QueueFragment;
 
 public class StudentQueueFragment extends Fragment {
 

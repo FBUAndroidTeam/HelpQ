@@ -148,7 +148,7 @@ public class AnswerQuestionFragment extends DialogFragment {
             for (int i = 0; i < likes.length(); i++) {
                 try {
                     String objectId = likes.getJSONObject(i).getString("objectId");
-                    ParseQuery<ParseUser> query = QueryFactory.UserQuery.getUserByObjectId(objectId);
+                    ParseQuery<ParseUser> query = QueryFactory.Users.getUserByObjectId(objectId);
                     query.findInBackground(new FindCallback<ParseUser>() {
                         @Override
                         public void done(List<ParseUser> objects, ParseException e) {

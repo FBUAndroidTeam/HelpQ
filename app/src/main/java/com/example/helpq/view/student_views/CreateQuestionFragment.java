@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.student_views;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -152,7 +152,7 @@ public class CreateQuestionFragment extends DialogFragment {
     }
 
     private void setupWaitTimes(@NonNull View view) {
-        final ParseQuery<WaitTime> query = QueryFactory.WaitTimeQuery.getAdminWaitTimes();
+        final ParseQuery<WaitTime> query = QueryFactory.WaitTimes.getAdminWaitTimes();
         query.findInBackground(new FindCallback<WaitTime>() {
             @Override
             public void done(List<WaitTime> objects, ParseException e) {
@@ -256,7 +256,7 @@ public class CreateQuestionFragment extends DialogFragment {
     }
 
     private void notifyAdmin() {
-        ParseQuery<ParseUser> query = QueryFactory.UserQuery.getAdmin();
+        ParseQuery<ParseUser> query = QueryFactory.Users.getAdmin();
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
