@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class ReplyQuestionFragment extends DialogFragment {
     private ReplyAdapter adapter;
     private List<Reply> mReplies;
     private ImageButton ibCancel;
+    private ProgressBar pbLoading;
 
     public static ReplyQuestionFragment newInstance(Question question) {
         ReplyQuestionFragment frag = new ReplyQuestionFragment();
@@ -91,6 +93,9 @@ public class ReplyQuestionFragment extends DialogFragment {
         etReply = view.findViewById(R.id.etReply);
         ibCancel = view.findViewById(R.id.ibCancel);
         setCancelButton();
+
+        pbLoading = view.findViewById(R.id.pbLoading);
+        pbLoading.setVisibility(View.VISIBLE);
 
         mReplies = new ArrayList<>();
         rvReplies = view.findViewById(R.id.rvReplies);
@@ -174,6 +179,7 @@ public class ReplyQuestionFragment extends DialogFragment {
                         mReplies.add(objects.get(i));
                     }
                     adapter.notifyDataSetChanged();
+                    pbLoading.setVisibility(View.INVISIBLE);
                 } else {
                     Log.d(TAG, "error querying replies");
                 }

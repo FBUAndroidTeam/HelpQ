@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -42,6 +43,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     private TextView tvNotice;
     private SearchView svQueueSearch;
     private TextView tvSearchNotice;
+    private ProgressBar pbLoading;
 
     public static QueueFragment newInstance() {
         return new QueueFragment();
@@ -58,6 +60,10 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        pbLoading = view.findViewById(R.id.pbLoading);
+        pbLoading.setVisibility(View.VISIBLE);
+
         tvNotice = view.findViewById(R.id.tvNotice);
         tvNotice.setVisibility(View.GONE);
         tvSearchNotice = view.findViewById(R.id.tvSearchNotice);
@@ -71,6 +77,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         rvQuestions.setLayoutManager(layoutManager);
         svQueueSearch = view.findViewById(R.id.svQueueSearch);
         Search.setSearchUi(svQueueSearch, getContext());
+
 
         queryQuestions();
         setupSwipeRefreshing(view);
@@ -144,6 +151,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                     .getString(R.string.empty_queue));
             tvNotice.setVisibility(View.VISIBLE);
         }
+        pbLoading.setVisibility(View.INVISIBLE);
     }
 
     // Return the list of questions that should appear on the current user's queue

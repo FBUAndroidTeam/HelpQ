@@ -74,4 +74,14 @@
         app:srcCompat="@drawable/ic_cancel"
         tools:ignore="VectorDrawableCompat" />
 
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/rvIndividualQuestions"
+        app:layout_constraintEnd_toEndOf="@+id/rvIndividualQuestions"
+        app:layout_constraintStart_toStartOf="@+id/rvIndividualQuestions"
+        app:layout_constraintTop_toTopOf="@+id/rvIndividualQuestions" />
+
 </android.support.constraint.ConstraintLayout>

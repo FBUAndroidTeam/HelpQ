@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -33,7 +34,8 @@ public class InboxFragment extends Fragment {
     protected TextView tvNotice;
     protected TextView tvSearchNotice;
     protected SearchView svSearch;
-    private TextView tvSearch;
+    protected TextView tvSearch;
+    protected ProgressBar pbLoading;
 
     public static InboxFragment newInstance() {
         return new InboxFragment();
@@ -57,7 +59,9 @@ public class InboxFragment extends Fragment {
         svSearch = view.findViewById(R.id.svSearch);
         Search.setSearchUi(svSearch, getContext());
         tvSearch = view.findViewById(R.id.tvSearch);
-        //tvSearch.setVisibility(View.VISIBLE);
+
+        pbLoading = view.findViewById(R.id.pbLoading);
+        pbLoading.setVisibility(View.VISIBLE);
 
         // Create data source, adapter, and layout manager
         mMessages = new ArrayList<>();
@@ -146,6 +150,7 @@ public class InboxFragment extends Fragment {
         else {
             tvSearchNotice.setVisibility(View.GONE);
         }
+        pbLoading.setVisibility(View.INVISIBLE);
     }
 
     // Reload inbox.

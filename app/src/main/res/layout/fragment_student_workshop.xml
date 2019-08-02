@@ -24,6 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></android.widget.TextView>
 
+
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipeContainer"
         android:layout_width="0dp"
@@ -55,5 +56,18 @@
             app:layout_constraintTop_toTopOf="parent"  />
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/swipeContainer"
+        app:layout_constraintEnd_toEndOf="@+id/swipeContainer"
+        app:layout_constraintStart_toStartOf="@+id/swipeContainer"
+        app:layout_constraintTop_toTopOf="@+id/swipeContainer" />
 
 </android.support.constraint.ConstraintLayout>

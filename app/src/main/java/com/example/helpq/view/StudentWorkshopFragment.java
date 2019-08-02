@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,13 +18,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.StudentWorkshopAdapter;
 import com.example.helpq.model.AlertReceiver;
-import com.example.helpq.model.Question;
 import com.example.helpq.model.QueryFactory;
+import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
 import com.example.helpq.model.Workshop;
 import com.parse.FindCallback;
@@ -46,7 +46,8 @@ public class StudentWorkshopFragment extends Fragment {
     private List<Workshop> mWorkshops;
     private SwipeRefreshLayout swipeContainer;
     private TextView tvNotice;
-    private Question q = new Question();
+    private Question q;
+    private ProgressBar pbLoading;
 
     public static StudentWorkshopFragment newInstance() {
         return new StudentWorkshopFragment();
@@ -76,6 +77,9 @@ public class StudentWorkshopFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        q = new Question();
+        pbLoading = view.findViewById(R.id.pbLoading);
+        pbLoading.setVisibility(View.VISIBLE);
 
         tvNotice = view.findViewById(R.id.tvNotice);
         tvNotice.setVisibility(View.GONE);
@@ -136,6 +140,7 @@ public class StudentWorkshopFragment extends Fragment {
             if(name.equals(name2)) {
                 mWorkshops.add(objects.get(i));
                 adapter.notifyDataSetChanged();
+                pbLoading.setVisibility(View.INVISIBLE);
                 Log.d(TAG, "adapter notified");
             }
         }

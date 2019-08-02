@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.helpq.R;
@@ -30,6 +31,7 @@ public class AdminEnrolledFragment extends Fragment {
     private EnrolledStudentsAdapter adapter;
     private List<ParseUser> mStudents;
     private TextView tvNotice;
+    private ProgressBar pbLoading;
 
     public static AdminEnrolledFragment newInstance() {
         return new AdminEnrolledFragment();
@@ -52,6 +54,8 @@ public class AdminEnrolledFragment extends Fragment {
         adapter = new EnrolledStudentsAdapter(getContext(), mStudents, this);
         rvEnrolledStudents.setAdapter(adapter);
         rvEnrolledStudents.setLayoutManager(new LinearLayoutManager(getContext()));
+        pbLoading = view.findViewById(R.id.pbLoading);
+        pbLoading.setVisibility(View.VISIBLE);
 
         queryEnrolledStudents();
     }
@@ -69,6 +73,7 @@ public class AdminEnrolledFragment extends Fragment {
                 for(int i = 0; i < objects.size(); i++) {
                     mStudents.add(objects.get(i));
                     adapter.notifyDataSetChanged();
+                    pbLoading.setVisibility(View.INVISIBLE);
                 }
                 isPageEmpty();
             }

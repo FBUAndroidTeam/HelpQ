@@ -44,6 +44,7 @@ public class StudentInboxFragment extends InboxFragment {
                 mMessages.addAll(messages);
                 mAllMessages.addAll(messages);
                 mAdapter.notifyDataSetChanged();
+                pbLoading.setVisibility(View.INVISIBLE);
 
                 // Display a notice if the user has no messages
                 if (mMessages.size() == 0) {

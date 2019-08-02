@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.helpq.R;
@@ -36,6 +37,7 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
     private FloatingActionButton fabAddWorkshop;
     private SwipeRefreshLayout swipeContainer;
     private FragmentManager fm;
+    private ProgressBar pbLoading;
 
     public static AdminWorkshopFragment newInstance() {
         return new AdminWorkshopFragment();
@@ -56,6 +58,8 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
         rvAdminWorkshops.setAdapter(adapter);
         rvAdminWorkshops.setLayoutManager(new LinearLayoutManager(getContext()));
         fabAddWorkshop = view.findViewById(R.id.fabAddWorkshop);
+        pbLoading = view.findViewById(R.id.pbLoading);
+        pbLoading.setVisibility(View.VISIBLE);
         fm = getFragmentManager();
         fabAddWorkshop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +121,7 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
                 if(e == null) {
                     mWorkshops.addAll(objects);
                     adapter.notifyDataSetChanged();
+                    pbLoading.setVisibility(View.INVISIBLE);
                     Log.d(TAG, "adapter notified");
                 } else {
                     e.printStackTrace();
