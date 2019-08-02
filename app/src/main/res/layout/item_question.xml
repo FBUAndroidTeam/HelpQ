@@ -4,9 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/item_question_rounded"
+    android:layout_height="wrap_content"
     android:layout_margin="3dp"
-    android:layout_height="wrap_content">
+    android:background="@drawable/item_question_rounded"
+    android:backgroundTint="@color/colorStrongGreen">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/clQuestion"
@@ -29,8 +30,8 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:text="Student Name"
-            android:textColor="@color/colorWhite"
-            android:textSize="18sp"
+            android:textColor="@color/colorFBBlue"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +51,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:text="Likes"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -70,7 +71,7 @@
             android:layout_marginBottom="8dp"
             android:text="💡"
             android:textColor="@color/colorWhite"
-            android:textSize="18sp"
+            android:textSize="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -90,7 +91,8 @@
             android:layout_marginBottom="8dp"
             android:ellipsize="end"
             android:text="Description"
-            android:textColor="@color/colorWhite"
+            android:textSize="20dp"
+            android:textColor="@color/colorFBBlue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tvHelpEmoji"
             app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +110,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:text="Date"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/gray"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/tvStudentName"
             app:layout_constraintEnd_toEndOf="parent"
@@ -117,20 +119,21 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/tvHelpEmoji"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="🤔"
-        android:textColor="@color/colorWhite"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAnswerTime"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/tvHelpEmoji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="🤔"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAnswerTime"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/tvSeeMore"
@@ -143,7 +146,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:text="See More"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -160,7 +163,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:text="Wait Time"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -180,7 +183,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@color/colorStrongGreen" />
+            app:srcCompat="@color/colorFaded" />
 
     </android.support.constraint.ConstraintLayout>
 

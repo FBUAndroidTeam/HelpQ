@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -20,6 +21,8 @@ import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Notification;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.WaitTime;
+import com.example.helpq.model.WaitTimeHelper;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -46,6 +49,10 @@ public class CreateQuestionFragment extends DialogFragment {
     private ToggleButton tbInPerson;
     private ToggleButton tbWritten;
     private ToggleButton toggleHelpSelected;
+
+    private TextView tvWaitTime;
+    private WaitTimeHelper helper;
+    private WaitTime waitTime;
 
     private Button btnSubmit;
 
@@ -78,6 +85,10 @@ public class CreateQuestionFragment extends DialogFragment {
         etQuestion = (EditText) view.findViewById(R.id.etQuestion);
         btnSubmit = view.findViewById(R.id.btnSubmit);
 
+        tvWaitTime = view.findViewById(R.id.tvWaitTime);
+        helper = new WaitTimeHelper(getParentFragment().getContext());
+        setupWaitTimes(view);
+
         // Fetch arguments from bundle and set title
         String title = getArguments().getString(KEY_TITLE, DEFAULT_TITLE);
         getDialog().setTitle(title);
@@ -86,7 +97,6 @@ public class CreateQuestionFragment extends DialogFragment {
         getDialog()
                 .getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        togglePriorityButtons();
         toggleHelpButtons();
         validQuestionCheck();
     }
@@ -100,6 +110,8 @@ public class CreateQuestionFragment extends DialogFragment {
                     tbExplanation.setChecked(false);
                     tbStretch.setChecked(false);
                     togglePrioritySelected = tbBlocker;
+                    tvWaitTime.setText(
+                            helper.getBlockingWaitTime(waitTime.getBlockingTime()));
                 } else {
                     togglePrioritySelected = null;
                 }
@@ -112,6 +124,8 @@ public class CreateQuestionFragment extends DialogFragment {
                     tbBlocker.setChecked(false);
                     tbExplanation.setChecked(false);
                     togglePrioritySelected = tbStretch;
+                    tvWaitTime.setText(
+                            helper.getStretchWaitTime(waitTime.getStretchTime()));
                 } else {
                     togglePrioritySelected = null;
                 }
@@ -124,9 +138,31 @@ public class CreateQuestionFragment extends DialogFragment {
                     tbBlocker.setChecked(false);
                     tbStretch.setChecked(false);
                     togglePrioritySelected = tbExplanation;
+                    tvWaitTime.setText(
+                            helper.getCuriosityWaitTime(waitTime.getCuriosityTime()));
                 } else {
                     togglePrioritySelected = null;
                 }
+            }
+        });
+    }
+
+    private void setupWaitTimes(@NonNull View view) {
+        final ParseQuery<WaitTime> query = QueryFactory.WaitTimeQuery.getAdminWaitTimes();
+        query.findInBackground(new FindCallback<WaitTime>() {
+            @Override
+            public void done(List<WaitTime> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error querying for wait times");
+                    return;
+                }
+                if (objects.size() > 1) {
+                    Log.e(TAG, "Every admin should only have one WaitTime dataset!");
+                    return;
+                }
+                waitTime = objects.get(0);
+                tvWaitTime.setText(helper.getBlockingWaitTime(waitTime.getBlockingTime()));
+                togglePriorityButtons();
             }
         });
     }

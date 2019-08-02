@@ -23,9 +23,6 @@ import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Search;
 import com.example.helpq.model.User;
-import com.example.helpq.model.WaitTime;
-import com.example.helpq.model.WaitTimeHelper;
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -44,10 +41,6 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     private SwipeRefreshLayout mSwipeContainer;
     private TextView tvNotice;
     private SearchView svQueueSearch;
-    // Wait time calculation fields
-    private TextView tvBlockingWaitTime;
-    private TextView tvStretchWaitTime;
-    private TextView tvCuriosityWaitTime;
 
     public static QueueFragment newInstance() {
         return new QueueFragment();
@@ -76,7 +69,6 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         svQueueSearch = view.findViewById(R.id.svQueueSearch);
         Search.setSearchUi(svQueueSearch, getContext());
 
-        setupWaitTimes(view);
         queryQuestions();
         setupSwipeRefreshing(view);
         search();
@@ -89,35 +81,6 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
             @Override
             public void onItemLongClick(int position, View v) {
                 Log.d(TAG, "onItemLongClick position: " + position);
-            }
-        });
-    }
-
-    private void setupWaitTimes(@NonNull View view) {
-        tvBlockingWaitTime = view.findViewById(R.id.tvBlockingWaitTime);
-        tvStretchWaitTime = view.findViewById(R.id.tvStretchWaitTime);
-        tvCuriosityWaitTime = view.findViewById(R.id.tvCuriosityWaitTime);
-
-        final ParseQuery<WaitTime> query = QueryFactory.WaitTimeQuery.getAdminWaitTimes();
-        query.findInBackground(new FindCallback<WaitTime>() {
-            @Override
-            public void done(List<WaitTime> objects, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error querying for wait times");
-                    return;
-                }
-                if (objects.size() > 1) {
-                    Log.e(TAG, "Every admin should only have one WaitTime dataset!");
-                    return;
-                }
-                WaitTime waitTime = objects.get(0);
-                WaitTimeHelper helper = new WaitTimeHelper(getParentFragment().getContext());
-                tvBlockingWaitTime.setText(
-                        helper.getBlockingWaitTime(waitTime.getBlockingTime()));
-                tvStretchWaitTime.setText(
-                        helper.getStretchWaitTime(waitTime.getStretchTime()));
-                tvCuriosityWaitTime.setText(
-                        helper.getCuriosityWaitTime(waitTime.getCuriosityTime()));
             }
         });
     }
@@ -169,13 +132,14 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     }
 
     private void addQuestionsToAdapter(List<Question> objects) {
-            tvNotice.setVisibility(View.GONE);
-            mQuestions.addAll(getQueueQuestions(objects));
-            Collections.sort(mQuestions);
-            mAdapter.notifyDataSetChanged();
-            if(mQuestions.size() == 0) {
-                tvNotice.setVisibility(View.VISIBLE);
-            }
+        tvNotice.setVisibility(View.GONE);
+        mQuestions.addAll(getQueueQuestions(objects));
+        Collections.sort(mQuestions);
+        mAdapter.notifyDataSetChanged();
+        if(mQuestions.size() == 0) {
+            tvNotice.setText(getResources().getString(R.string.empty_queue));
+            tvNotice.setVisibility(View.VISIBLE);
+        }
     }
 
     // Return the list of questions that should appear on the current user's queue
@@ -237,6 +201,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         svQueueSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(final String query) {
+                tvNotice.setVisibility(View.GONE);
                 final ParseQuery<Question> queueQuestions =
                         QueryFactory.QuestionQuery.getQuestionsForQueue();
                 queueQuestions.findInBackground(new FindCallback<Question>() {
@@ -246,6 +211,10 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                         mQuestions.clear();
                         mQuestions.addAll(result);
                         mAdapter.notifyDataSetChanged();
+                        if(mQuestions.isEmpty()) {
+                            tvNotice.setText(getResources().getString(R.string.search_notice));
+                            tvNotice.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
                 return false;
@@ -253,6 +222,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                tvNotice.setVisibility(View.GONE);
                 if (newText.isEmpty()) {
                     mQuestions.clear();
                     queryQuestions();
@@ -262,5 +232,3 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         });
     }
 }
-
-
