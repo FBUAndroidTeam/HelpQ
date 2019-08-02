@@ -149,9 +149,9 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             return animate;
         }
 
-        private void resetRecyclerCell() {
+        private void resetRecyclerCell(int deltaX) {
             TranslateAnimation animate = new TranslateAnimation(
-                    itemView.getX(),
+                    itemView.getX() + deltaX,
                     0,
                     0,
                     0
@@ -159,13 +159,15 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             animate.setDuration(400);
             animate.setFillAfter(true);
             vQuestionView.startAnimation(animate);
-            ibLike.setVisibility(View.GONE);
-            ibView.setVisibility(View.GONE);
         }
 
         @Override
         public void onClick(View v) {
-            resetRecyclerCell();
+            if (User.isAdmin(ParseUser.getCurrentUser())) {
+                resetRecyclerCell(-150);
+            } else {
+                resetRecyclerCell(-300);
+            }
         }
 
         @Override
@@ -190,7 +192,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     replyToQuestion(question);
-                    resetRecyclerCell();
+                    resetRecyclerCell(-300);
                 }
             });
 
@@ -218,7 +220,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                 public void onClick(View v) {
                     Question message = mMessages.get(getAdapterPosition());
                     replyToQuestion(message);
-                    resetRecyclerCell();
+                    resetRecyclerCell(-150);
                 }
             });
         }

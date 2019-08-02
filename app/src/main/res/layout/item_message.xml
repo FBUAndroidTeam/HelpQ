@@ -124,6 +124,21 @@
             app:layout_constraintTop_toBottomOf="@+id/tvAnswerTime"
             app:layout_constraintVertical_bias="0.0" />
 
+        <ImageView
+            android:id="@+id/ivBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:elevation="-1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@color/colorFaded" />
+
     </android.support.constraint.ConstraintLayout>
 
     <ImageButton
@@ -135,6 +150,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:visibility="gone"
+        android:elevation="-2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -152,6 +168,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:visibility="invisible"
+        android:elevation="-2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ibView"
         app:layout_constraintHorizontal_bias="1.0"
