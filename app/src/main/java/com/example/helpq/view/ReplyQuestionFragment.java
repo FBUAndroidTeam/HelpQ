@@ -1,6 +1,7 @@
 package com.example.helpq.view;
 
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +24,8 @@ import com.example.helpq.controller.ReplyAdapter;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Reply;
 import com.example.helpq.model.User;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.login.widget.ProfilePictureView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -38,9 +41,9 @@ public class ReplyQuestionFragment extends DialogFragment {
     public static final String TAG = "ReplyQuestionFragment";
     private TextView tvFullName;
     private TextView tvQuestion;
-    private ProfilePictureView ppvAskerPic;
+    private SimpleDraweeView ppvAskerPic;
     private RecyclerView rvReplies;
-    private ProfilePictureView ppvProfilePic;
+    private SimpleDraweeView ppvProfilePic;
     private EditText etReply;
     private Question mQuestion;
     private Button btnReply;
@@ -97,8 +100,11 @@ public class ReplyQuestionFragment extends DialogFragment {
 
         tvFullName.setText(User.getFullName(mQuestion.getAsker()));
         tvQuestion.setText(mQuestion.getText());
-        ppvAskerPic.setProfileId(User.getProfilePicture(mQuestion.getAsker()));
-        ppvProfilePic.setProfileId(User.getProfilePicture(ParseUser.getCurrentUser()));
+
+        ppvAskerPic.setImageURI(Uri.parse("http://graph.facebook.com/"+
+                User.getProfilePicture(mQuestion.getAsker())+"/picture?type=large"));
+        ppvProfilePic.setImageURI(Uri.parse("http://graph.facebook.com/"+
+                User.getProfilePicture(ParseUser.getCurrentUser())+"/picture?type=large"));
         submitReply();
         if(User.isAdmin(ParseUser.getCurrentUser())) {
             disableReply();

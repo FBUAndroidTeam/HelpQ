@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.helpq.R;
 import com.example.helpq.model.User;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {

@@ -40,4 +40,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
     implementation 'me.xdrop:fuzzywuzzy:1.2.0'
+
+    implementation 'com.facebook.fresco:fresco:1.13.0'
+    implementation 'com.android.support:support-compat:28.0.0'
+
 }

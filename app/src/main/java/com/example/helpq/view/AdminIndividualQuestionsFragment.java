@@ -1,5 +1,6 @@
 package com.example.helpq.view;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,10 +11,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.AdminIndividualQuestionsAdapter;
+import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.User;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -29,6 +34,8 @@ public class AdminIndividualQuestionsFragment extends DialogFragment {
     private RecyclerView rvQuestions;
     private List<Question> mQuestions;
     private AdminIndividualQuestionsAdapter mAdapter;
+    private SimpleDraweeView sdvProfilePic;
+    private TextView tvName;
     private ParseUser mStudent;
 
     public static AdminIndividualQuestionsFragment newInstance(ParseUser student) {
@@ -54,17 +61,22 @@ public class AdminIndividualQuestionsFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         rvQuestions = view.findViewById(R.id.rvIndividualQuestions);
+        sdvProfilePic = view.findViewById(R.id.ivProfilePic);
+        tvName = view.findViewById(R.id.tvFullName);
         mQuestions = new ArrayList<>();
         mStudent = getArguments().getParcelable(KEY_USERNAME);
         mAdapter = new AdminIndividualQuestionsAdapter(getContext(), mQuestions, this);
         rvQuestions.setAdapter(mAdapter);
         rvQuestions.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        tvName.setText(User.getFullName(mStudent));
+        sdvProfilePic.setImageURI(Uri.parse("http://graph.facebook.com/"+
+                User.getProfilePicture(mStudent)+"/picture?type=large"));
         populateQuestions();
     }
 
     private void populateQuestions(){
-        ParseQuery<Question> query = new ParseQuery<Question>(Question.class);
+        ParseQuery<Question> query = QueryFactory.QuestionQuery.getQuestionsForQueue();
         query.whereEqualTo("student", mStudent);
         query.findInBackground(new FindCallback<Question>() {
             @Override

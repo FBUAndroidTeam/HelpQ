@@ -1,6 +1,7 @@
 package com.example.helpq.controller;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.example.helpq.model.User;
 import com.example.helpq.view.AdminEnrolledFragment;
 import com.example.helpq.view.AdminIndividualQuestionsFragment;
 import com.example.helpq.view.ReplyQuestionFragment;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.login.widget.ProfilePictureView;
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -62,7 +64,7 @@ public class EnrolledStudentsAdapter extends
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvEnrolledStudent;
         private TextView tvStats;
-        private ProfilePictureView ppvProfilePic;
+        private SimpleDraweeView ppvProfilePic;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -85,7 +87,8 @@ public class EnrolledStudentsAdapter extends
         public void bind(ParseUser student) {
             tvEnrolledStudent.setText(User.getFullName(student));
             queryForStats(student);
-            ppvProfilePic.setProfileId(User.getProfilePicture(student));
+            ppvProfilePic.setImageURI(Uri.parse("http://graph.facebook.com/"+
+                    User.getProfilePicture(student)+"/picture?type=large"));
         }
 
         private void queryForStats(final ParseUser student) {

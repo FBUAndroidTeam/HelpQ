@@ -135,14 +135,14 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     }
 
     private void addQuestionsToAdapter(List<Question> objects) {
-            tvNotice.setVisibility(View.GONE);
-            mQuestions.addAll(getQueueQuestions(objects));
-            Collections.sort(mQuestions);
-            mAdapter.notifyDataSetChanged();
-            if(mQuestions.size() == 0) {
-                tvNotice.setText(getResources().getString(R.string.empty_queue));
-                tvNotice.setVisibility(View.VISIBLE);
-            }
+        tvNotice.setVisibility(View.GONE);
+        mQuestions.addAll(getQueueQuestions(objects));
+        Collections.sort(mQuestions);
+        mAdapter.notifyDataSetChanged();
+        if(mQuestions.size() == 0) {
+            tvNotice.setText(getResources().getString(R.string.empty_queue));
+            tvNotice.setVisibility(View.VISIBLE);
+        }
     }
 
     // Return the list of questions that should appear on the current user's queue
@@ -243,5 +243,3 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         });
     }
 }
-
-
