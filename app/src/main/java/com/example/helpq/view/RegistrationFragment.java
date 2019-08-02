@@ -121,7 +121,7 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
 
     //checks to see if username is taken already or not
     private void queryUsernameExists(final String username) {
-        ParseQuery<ParseUser> query = QueryFactory.UserQuery.getUserByUsername(username);
+        ParseQuery<ParseUser> query = QueryFactory.Users.getUserByUsername(username);
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {

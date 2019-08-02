@@ -90,7 +90,7 @@ public class EnrolledStudentsAdapter extends
 
         private void queryForStats(final ParseUser student) {
             final int[] unAnsweredQuestions = {0};
-            ParseQuery<Question> query = QueryFactory.QuestionQuery.getQuestionsForQueue();
+            ParseQuery<Question> query = QueryFactory.Questions.getQuestionsForQueue();
             query.findInBackground(new FindCallback<Question>() {
                 @Override
                 public void done(List<Question> objects, ParseException e) {

@@ -114,7 +114,7 @@ public class StudentWorkshopFragment extends Fragment {
     }
 
     private void queryWorkshops() {
-        ParseQuery<Workshop> query = QueryFactory.WorkshopQuery.getWorkshopsForStudent();
+        ParseQuery<Workshop> query = QueryFactory.Workshops.getWorkshopsForStudent();
         query.findInBackground(new FindCallback<Workshop>() {
             @Override
             public void done(List<Workshop> objects, ParseException e) {

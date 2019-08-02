@@ -82,7 +82,7 @@ public class AdminListFragment extends DialogFragment {
     }
 
     private void findAllAdmins() {
-        ParseQuery<ParseUser> query = QueryFactory.UserQuery.getAllAdmins();
+        ParseQuery<ParseUser> query = QueryFactory.Users.getAllAdmins();
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {

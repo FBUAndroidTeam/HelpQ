@@ -110,7 +110,7 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
     }
 
     private void queryWorkshops() {
-        ParseQuery<Workshop> query = QueryFactory.WorkshopQuery.getWorkshopsForAdmin();
+        ParseQuery<Workshop> query = QueryFactory.Workshops.getWorkshopsForAdmin();
         query.findInBackground(new FindCallback<Workshop>() {
             @Override
             public void done(List<Workshop> objects, ParseException e) {

@@ -63,7 +63,7 @@ public class StudentFragment extends Fragment {
 
     // Add badges to the tabs that have notifications.
     private void addNotificationBadges() {
-        ParseQuery<Notification> query = QueryFactory.NotificationQuery.getNotifications();
+        ParseQuery<Notification> query = QueryFactory.Notifications.getNotifications();
         query.findInBackground(new FindCallback<Notification>() {
             @Override
             public void done(List<Notification> objects, ParseException e) {
@@ -109,7 +109,7 @@ public class StudentFragment extends Fragment {
 
     // Remove notifications badge from this tab, if one exists.
     private void removeNotificationBadges(int tab, final int itemId) {
-        ParseQuery<Notification> query = QueryFactory.NotificationQuery.getNotificationsForTab(tab);
+        ParseQuery<Notification> query = QueryFactory.Notifications.getNotificationsForTab(tab);
         query.findInBackground(new FindCallback<Notification>() {
             @Override
             public void done(List<Notification> objects, ParseException e) {

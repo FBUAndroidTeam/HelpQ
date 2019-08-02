@@ -23,7 +23,7 @@ public class StudentInboxFragment extends InboxFragment {
 
     // Query for messages intended for this student
     protected void queryMessages() {
-        final ParseQuery<Question> query = QueryFactory.QuestionQuery.getStudentInboxMessages();
+        final ParseQuery<Question> query = QueryFactory.Questions.getStudentInboxMessages();
         query.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> objects, ParseException e) {

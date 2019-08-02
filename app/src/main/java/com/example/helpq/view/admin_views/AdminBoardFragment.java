@@ -25,7 +25,7 @@ public class AdminBoardFragment extends InboxFragment {
 
     // Query for all questions answered by this admin
     protected void queryMessages() {
-        final ParseQuery<Question> query = QueryFactory.QuestionQuery.getAdminBoardMessages();
+        final ParseQuery<Question> query = QueryFactory.Questions.getAdminBoardMessages();
         query.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> objects, ParseException e) {

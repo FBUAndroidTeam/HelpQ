@@ -76,7 +76,7 @@ public class AdminIndividualQuestionsFragment extends DialogFragment {
     }
 
     private void populateQuestions(){
-        ParseQuery<Question> query = QueryFactory.QuestionQuery.getQuestionsForQueue();
+        ParseQuery<Question> query = QueryFactory.Questions.getQuestionsForQueue();
         query.whereEqualTo("student", mStudent);
         query.findInBackground(new FindCallback<Question>() {
             @Override
