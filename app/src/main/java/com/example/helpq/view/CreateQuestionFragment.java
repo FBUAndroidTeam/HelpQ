@@ -89,6 +89,9 @@ public class CreateQuestionFragment extends DialogFragment {
         helper = new WaitTimeHelper(getParentFragment().getContext());
         setupWaitTimes(view);
 
+        toggleHelpSelected = tbInPerson;
+        togglePrioritySelected = tbBlocker;
+
         // Fetch arguments from bundle and set title
         String title = getArguments().getString(KEY_TITLE, DEFAULT_TITLE);
         getDialog().setTitle(title);
@@ -202,15 +205,6 @@ public class CreateQuestionFragment extends DialogFragment {
                             R.string.edge_case_enter_question,
                             Toast.LENGTH_LONG).show();
                     return;
-                } else if (tbBlocker.isChecked() && tbInPerson.isChecked()) {
-                    togglePrioritySelected = tbBlocker;
-                    toggleHelpSelected = tbInPerson;
-                    submitQuestion();
-                    notifyAdmin();
-                } else if (togglePrioritySelected != null && toggleHelpSelected == null) {
-                    toggleHelpSelected = tbInPerson;
-                    submitQuestion();
-                    notifyAdmin();
                 } else if (togglePrioritySelected == null) {
                     Toast.makeText(getContext(),
                             R.string.edge_case_enter_priority,
@@ -235,6 +229,7 @@ public class CreateQuestionFragment extends DialogFragment {
         newQuestion.setAsker(ParseUser.getCurrentUser());
         newQuestion.setIsArchived(false);
         newQuestion.setPriority(togglePrioritySelected.getText().toString());
+        String s = toggleHelpSelected.getText().toString();
         newQuestion.setHelpType(toggleHelpSelected.getText().toString());
         newQuestion.saveInBackground(new SaveCallback() {
             @Override
