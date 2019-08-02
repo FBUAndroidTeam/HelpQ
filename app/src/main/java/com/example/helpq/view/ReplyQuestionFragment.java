@@ -41,6 +41,7 @@ public class ReplyQuestionFragment extends DialogFragment {
     public static final String TAG = "ReplyQuestionFragment";
     private TextView tvFullName;
     private TextView tvQuestion;
+    private TextView tvNoComments;
     private SimpleDraweeView ppvAskerPic;
     private RecyclerView rvReplies;
     private SimpleDraweeView ppvProfilePic;
@@ -88,6 +89,7 @@ public class ReplyQuestionFragment extends DialogFragment {
         ppvAskerPic = view.findViewById(R.id.ivProfilePic);
         ppvProfilePic = view.findViewById(R.id.ivMyProfilePic);
         btnReply = view.findViewById(R.id.btnReply);
+        tvNoComments = view.findViewById(R.id.tvNoComments);
         etReply = view.findViewById(R.id.etReply);
 
         mReplies = new ArrayList<>();
@@ -136,6 +138,7 @@ public class ReplyQuestionFragment extends DialogFragment {
                                 mReplies.add(newReply);
                                 adapter.notifyItemInserted(mReplies.size() - 1);
                                 rvReplies.getLayoutManager().scrollToPosition(mReplies.size() - 1);
+                                tvNoComments.setVisibility(tvNoComments.INVISIBLE);
                             } else {
                                 Log.d(TAG, "error creating reply");
                                 e.printStackTrace();
@@ -165,6 +168,9 @@ public class ReplyQuestionFragment extends DialogFragment {
                     adapter.notifyDataSetChanged();
                 } else {
                     Log.d(TAG, "error querying replies");
+                }
+                if(mReplies.isEmpty()) {
+                    tvNoComments.setVisibility(tvNoComments.VISIBLE);
                 }
             }
         });

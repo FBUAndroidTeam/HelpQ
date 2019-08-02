@@ -36,6 +36,7 @@ public class AdminIndividualQuestionsFragment extends DialogFragment {
     private AdminIndividualQuestionsAdapter mAdapter;
     private SimpleDraweeView sdvProfilePic;
     private TextView tvName;
+    private TextView tvNoQuestions;
     private ParseUser mStudent;
 
     public static AdminIndividualQuestionsFragment newInstance(ParseUser student) {
@@ -63,6 +64,7 @@ public class AdminIndividualQuestionsFragment extends DialogFragment {
         rvQuestions = view.findViewById(R.id.rvIndividualQuestions);
         sdvProfilePic = view.findViewById(R.id.ivProfilePic);
         tvName = view.findViewById(R.id.tvFullName);
+        tvNoQuestions = view.findViewById(R.id.tvNoQuestions);
         mQuestions = new ArrayList<>();
         mStudent = getArguments().getParcelable(KEY_USERNAME);
         mAdapter = new AdminIndividualQuestionsAdapter(getContext(), mQuestions, this);
@@ -84,6 +86,9 @@ public class AdminIndividualQuestionsFragment extends DialogFragment {
                 if(e == null) {
                     mQuestions.addAll(objects);
                     mAdapter.notifyDataSetChanged();
+                    if(mQuestions.isEmpty()) {
+                        tvNoQuestions.setVisibility(tvNoQuestions.VISIBLE);
+                    }
                 } else {
                     Log.d(TAG, "error querying replies");
                 }
