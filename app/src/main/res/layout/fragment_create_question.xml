@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/colorFaded"
     android:layout_height="match_parent">
 
     <TextView
@@ -25,7 +26,7 @@
 
     <EditText
         android:id="@+id/etQuestion"
-        android:layout_width="360dp"
+        android:layout_width="340dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -110,8 +111,8 @@
         android:text="ToggleButton"
         android:textAllCaps="false"
         android:checked="true"
-        android:textOff="in-person"
-        android:textOn="in-person"
+        android:textOff="@string/EMOJI_IN_PERSON"
+        android:textOn="@string/EMOJI_IN_PERSON"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tbBlocker" />
 
@@ -122,10 +123,48 @@
         android:layout_marginTop="4dp"
         android:text="ToggleButton"
         android:textAllCaps="false"
-        android:textOff="written"
-        android:textOn="written"
+        android:textOff="@string/EMOJI_WRITTEN"
+        android:textOn="@string/EMOJI_WRITTEN"
         app:layout_constraintStart_toEndOf="@+id/tbInPerson"
         app:layout_constraintTop_toBottomOf="@+id/tbBlocker" />
+
+    <TextView
+        android:id="@+id/tvWaitTime"
+        android:layout_width="115dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round"
+        android:gravity="center"
+        android:text="Calculating..."
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tbInPerson"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Estimated Wait Time"
+        app:layout_constraintBottom_toTopOf="@+id/tvWaitTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tbInPerson" />
 
 
 </android.support.constraint.ConstraintLayout>
