@@ -235,8 +235,13 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 public void onClick(View v) {
                     Question question = mQuestions.get(getAdapterPosition());
                     replyToQuestion(question);
-                    ibView.setVisibility(View.GONE);
-                    resetRecyclerCell();
+                    if (question.getHelpType()
+                            .equals(mContext.getResources().getString(R.string.written))) {
+                        resetRecyclerCell(ADMIN_WRITTEN_DELTAX);
+                    }
+                    else {
+                        resetRecyclerCell(ADMIN_IN_PERSON_DELTAX);
+                    }
                 }
             });
         }
@@ -247,9 +252,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     answerQuestion(getAdapterPosition());
-                    ibDelete.setVisibility(View.GONE);
-                    ibReply.setVisibility(View.GONE);
-                    resetRecyclerCell();
+                    resetRecyclerCell(ADMIN_WRITTEN_DELTAX);
                 }
             });
         }
@@ -280,7 +283,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     removeAt(getAdapterPosition());
                     mQueueFragment.createSnackbar(getAdapterPosition(), q);
                     ibDelete.setVisibility(View.GONE);
-                    resetRecyclerCell();
+                    resetRecyclerCell(0);
                 }
             });
             ibView.setVisibility(View.VISIBLE);
@@ -289,7 +292,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 public void onClick(View v) {
                     replyToQuestion(mQuestions.get(getAdapterPosition()));
                     ibView.setVisibility(View.GONE);
-                    resetRecyclerCell();
+                    resetRecyclerCell(0);
                 }
             });
         }
@@ -306,7 +309,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     removeAt(getAdapterPosition());
                     mQueueFragment.createSnackbar(getAdapterPosition(), q);
                     ibDelete.setVisibility(View.GONE);
-                    resetRecyclerCell();
+                    resetRecyclerCell(0);
                 }
             });
         }
@@ -343,7 +346,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                                 mContext.getResources().getString(R.string.reply_in_person_help),
                                 Toast.LENGTH_LONG).show();
                     }
-                    resetRecyclerCell();
+                    resetRecyclerCell(0);
                 }
             });
         }
@@ -405,19 +408,29 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             if (originalLines > 1) {
                 setTextExpansion();
             }
-            hideActions(v);
-        }
 
-        private void hideActions(View v) {
-            if (isSlideMenuOpen) {
-                mClickListener.onItemClick(getAdapterPosition(), v);
-                resetRecyclerCell();
+            boolean isWritten = mQuestions.get(getAdapterPosition())
+                    .getHelpType().equals(mContext.getResources().getString(R.string.written));
+
+            // Display correct slide-back menu
+            if (User.isAdmin(ParseUser.getCurrentUser())) {
+                if (isWritten) hideActions(v, ADMIN_WRITTEN_DELTAX);
+                else hideActions(v, ADMIN_IN_PERSON_DELTAX);
+            } else {
+                hideActions(v, 0);
             }
         }
 
-        private void resetRecyclerCell() {
+        private void hideActions(View v, int deltaX) {
+            if (isSlideMenuOpen) {
+                mClickListener.onItemClick(getAdapterPosition(), v);
+                resetRecyclerCell(deltaX);
+            }
+        }
+
+        private void resetRecyclerCell(int deltaX) {
             TranslateAnimation animate = new TranslateAnimation(
-                    itemView.getX(),
+                    itemView.getX() + deltaX,
                     0,
                     0,
                     0
@@ -425,10 +438,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             animate.setDuration(400);
             animate.setFillAfter(true);
             vQuestionView.startAnimation(animate);
-            ibDelete.setVisibility(View.GONE);
-            ibReply.setVisibility(View.GONE);
-            ibLike.setVisibility(View.GONE);
-            ibView.setVisibility(View.GONE);
             isSlideMenuOpen = false;
         }
 
