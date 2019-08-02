@@ -1,6 +1,7 @@
 package com.example.helpq.controller;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import com.example.helpq.R;
 import com.example.helpq.model.Reply;
 import com.example.helpq.model.User;
 import com.example.helpq.view.ReplyQuestionFragment;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.login.widget.ProfilePictureView;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -50,7 +52,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private ProfilePictureView ppvPicture;
+        private SimpleDraweeView ppvPicture;
         private TextView tvFullName;
         private TextView tvReply;
         private ImageView ivVerified;
@@ -67,7 +69,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         }
 
         public void bind(Reply reply) {
-            ppvPicture.setProfileId(User.getProfilePicture(reply.getUser()));
+            ppvPicture.setImageURI(Uri.parse("http://graph.facebook.com/"+
+                    User.getProfilePicture(reply.getUser())+"/picture?type=large"));
             tvReply.setText(reply.getText());
             tvFullName.setText(User.getFullName(reply.getUser()));
             if(reply.getVerification() || User.isAdmin(ParseUser.getCurrentUser())) {

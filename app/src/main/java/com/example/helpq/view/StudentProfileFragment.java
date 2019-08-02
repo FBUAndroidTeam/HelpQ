@@ -2,6 +2,7 @@ package com.example.helpq.view;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.model.User;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.login.widget.ProfilePictureView;
 import com.parse.ParseUser;
 
@@ -26,7 +28,7 @@ public class StudentProfileFragment extends Fragment {
     private TextView tvAdmin;
     private TextView tvUsername;
     private Button btnLogout;
-    private ProfilePictureView ppvPicture;
+    private SimpleDraweeView ppvPicture;
     private String mProfile;
 
     public static StudentProfileFragment newInstance() {
@@ -35,7 +37,8 @@ public class StudentProfileFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         setRetainInstance(true);
         mProfile = User.getProfilePicture(ParseUser.getCurrentUser());
         return inflater.inflate(R.layout.fragment_student_profile, container, false);
@@ -62,7 +65,8 @@ public class StudentProfileFragment extends Fragment {
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         tvAdmin.setText(User.getAdminName(ParseUser.getCurrentUser()));
         tvFullName.setText(User.getFullName(ParseUser.getCurrentUser()));
-        ppvPicture.setProfileId(mProfile);
+        ppvPicture.setImageURI(Uri.parse("http://graph.facebook.com/"+
+                mProfile+"/picture?type=large"));
         setupLogout();
     }
 

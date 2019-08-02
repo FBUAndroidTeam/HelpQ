@@ -14,6 +14,7 @@ import android.widget.Button;
 import com.example.helpq.R;
 import com.facebook.FacebookSdk;
 import com.facebook.LoggingBehavior;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -31,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fresco.initialize(this);
         FacebookSdk.setIsDebugEnabled(true);
         FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
         setContentView(R.layout.activity_login);
