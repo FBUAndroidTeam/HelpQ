@@ -1,6 +1,7 @@
 package com.example.helpq.model;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -38,17 +39,15 @@ public class Search {
     }
 
     public static void setSearchUi(SearchView svSearch, Context context) {
-        int closeId = svSearch.getContext().getResources()
-                .getIdentifier("android:id/search_close_btn", null, null);
-        ImageView closeBtn = ((ImageView) svSearch.findViewById(closeId));
+        Resources resource = svSearch.getContext().getResources();
+        ImageView closeBtn = ((ImageView) svSearch.findViewById(resource.getIdentifier
+                ("android:id/search_close_btn", null, null)));
         closeBtn.setColorFilter(context.getResources().getColor(R.color.colorFaded));
-        int searchIconId = svSearch.getContext().getResources()
-                .getIdentifier("android:id/search_button", null, null);
-        ((ImageView) svSearch.findViewById(searchIconId))
+        ((ImageView) svSearch.findViewById(resource
+                .getIdentifier("android:id/search_button", null, null)))
                 .setColorFilter(context.getResources().getColor(R.color.colorFaded));
-        int searchTextId = svSearch.getContext().getResources()
-                .getIdentifier("android:id/search_src_text", null, null);
-        TextView searchText = (TextView) svSearch.findViewById(searchTextId);
+        TextView searchText = (TextView) svSearch.findViewById(resource
+                .getIdentifier("android:id/search_src_text", null, null));
         searchText.setTextColor(context.getResources().getColor(R.color.colorFaded));
         searchText.setHint("");
     }

@@ -10,5 +10,5 @@
     <color name="colorRed">#F20000</color>
     <color name="realFBBlue">#3C5A99</color>
     <color name="colorFaded">#F0FBF7</color>
-    <color name="gray">	#808080</color>
+    <color name="colorGray">	#808080</color>
 </resources>

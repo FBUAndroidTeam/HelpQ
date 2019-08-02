@@ -53,10 +53,11 @@ public class InboxFragment extends Fragment {
         tvSearchNotice = view.findViewById(R.id.tvSearchNotice);
         tvNotice.setVisibility(View.GONE);
         tvSearchNotice.setVisibility(View.GONE);
+
         svSearch = view.findViewById(R.id.svSearch);
-        tvSearch = view.findViewById(R.id.tvSearch);
-        tvSearch.setVisibility(View.VISIBLE);
         Search.setSearchUi(svSearch, getContext());
+        tvSearch = view.findViewById(R.id.tvSearch);
+        //tvSearch.setVisibility(View.VISIBLE);
 
         // Create data source, adapter, and layout manager
         mMessages = new ArrayList<>();
@@ -120,11 +121,12 @@ public class InboxFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                tvSearch.setVisibility(View.GONE);
                 if (newText.isEmpty()) {
                     mMessages.clear();
                     queryMessages();
                     return false;
+                } else {
+                    tvSearch.setVisibility(View.GONE);
                 }
                 findMatches(newText);
                 return false;
@@ -140,6 +142,9 @@ public class InboxFragment extends Fragment {
         mAdapter.notifyDataSetChanged();
         if (mMessages.size() == 0) {
             tvSearchNotice.setVisibility(View.VISIBLE);
+        }
+        else {
+            tvSearchNotice.setVisibility(View.GONE);
         }
     }
 
