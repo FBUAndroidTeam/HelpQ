@@ -137,6 +137,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
             Collections.sort(mQuestions);
             mAdapter.notifyDataSetChanged();
             if(mQuestions.size() == 0) {
+                tvNotice.setText(getResources().getString(R.string.empty_queue));
                 tvNotice.setVisibility(View.VISIBLE);
             }
     }
@@ -200,6 +201,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         svQueueSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(final String query) {
+                tvNotice.setVisibility(View.GONE);
                 final ParseQuery<Question> queueQuestions =
                         QueryFactory.QuestionQuery.getQuestionsForQueue();
                 queueQuestions.findInBackground(new FindCallback<Question>() {
@@ -209,6 +211,10 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                         mQuestions.clear();
                         mQuestions.addAll(result);
                         mAdapter.notifyDataSetChanged();
+                        if(mQuestions.isEmpty()) {
+                            tvNotice.setText(getResources().getString(R.string.search_notice));
+                            tvNotice.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
                 return false;
@@ -216,6 +222,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                tvNotice.setVisibility(View.GONE);
                 if (newText.isEmpty()) {
                     mQuestions.clear();
                     queryQuestions();
