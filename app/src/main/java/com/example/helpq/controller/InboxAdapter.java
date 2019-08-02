@@ -23,6 +23,8 @@ import java.util.List;
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> {
 
     private static final String TAG = "InboxAdapter";
+    private final int iAdminDeltaX = -150;
+    private final int iStudentDeltaX = -300;
     private Context mContext;
     private List<Question> mMessages;
     private static ClickListener mClickListener;
@@ -104,6 +106,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         private ImageButton ibLike;
         private ImageButton ibView;
         private View vQuestionView;
+        private boolean isSlideMenuOpen;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -135,6 +138,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             tvAnswer.setText(message.getAnswer());
             setLikeText(message, tvLikes);
             setLikeButton(ibLike, message.isLiked());
+            isSlideMenuOpen = false;
         }
 
         private TranslateAnimation slideRecyclerCell(View v, int deltaX) {
@@ -163,10 +167,13 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
 
         @Override
         public void onClick(View v) {
-            if (User.isAdmin(ParseUser.getCurrentUser())) {
-                resetRecyclerCell(-150);
-            } else {
-                resetRecyclerCell(-300);
+            if (isSlideMenuOpen) {
+                if (User.isAdmin(ParseUser.getCurrentUser())) {
+                    resetRecyclerCell(iAdminDeltaX);
+                } else {
+                    resetRecyclerCell(iStudentDeltaX);
+                }
+                isSlideMenuOpen = false;
             }
         }
 
@@ -175,24 +182,26 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             mClickListener.onItemLongClick(getAdapterPosition(), v);
             Question question = mMessages.get(getAdapterPosition());
             if(User.isAdmin(ParseUser.getCurrentUser())) {
-                vQuestionView.startAnimation(slideRecyclerCell(v, -150));
-                adminMenu();
+                adminMenu(v);
             } else {
-                vQuestionView.startAnimation(slideRecyclerCell(v, -300));
-                studentMenu(question);
+                studentMenu(v, question);
             }
 
             return true;
         }
 
-        private void studentMenu(final Question question) {
+        private void studentMenu(View v, final Question question) {
+            if (!isSlideMenuOpen) {
+                vQuestionView.startAnimation(slideRecyclerCell(v, iStudentDeltaX));
+                isSlideMenuOpen = true;
+            }
             ibView.setVisibility(View.VISIBLE);
             ibLike.setVisibility(View.VISIBLE);
             ibView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     replyToQuestion(question);
-                    resetRecyclerCell(-300);
+                    resetRecyclerCell(iStudentDeltaX);
                 }
             });
 
@@ -212,7 +221,11 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             });
         }
 
-        private void adminMenu() {
+        private void adminMenu(View v) {
+            if (!isSlideMenuOpen) {
+                vQuestionView.startAnimation(slideRecyclerCell(v, iAdminDeltaX));
+                isSlideMenuOpen = true;
+            }
             ibLike.setVisibility(View.GONE);
             ibView.setVisibility(View.VISIBLE);
             ibView.setOnClickListener(new View.OnClickListener() {
@@ -220,7 +233,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                 public void onClick(View v) {
                     Question message = mMessages.get(getAdapterPosition());
                     replyToQuestion(message);
-                    resetRecyclerCell(-150);
+                    resetRecyclerCell(iAdminDeltaX);
                 }
             });
         }
