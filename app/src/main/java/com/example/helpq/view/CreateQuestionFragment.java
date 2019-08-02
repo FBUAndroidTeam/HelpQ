@@ -1,5 +1,6 @@
 package com.example.helpq.view;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -230,11 +231,14 @@ public class CreateQuestionFragment extends DialogFragment {
         newQuestion.setIsArchived(false);
         newQuestion.setPriority(togglePrioritySelected.getText().toString());
         String s = toggleHelpSelected.getText().toString();
-        if (s.equals(getContext().getResources().getString(R.string.EMOJI_IN_PERSON))) {
-            newQuestion.setHelpType(getContext().getResources().getString(R.string.in_person));
+
+        Resources res = getContext().getResources();
+        if (s.equals(res.getString(R.string.EMOJI_IN_PERSON))) {
+            newQuestion.setHelpType(res.getString(R.string.in_person));
         } else {
-            newQuestion.setHelpType(getContext().getResources().getString(R.string.written));
+            newQuestion.setHelpType(res.getString(R.string.written));
         }
+
         newQuestion.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
