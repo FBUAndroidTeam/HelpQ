@@ -25,6 +25,7 @@ import com.example.helpq.model.Search;
 import com.example.helpq.model.User;
 import com.example.helpq.model.WaitTime;
 import com.example.helpq.model.WaitTimeHelper;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
