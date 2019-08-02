@@ -150,6 +150,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             );
             animate.setDuration(300);
             animate.setFillAfter(true);
+            isSlideMenuOpen = true;
             return animate;
         }
 
@@ -163,6 +164,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             animate.setDuration(400);
             animate.setFillAfter(true);
             vQuestionView.startAnimation(animate);
+            isSlideMenuOpen = false;
         }
 
         @Override
@@ -173,7 +175,6 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                 } else {
                     resetRecyclerCell(iStudentDeltaX);
                 }
-                isSlideMenuOpen = false;
             }
         }
 
@@ -193,7 +194,6 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         private void studentMenu(View v, final Question question) {
             if (!isSlideMenuOpen) {
                 vQuestionView.startAnimation(slideRecyclerCell(v, iStudentDeltaX));
-                isSlideMenuOpen = true;
             }
             ibView.setVisibility(View.VISIBLE);
             ibLike.setVisibility(View.VISIBLE);
@@ -224,7 +224,6 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         private void adminMenu(View v) {
             if (!isSlideMenuOpen) {
                 vQuestionView.startAnimation(slideRecyclerCell(v, iAdminDeltaX));
-                isSlideMenuOpen = true;
             }
             ibLike.setVisibility(View.GONE);
             ibView.setVisibility(View.VISIBLE);
