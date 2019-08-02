@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,9 +67,11 @@ public class CreateWorkshopFragment extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         etTitle = view.findViewById(R.id.etTitle);
+        etTitle.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         tpTime = view.findViewById(R.id.tpTime);
         tpTime.setIs24HourView(true);
         etLocation = view.findViewById(R.id.etLocation);
+        etLocation.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         cvDate = view.findViewById(R.id.cvDate);
         btnSubmit = view.findViewById(R.id.btnSubmit);
         isCalendarClicked = false;

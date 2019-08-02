@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,6 +92,7 @@ public class ReplyQuestionFragment extends DialogFragment {
         btnReply = view.findViewById(R.id.btnReply);
         tvNoComments = view.findViewById(R.id.tvNoComments);
         etReply = view.findViewById(R.id.etReply);
+        etReply.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
         mReplies = new ArrayList<>();
         rvReplies = view.findViewById(R.id.rvReplies);

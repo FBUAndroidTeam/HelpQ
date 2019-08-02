@@ -19,7 +19,7 @@ import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
 import com.example.helpq.model.WaitTime;
 import com.example.helpq.model.WaitTimeHelper;
-import com.example.helpq.view.AnswerQuestionFragment;
+import com.example.helpq.view.admin_views.AnswerQuestionFragment;
 import com.example.helpq.view.QueueFragment;
 import com.example.helpq.view.ReplyQuestionFragment;
 import com.parse.FindCallback;
