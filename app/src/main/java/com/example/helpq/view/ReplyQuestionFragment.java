@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,9 +25,7 @@ import com.example.helpq.controller.ReplyAdapter;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Reply;
 import com.example.helpq.model.User;
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.login.widget.ProfilePictureView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -49,6 +48,7 @@ public class ReplyQuestionFragment extends DialogFragment {
     private Button btnReply;
     private ReplyAdapter adapter;
     private List<Reply> mReplies;
+    private ImageButton ibCancel;
 
     public static ReplyQuestionFragment newInstance(Question question) {
         ReplyQuestionFragment frag = new ReplyQuestionFragment();
@@ -89,6 +89,8 @@ public class ReplyQuestionFragment extends DialogFragment {
         ppvProfilePic = view.findViewById(R.id.ivMyProfilePic);
         btnReply = view.findViewById(R.id.btnReply);
         etReply = view.findViewById(R.id.etReply);
+        ibCancel = view.findViewById(R.id.ibCancel);
+        setCancelButton();
 
         mReplies = new ArrayList<>();
         rvReplies = view.findViewById(R.id.rvReplies);
@@ -109,6 +111,15 @@ public class ReplyQuestionFragment extends DialogFragment {
         if(User.isAdmin(ParseUser.getCurrentUser())) {
             disableReply();
         }
+    }
+
+    private void setCancelButton() {
+        ibCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
     private void disableReply() {

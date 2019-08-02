@@ -38,12 +38,12 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="Mon 12:45pm"
-        android:textSize="15dp"
         android:textColor="@color/colorFBBlue"
+        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvStudentWorkshopName"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tvStudentWorkshopSignedUpCount"
@@ -75,8 +75,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text="MPK 21.65.23"
-        android:textSize="15dp"
         android:textColor="@color/colorFBBlue"
+        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

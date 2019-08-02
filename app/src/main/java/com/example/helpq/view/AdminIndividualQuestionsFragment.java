@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.helpq.R;
@@ -37,6 +38,7 @@ public class AdminIndividualQuestionsFragment extends DialogFragment {
     private SimpleDraweeView sdvProfilePic;
     private TextView tvName;
     private ParseUser mStudent;
+    private ImageButton ibCancel;
 
     public static AdminIndividualQuestionsFragment newInstance(ParseUser student) {
         AdminIndividualQuestionsFragment frag = new AdminIndividualQuestionsFragment();
@@ -69,10 +71,23 @@ public class AdminIndividualQuestionsFragment extends DialogFragment {
         rvQuestions.setAdapter(mAdapter);
         rvQuestions.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        ibCancel = view.findViewById(R.id.ibCancel);
+        setCancelButton();
+
+
         tvName.setText(User.getFullName(mStudent));
         sdvProfilePic.setImageURI(Uri.parse("http://graph.facebook.com/"+
                 User.getProfilePicture(mStudent)+"/picture?type=large"));
         populateQuestions();
+    }
+
+    private void setCancelButton() {
+        ibCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
     private void populateQuestions(){

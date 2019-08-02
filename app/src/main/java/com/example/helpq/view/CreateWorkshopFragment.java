@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class CreateWorkshopFragment extends DialogFragment {
     private int mYear;
     private int mDay;
     private boolean isCalendarClicked;
+    private ImageButton ibCancel;
 
     public static CreateWorkshopFragment newInstance(String title) {
         CreateWorkshopFragment frag = new CreateWorkshopFragment();
@@ -71,6 +73,8 @@ public class CreateWorkshopFragment extends DialogFragment {
         etLocation = view.findViewById(R.id.etLocation);
         cvDate = view.findViewById(R.id.cvDate);
         btnSubmit = view.findViewById(R.id.btnSubmit);
+        ibCancel = view.findViewById(R.id.ibCancel);
+        setCancelButton();
         isCalendarClicked = false;
 
         // Fetch arguments from bundle and set title
@@ -102,6 +106,15 @@ public class CreateWorkshopFragment extends DialogFragment {
                     Toast.makeText(getContext(), R.string.edge_case_enter_location,
                             Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+    }
+
+    private void setCancelButton() {
+        ibCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
             }
         });
     }

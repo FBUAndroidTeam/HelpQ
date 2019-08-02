@@ -124,10 +124,8 @@ public class StudentWorkshopAdapter extends
 
         public void bind(final Workshop workshop) {
             tvWorkshopName.setText(workshop.getTitle());
-            tvWorkshopDate.setText(mContext.getResources().getString(R.string.workshop_when)
-                    + " " + workshop.getDate());
-            tvWorkshopLocation.setText(mContext.getResources().getString(R.string.workshop_where)
-                    + " " + workshop.getLocation());
+            tvWorkshopDate.setText(workshop.getDate());
+            tvWorkshopLocation.setText(workshop.getLocation());
             setSwitchStatus(workshop);
             setAttendeeText(workshop);
 

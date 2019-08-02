@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -38,6 +39,7 @@ public class CreateQuestionFragment extends DialogFragment {
     private static final String DEFAULT_TITLE = "New Question";
 
     private EditText etQuestion;
+    private ImageButton ibCancel;
 
     // ToggleButtons for priority selection
     private ToggleButton tbBlocker;
@@ -75,6 +77,9 @@ public class CreateQuestionFragment extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ibCancel = view.findViewById(R.id.ibCancel);
+        setCancelButton();
+
         tbBlocker = view.findViewById(R.id.tbBlocker);
         tbExplanation = view.findViewById(R.id.tbExplanation);
         tbStretch = view.findViewById(R.id.tbStretch);
@@ -102,6 +107,15 @@ public class CreateQuestionFragment extends DialogFragment {
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         toggleHelpButtons();
         validQuestionCheck();
+    }
+
+    private void setCancelButton() {
+        ibCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
     // Ensures only one toggle button for priority is selected
