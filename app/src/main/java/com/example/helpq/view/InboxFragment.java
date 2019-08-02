@@ -33,6 +33,7 @@ public class InboxFragment extends Fragment {
     protected TextView tvNotice;
     protected TextView tvSearchNotice;
     protected SearchView svSearch;
+    private TextView tvSearch;
 
     public static InboxFragment newInstance() {
         return new InboxFragment();
@@ -53,6 +54,8 @@ public class InboxFragment extends Fragment {
         tvNotice.setVisibility(View.GONE);
         tvSearchNotice.setVisibility(View.GONE);
         svSearch = view.findViewById(R.id.svSearch);
+        tvSearch = view.findViewById(R.id.tvSearch);
+        tvSearch.setVisibility(View.VISIBLE);
         Search.setSearchUi(svSearch, getContext());
 
         // Create data source, adapter, and layout manager
@@ -100,15 +103,24 @@ public class InboxFragment extends Fragment {
     }
 
     private void search() {
+        svSearch.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                tvSearch.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });
         svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(final String query) {
+                tvSearch.setVisibility(View.GONE);
                 findMatches(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                tvSearch.setVisibility(View.GONE);
                 if (newText.isEmpty()) {
                     mMessages.clear();
                     queryMessages();
