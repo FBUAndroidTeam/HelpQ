@@ -70,4 +70,5 @@
     <string name="search_hint">Find a question...</string>
     <string name="stat_question">pending</string>
     <string name="search_notice">No results match your search.</string>
+    <string name="no_pending_student">This student has no pending questions.</string>
 </resources>
