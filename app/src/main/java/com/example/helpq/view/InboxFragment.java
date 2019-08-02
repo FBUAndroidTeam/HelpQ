@@ -28,6 +28,7 @@ public class InboxFragment extends Fragment {
     private RecyclerView rvMessages;
     private SwipeRefreshLayout swipeContainer;
     protected List<Question> mMessages;
+    protected List<Question> mAllMessages;
     protected InboxAdapter mAdapter;
     protected TextView tvNotice;
     protected TextView tvSearchNotice;
@@ -56,6 +57,7 @@ public class InboxFragment extends Fragment {
 
         // Create data source, adapter, and layout manager
         mMessages = new ArrayList<>();
+        mAllMessages = new ArrayList<>();
         mAdapter = new InboxAdapter(getContext(), mMessages, this);
         rvMessages = view.findViewById(R.id.rvMessages);
         rvMessages.setAdapter(mAdapter);
@@ -97,7 +99,36 @@ public class InboxFragment extends Fragment {
 
     }
 
-    protected void search() {
+    private void search() {
+        svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(final String query) {
+                findMatches(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    mMessages.clear();
+                    queryMessages();
+                    return false;
+                }
+                findMatches(newText);
+                return false;
+            }
+        });
+    }
+
+    // Search for matches, and add them to the list to be displayed.
+    protected void findMatches(String query) {
+        List<Question> result = Search.mSearch(mAllMessages, query);
+        mMessages.clear();
+        mMessages.addAll(result);
+        mAdapter.notifyDataSetChanged();
+        if (mMessages.size() == 0) {
+            tvSearchNotice.setVisibility(View.VISIBLE);
+        }
     }
 
     // Reload inbox.
