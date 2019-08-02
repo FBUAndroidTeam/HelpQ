@@ -23,8 +23,8 @@ import java.util.List;
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> {
 
     private static final String TAG = "InboxAdapter";
-    private final int iAdminDeltaX = -150;
-    private final int iStudentDeltaX = -300;
+    private final int iAdminDeltaX = -170;
+    private final int iStudentDeltaX = -310;
     private Context mContext;
     private List<Question> mMessages;
     private static ClickListener mClickListener;

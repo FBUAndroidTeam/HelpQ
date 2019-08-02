@@ -230,7 +230,11 @@ public class CreateQuestionFragment extends DialogFragment {
         newQuestion.setIsArchived(false);
         newQuestion.setPriority(togglePrioritySelected.getText().toString());
         String s = toggleHelpSelected.getText().toString();
-        newQuestion.setHelpType(toggleHelpSelected.getText().toString());
+        if (s.equals(getContext().getResources().getString(R.string.EMOJI_IN_PERSON))) {
+            newQuestion.setHelpType(getContext().getResources().getString(R.string.in_person));
+        } else {
+            newQuestion.setHelpType(getContext().getResources().getString(R.string.written));
+        }
         newQuestion.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

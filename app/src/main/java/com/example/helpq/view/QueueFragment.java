@@ -140,7 +140,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         Collections.sort(mQuestions);
         mAdapter.notifyDataSetChanged();
         if(mQuestions.size() == 0) {
-            tvNotice.setText(getResources().getString(R.string.empty_queue));
+            tvNotice.setText(getParentFragment().getResources().getString(R.string.empty_queue));
             tvNotice.setVisibility(View.VISIBLE);
         }
     }

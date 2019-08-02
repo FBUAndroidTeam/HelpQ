@@ -141,6 +141,9 @@ public class InboxFragment extends Fragment {
         if (mMessages.size() == 0) {
             tvSearchNotice.setVisibility(View.VISIBLE);
         }
+        else {
+            tvSearchNotice.setVisibility(View.GONE);
+        }
     }
 
     // Reload inbox.

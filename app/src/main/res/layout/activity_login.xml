@@ -36,10 +36,11 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/btnFacebookLogin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3"
-        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.95"
         app:srcCompat="@drawable/helpq_logo" />
+        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintVertical_chainStyle="packed"/>
 </android.support.constraint.ConstraintLayout>
