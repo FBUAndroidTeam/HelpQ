@@ -40,8 +40,8 @@ public class Search {
     public static void setSearchUi(SearchView svSearch, Context context) {
         int closeId = svSearch.getContext().getResources()
                 .getIdentifier("android:id/search_close_btn", null, null);
-        ((ImageView) svSearch.findViewById(closeId))
-                .setColorFilter(context.getResources().getColor(R.color.colorFaded));
+        ImageView closeBtn = ((ImageView) svSearch.findViewById(closeId));
+        closeBtn.setColorFilter(context.getResources().getColor(R.color.colorFaded));
         int searchIconId = svSearch.getContext().getResources()
                 .getIdentifier("android:id/search_button", null, null);
         ((ImageView) svSearch.findViewById(searchIconId))
@@ -49,8 +49,7 @@ public class Search {
         int searchTextId = svSearch.getContext().getResources()
                 .getIdentifier("android:id/search_src_text", null, null);
         TextView searchText = (TextView) svSearch.findViewById(searchTextId);
-        searchText.setHint(context.getResources().getString(R.string.search_hint));
-        searchText.setHintTextColor(context.getResources().getColor(R.color.colorFaded));
         searchText.setTextColor(context.getResources().getColor(R.color.colorFaded));
+        searchText.setHint("");
     }
 }

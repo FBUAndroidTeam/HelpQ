@@ -41,6 +41,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     private SwipeRefreshLayout mSwipeContainer;
     private TextView tvNotice;
     private SearchView svQueueSearch;
+    private TextView tvSearchNotice;
 
     public static QueueFragment newInstance() {
         return new QueueFragment();
@@ -59,6 +60,8 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         super.onViewCreated(view, savedInstanceState);
         tvNotice = view.findViewById(R.id.tvNotice);
         tvNotice.setVisibility(View.GONE);
+        tvSearchNotice = view.findViewById(R.id.tvSearchNotice);
+        tvSearchNotice.setVisibility(View.VISIBLE);
         // Create data source, adapter, and layout manager
         mQuestions = new ArrayList<>();
         mAdapter = new QueueAdapter(getContext(), mQuestions, this);
@@ -198,6 +201,14 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     }
 
     protected void search() {
+        svQueueSearch.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                tvSearchNotice.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });
+
         svQueueSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(final String query) {
@@ -222,7 +233,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                tvNotice.setVisibility(View.GONE);
+                tvSearchNotice.setVisibility(View.GONE);
                 if (newText.isEmpty()) {
                     mQuestions.clear();
                     queryQuestions();

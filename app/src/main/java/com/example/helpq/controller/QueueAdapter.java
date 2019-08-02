@@ -206,7 +206,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private void adminSlideMenu(View v, int position) {
             vQuestionView.startAnimation(slideRecyclerCell(v, -425));
             ibDelete.setVisibility(ibDelete.VISIBLE);
-            ibReply.setVisibility(ibReply.VISIBLE);
             ibView.setVisibility(ibView.VISIBLE);
             ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -215,7 +214,8 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 }
             });
             if(mQuestions.get(position).getHelpType()
-                    .equals(mContext.getResources().getString(R.string.in_person))) {
+                    .equals(mContext.getResources().getString(R.string.written))) {
+                ibReply.setVisibility(ibReply.VISIBLE);
                 ibReply.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
