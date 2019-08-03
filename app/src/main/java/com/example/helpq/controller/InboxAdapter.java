@@ -23,8 +23,6 @@ import java.util.List;
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> {
 
     private static final String TAG = "InboxAdapter";
-    private final int iAdminDeltaX = -170;
-    private final int iStudentDeltaX = -310;
     private Context mContext;
     private List<Question> mMessages;
     private static ClickListener mClickListener;
@@ -107,6 +105,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         private ImageButton ibView;
         private View vQuestionView;
         private boolean isSlideMenuOpen;
+        private int iSlideDeltaX;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -126,19 +125,72 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
 
         // Bind the view elements to the message.
         public void bind(Question message) {
+            setupMessageText(message);
+            setupMenuClickListeners();
+        }
+
+        private void setupMessageText(Question message) {
             tvPriorityEmoji.setText(message.getPriority());
             tvQuestion.setText(message.getText());
             tvAnswerTime.setText(message.getAnsweredTimeAgo());
             if (User.isAdmin(ParseUser.getCurrentUser())) {
                 tvAdminName.setText(mContext.getResources().getString(R.string.your_answer));
+                iSlideDeltaX = -170;
             } else {
                 tvAdminName.setText(User.getAdminName(ParseUser.getCurrentUser()) +
                         mContext.getResources().getString(R.string.admin_answer));
+                iSlideDeltaX = -310;
             }
             tvAnswer.setText(message.getAnswer());
             setLikeText(message, tvLikes);
             setLikeButton(ibLike, message.isLiked());
+        }
+
+        private void setupMenuClickListeners() {
+            ibView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    replyToQuestion(mMessages.get(getAdapterPosition()));
+                    resetRecyclerCell(iSlideDeltaX);
+                }
+            });
+            ibLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Question question = mMessages.get(getAdapterPosition());
+                    boolean isLiked = question.isLiked();
+                    if (!isLiked) {
+                        question.likeQuestion(ParseUser.getCurrentUser());
+                    } else {
+                        question.unlikeQuestion(ParseUser.getCurrentUser());
+                    }
+                    question.saveInBackground();
+                    setLikeButton(ibLike, !isLiked);
+                    setLikeText(question, tvLikes);
+                }
+            });
+            ibView.setEnabled(false);
+            ibLike.setEnabled(false);
             isSlideMenuOpen = false;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (isSlideMenuOpen) {
+                resetRecyclerCell(iSlideDeltaX);
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            mClickListener.onItemLongClick(getAdapterPosition(), v);
+            if (User.isAdmin(ParseUser.getCurrentUser())) {
+                adminMenu(v);
+            } else {
+                studentMenu(v);
+            }
+
+            return true;
         }
 
         private TranslateAnimation slideRecyclerCell(View v, int deltaX) {
@@ -161,82 +213,31 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                     0,
                     0
             );
-            animate.setDuration(400);
+            animate.setDuration(300);
             animate.setFillAfter(true);
             vQuestionView.startAnimation(animate);
-            ibLike.setOnClickListener(null);
-            ibView.setOnClickListener(null);
             isSlideMenuOpen = false;
+            ibView.setEnabled(false);
+            ibLike.setEnabled(false);
         }
 
-        @Override
-        public void onClick(View v) {
-            if (isSlideMenuOpen) {
-                if (User.isAdmin(ParseUser.getCurrentUser())) {
-                    resetRecyclerCell(iAdminDeltaX);
-                } else {
-                    resetRecyclerCell(iStudentDeltaX);
-                }
-            }
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            mClickListener.onItemLongClick(getAdapterPosition(), v);
-            Question question = mMessages.get(getAdapterPosition());
-            if(User.isAdmin(ParseUser.getCurrentUser())) {
-                adminMenu(v);
-            } else {
-                studentMenu(v, question);
-            }
-
-            return true;
-        }
-
-        private void studentMenu(View v, final Question question) {
+        private void studentMenu(View v) {
             if (!isSlideMenuOpen) {
-                vQuestionView.startAnimation(slideRecyclerCell(v, iStudentDeltaX));
+                vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
             }
             ibView.setVisibility(View.VISIBLE);
             ibLike.setVisibility(View.VISIBLE);
-            ibView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    replyToQuestion(question);
-                    resetRecyclerCell(iStudentDeltaX);
-                }
-            });
-
-            ibLike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    boolean isLiked = question.isLiked();
-                    if (!isLiked) {
-                        question.likeQuestion(ParseUser.getCurrentUser());
-                    } else {
-                        question.unlikeQuestion(ParseUser.getCurrentUser());
-                    }
-                    question.saveInBackground();
-                    setLikeButton(ibLike, !isLiked);
-                    setLikeText(question, tvLikes);
-                }
-            });
+            ibView.setEnabled(true);
+            ibLike.setEnabled(true);
         }
 
         private void adminMenu(View v) {
             if (!isSlideMenuOpen) {
-                vQuestionView.startAnimation(slideRecyclerCell(v, iAdminDeltaX));
+                vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
             }
             ibLike.setVisibility(View.GONE);
             ibView.setVisibility(View.VISIBLE);
-            ibView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Question message = mMessages.get(getAdapterPosition());
-                    replyToQuestion(message);
-                    resetRecyclerCell(iAdminDeltaX);
-                }
-            });
+            ibView.setEnabled(true);
         }
     }
 }

@@ -435,8 +435,12 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     0,
                     0
             );
-            animate.setDuration(400);
+            animate.setDuration(300);
             animate.setFillAfter(true);
+            ibLike.setOnClickListener(null);
+            ibView.setOnClickListener(null);
+            ibReply.setOnClickListener(null);
+            ibDelete.setOnClickListener(null);
             vQuestionView.startAnimation(animate);
             isSlideMenuOpen = false;
         }
