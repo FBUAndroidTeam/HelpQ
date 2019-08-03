@@ -164,6 +164,8 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             animate.setDuration(400);
             animate.setFillAfter(true);
             vQuestionView.startAnimation(animate);
+            ibLike.setOnClickListener(null);
+            ibView.setOnClickListener(null);
             isSlideMenuOpen = false;
         }
 

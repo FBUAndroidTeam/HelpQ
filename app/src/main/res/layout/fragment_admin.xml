@@ -13,7 +13,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/admin_navigation">
-
     </android.support.v4.view.ViewPager>
 
     <android.support.design.widget.BottomNavigationView
@@ -21,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:labelVisibilityMode="selected"
+        app:itemBackground="@color/colorFaded"
         app:itemIconTint="@color/menu_item_color"
         app:itemTextColor="@color/menu_item_color"
         app:layout_constraintBottom_toBottomOf="parent"
