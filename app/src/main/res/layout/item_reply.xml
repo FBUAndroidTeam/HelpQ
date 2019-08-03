@@ -10,7 +10,7 @@
         android:id="@+id/ppvPicture"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -39,6 +39,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:text="TextView"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tvReply"
         app:layout_constraintStart_toEndOf="@+id/ppvPicture"
         app:layout_constraintTop_toTopOf="parent" />
