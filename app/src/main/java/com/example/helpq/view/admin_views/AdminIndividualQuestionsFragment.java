@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.admin_views;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,6 +38,7 @@ public class AdminIndividualQuestionsFragment extends DialogFragment {
     private AdminIndividualQuestionsAdapter mAdapter;
     private SimpleDraweeView sdvProfilePic;
     private TextView tvName;
+    private TextView tvNoQuestions;
     private ParseUser mStudent;
     private ImageButton ibCancel;
     private ProgressBar pbLoading;
@@ -70,6 +71,7 @@ public class AdminIndividualQuestionsFragment extends DialogFragment {
         rvQuestions = view.findViewById(R.id.rvIndividualQuestions);
         sdvProfilePic = view.findViewById(R.id.ivProfilePic);
         tvName = view.findViewById(R.id.tvFullName);
+        tvNoQuestions = view.findViewById(R.id.tvNoQuestions);
         mQuestions = new ArrayList<>();
         mStudent = getArguments().getParcelable(KEY_USERNAME);
         mAdapter = new AdminIndividualQuestionsAdapter(getContext(), mQuestions, this);
@@ -96,7 +98,7 @@ public class AdminIndividualQuestionsFragment extends DialogFragment {
     }
 
     private void populateQuestions(){
-        ParseQuery<Question> query = QueryFactory.QuestionQuery.getQuestionsForQueue();
+        ParseQuery<Question> query = QueryFactory.Questions.getQuestionsForQueue();
         query.whereEqualTo("student", mStudent);
         query.findInBackground(new FindCallback<Question>() {
             @Override
@@ -105,6 +107,9 @@ public class AdminIndividualQuestionsFragment extends DialogFragment {
                     mQuestions.addAll(objects);
                     mAdapter.notifyDataSetChanged();
                     pbLoading.setVisibility(View.INVISIBLE);
+                    if(mQuestions.isEmpty()) {
+                        tvNoQuestions.setVisibility(tvNoQuestions.VISIBLE);
+                    }
                 } else {
                     Log.d(TAG, "error querying replies");
                 }

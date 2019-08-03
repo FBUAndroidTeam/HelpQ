@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.student_views;
 
 import android.util.Log;
 import android.view.View;
@@ -24,7 +24,7 @@ public class StudentBoardFragment extends InboxFragment {
 
     // Query for public messages intended for all students
     protected void queryMessages() {
-        final ParseQuery<Question> query = QueryFactory.QuestionQuery.getStudentBoardMessages();
+        final ParseQuery<Question> query = QueryFactory.Questions.getStudentBoardMessages();
         query.findInBackground(new FindCallback<Question>() {
             @Override
             public void done(List<Question> objects, ParseException e) {

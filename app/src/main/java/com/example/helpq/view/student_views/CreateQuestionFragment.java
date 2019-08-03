@@ -1,9 +1,11 @@
-package com.example.helpq.view;
+package com.example.helpq.view.student_views;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,6 +90,7 @@ public class CreateQuestionFragment extends DialogFragment {
         tbWritten = view.findViewById(R.id.tbWritten);
 
         etQuestion = (EditText) view.findViewById(R.id.etQuestion);
+        etQuestion.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         btnSubmit = view.findViewById(R.id.btnSubmit);
 
         tvWaitTime = view.findViewById(R.id.tvWaitTime);
@@ -165,7 +168,7 @@ public class CreateQuestionFragment extends DialogFragment {
     }
 
     private void setupWaitTimes(@NonNull View view) {
-        final ParseQuery<WaitTime> query = QueryFactory.WaitTimeQuery.getAdminWaitTimes();
+        final ParseQuery<WaitTime> query = QueryFactory.WaitTimes.getAdminWaitTimes();
         query.findInBackground(new FindCallback<WaitTime>() {
             @Override
             public void done(List<WaitTime> objects, ParseException e) {
@@ -243,11 +246,13 @@ public class CreateQuestionFragment extends DialogFragment {
         newQuestion.setAsker(ParseUser.getCurrentUser());
         newQuestion.setIsArchived(false);
         newQuestion.setPriority(togglePrioritySelected.getText().toString());
+        Resources res = getContext().getResources();
         if (toggleHelpSelected.getText().toString().equals(getContext().getResources().getString(R.string.EMOJI_IN_PERSON))) {
             newQuestion.setHelpType(getContext().getResources().getString(R.string.in_person));
         } else {
-            newQuestion.setHelpType(getContext().getResources().getString(R.string.written));
+            newQuestion.setHelpType(res.getString(R.string.written));
         }
+
         newQuestion.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -265,7 +270,7 @@ public class CreateQuestionFragment extends DialogFragment {
     }
 
     private void notifyAdmin() {
-        ParseQuery<ParseUser> query = QueryFactory.UserQuery.getAdmin();
+        ParseQuery<ParseUser> query = QueryFactory.Users.getAdmin();
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {

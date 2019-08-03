@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Workshop;
-import com.example.helpq.view.StudentWorkshopFragment;
+import com.example.helpq.view.student_views.StudentWorkshopFragment;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;

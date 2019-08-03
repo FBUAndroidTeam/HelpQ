@@ -19,6 +19,7 @@ import com.example.helpq.R;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.User;
+import com.example.helpq.view.admin_views.AdminListFragment;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -120,7 +121,7 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
 
     //checks to see if username is taken already or not
     private void queryUsernameExists(final String username) {
-        ParseQuery<ParseUser> query = QueryFactory.UserQuery.getUserByUsername(username);
+        ParseQuery<ParseUser> query = QueryFactory.Users.getUserByUsername(username);
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {

@@ -1,9 +1,10 @@
-package com.example.helpq.view;
+package com.example.helpq.view.admin_views;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,6 +73,7 @@ public class AnswerQuestionFragment extends DialogFragment {
         tvStudent = view.findViewById(R.id.tvStudent);
         tvDescription = view.findViewById(R.id.tvQuestion);
         etAnswer = view.findViewById(R.id.etAnswer);
+        etAnswer.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         btnSubmit = view.findViewById(R.id.btnSubmit);
         tbPrivate = view.findViewById(R.id.tbPrivate);
 
@@ -148,7 +150,7 @@ public class AnswerQuestionFragment extends DialogFragment {
             for (int i = 0; i < likes.length(); i++) {
                 try {
                     String objectId = likes.getJSONObject(i).getString("objectId");
-                    ParseQuery<ParseUser> query = QueryFactory.UserQuery.getUserByObjectId(objectId);
+                    ParseQuery<ParseUser> query = QueryFactory.Users.getUserByObjectId(objectId);
                     query.findInBackground(new FindCallback<ParseUser>() {
                         @Override
                         public void done(List<ParseUser> objects, ParseException e) {

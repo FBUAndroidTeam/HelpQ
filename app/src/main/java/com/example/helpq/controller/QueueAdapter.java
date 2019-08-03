@@ -19,7 +19,7 @@ import com.example.helpq.model.Question;
 import com.example.helpq.model.User;
 import com.example.helpq.model.WaitTime;
 import com.example.helpq.model.WaitTimeHelper;
-import com.example.helpq.view.AnswerQuestionFragment;
+import com.example.helpq.view.admin_views.AnswerQuestionFragment;
 import com.example.helpq.view.QueueFragment;
 import com.example.helpq.view.ReplyQuestionFragment;
 import com.parse.FindCallback;
@@ -40,6 +40,10 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     private List<Question> mQuestions;
     private QueueFragment mQueueFragment;
     private static ClickListener mClickListener;
+
+    // Animation offsets
+    private int ADMIN_IN_PERSON_DELTAX = -300;
+    private int ADMIN_WRITTEN_DELTAX = -425;
 
     // Constructor
     public QueueAdapter(Context context, List<Question> questions, QueueFragment fragment) {
@@ -168,6 +172,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private String questionText;
         private int originalLines;
         private TextView tvWaitTime;
+        private boolean isSlideMenuOpen;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -201,44 +206,59 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             setLikeButton(ibLike, question.isLiked());
             setLikeText(question, tvLikes);
             setWaitTimeText(question, tvWaitTime);
+            isSlideMenuOpen = false;
         }
 
         private void adminSlideMenu(View v, int position) {
-            vQuestionView.startAnimation(slideRecyclerCell(v, -425));
-            ibDelete.setVisibility(ibDelete.VISIBLE);
-            ibView.setVisibility(ibView.VISIBLE);
+            ibDelete.setVisibility(View.VISIBLE);
+            ibView.setVisibility(View.VISIBLE);
             ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     archiveQuestion(getAdapterPosition());
                 }
             });
-            if(mQuestions.get(position).getHelpType()
-                    .equals(mContext.getResources().getString(R.string.written))) {
-                ibReply.setVisibility(ibReply.VISIBLE);
-                ibReply.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        answerQuestion(getAdapterPosition());
-                        ibDelete.setVisibility(View.GONE);
-                        ibReply.setVisibility(View.GONE);
-                        resetRecyclerCell();
-                    }
-                });
+
+            // If help is written, set written help slide animation
+            if (mQuestions.get(position).getHelpType()
+                    .equals(mContext.getResources().getString(R.string.written))
+                    && !isSlideMenuOpen) {
+                vQuestionView.startAnimation(slideRecyclerCell(v, ADMIN_WRITTEN_DELTAX));
+                setupAdminReply();
+            } else if (!isSlideMenuOpen) {
+                // Set in person slide animation
+                vQuestionView.startAnimation(slideRecyclerCell(v, ADMIN_IN_PERSON_DELTAX));
             }
+
             ibView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Question question = mQuestions.get(getAdapterPosition());
                     replyToQuestion(question);
-                    ibView.setVisibility(View.GONE);
-                    resetRecyclerCell();
+                    if (question.getHelpType()
+                            .equals(mContext.getResources().getString(R.string.written))) {
+                        resetRecyclerCell(ADMIN_WRITTEN_DELTAX);
+                    }
+                    else {
+                        resetRecyclerCell(ADMIN_IN_PERSON_DELTAX);
+                    }
+                }
+            });
+        }
+
+        private void setupAdminReply() {
+            ibReply.setVisibility(View.VISIBLE);
+            ibReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    answerQuestion(getAdapterPosition());
+                    resetRecyclerCell(ADMIN_WRITTEN_DELTAX);
                 }
             });
         }
 
         private void studentSlideMenu(View v, ParseUser currentUser) {
-            ibDelete.setVisibility(ibDelete.VISIBLE);
+            ibDelete.setVisibility(View.VISIBLE);
             final Question q = mQuestions.get(getAdapterPosition());
             if(User.getFullName(currentUser)
                     .equals(tvStudentName.getText().toString()) && q.getHelpType().equals("written")) {
@@ -253,7 +273,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
         private void currentUserWrittenMenu(View v, final Question q) {
             vQuestionView.startAnimation(slideRecyclerCell(v, -300));
-            ibDelete.setVisibility(ibDelete.VISIBLE);
+            ibDelete.setVisibility(View.VISIBLE);
             ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -262,8 +282,8 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     q.saveInBackground();
                     removeAt(getAdapterPosition());
                     mQueueFragment.createSnackbar(getAdapterPosition(), q);
-                    ibDelete.setVisibility(ibDelete.GONE);
-                    resetRecyclerCell();
+                    ibDelete.setVisibility(View.GONE);
+                    resetRecyclerCell(0);
                 }
             });
             ibView.setVisibility(View.VISIBLE);
@@ -272,14 +292,14 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 public void onClick(View v) {
                     replyToQuestion(mQuestions.get(getAdapterPosition()));
                     ibView.setVisibility(View.GONE);
-                    resetRecyclerCell();
+                    resetRecyclerCell(0);
                 }
             });
         }
 
         private void currentUserInpersonMenu(View v, final Question q) {
             vQuestionView.startAnimation(slideRecyclerCell(v, -150));
-            ibDelete.setVisibility(ibDelete.VISIBLE);
+            ibDelete.setVisibility(View.VISIBLE);
             ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -288,8 +308,8 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     q.saveInBackground();
                     removeAt(getAdapterPosition());
                     mQueueFragment.createSnackbar(getAdapterPosition(), q);
-                    ibDelete.setVisibility(ibDelete.GONE);
-                    resetRecyclerCell();
+                    ibDelete.setVisibility(View.GONE);
+                    resetRecyclerCell(0);
                 }
             });
         }
@@ -320,13 +340,13 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 public void onClick(View v) {
                     if(q.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
                         replyToQuestion(q);
-                        ibReply.setVisibility(ibReply.GONE);
+                        ibReply.setVisibility(View.GONE);
                     } else {
                         Toast.makeText(mContext,
                                 mContext.getResources().getString(R.string.reply_in_person_help),
                                 Toast.LENGTH_LONG).show();
                     }
-                    resetRecyclerCell();
+                    resetRecyclerCell(0);
                 }
             });
         }
@@ -340,6 +360,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             );
             animate.setDuration(300);
             animate.setFillAfter(true);
+            isSlideMenuOpen = true;
             return animate;
         }
 
@@ -384,22 +405,32 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
         @Override
         public void onClick(View v) {
-            if(originalLines > 1) {
+            if (originalLines > 1) {
                 setTextExpansion();
             }
-            hideActions(v);
-        }
 
-        private void hideActions(View v) {
-            mClickListener.onItemClick(getAdapterPosition(), v);
-            if(ibDelete.getVisibility() == View.VISIBLE || ibReply.getVisibility() == View.VISIBLE){
-                resetRecyclerCell();
+            boolean isWritten = mQuestions.get(getAdapterPosition())
+                    .getHelpType().equals(mContext.getResources().getString(R.string.written));
+
+            // Display correct slide-back menu
+            if (User.isAdmin(ParseUser.getCurrentUser())) {
+                if (isWritten) hideActions(v, ADMIN_WRITTEN_DELTAX);
+                else hideActions(v, ADMIN_IN_PERSON_DELTAX);
+            } else {
+                hideActions(v, 0);
             }
         }
 
-        private void resetRecyclerCell() {
+        private void hideActions(View v, int deltaX) {
+            if (isSlideMenuOpen) {
+                mClickListener.onItemClick(getAdapterPosition(), v);
+                resetRecyclerCell(deltaX);
+            }
+        }
+
+        private void resetRecyclerCell(int deltaX) {
             TranslateAnimation animate = new TranslateAnimation(
-                    itemView.getX(),
+                    itemView.getX() + deltaX,
                     0,
                     0,
                     0
@@ -407,10 +438,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             animate.setDuration(400);
             animate.setFillAfter(true);
             vQuestionView.startAnimation(animate);
-            ibDelete.setVisibility(View.GONE);
-            ibReply.setVisibility(View.GONE);
-            ibLike.setVisibility(View.GONE);
-            ibView.setVisibility(View.GONE);
+            isSlideMenuOpen = false;
         }
 
         @Override
@@ -438,7 +466,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     }
 
     private void setWaitTimeText(final Question question, final TextView view) {
-        final ParseQuery<WaitTime> query = QueryFactory.WaitTimeQuery.getAdminWaitTimes();
+        final ParseQuery<WaitTime> query = QueryFactory.WaitTimes.getAdminWaitTimes();
         query.findInBackground(new FindCallback<WaitTime>() {
             @Override
             public void done(List<WaitTime> objects, ParseException e) {
@@ -459,7 +487,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
     // Add the wait time of the newly archived question to the weighted average.
     private void updateWaitTime(final Question question) {
-        ParseQuery<WaitTime> query = QueryFactory.WaitTimeQuery.getAdminWaitTimes();
+        ParseQuery<WaitTime> query = QueryFactory.WaitTimes.getAdminWaitTimes();
         query.findInBackground(new FindCallback<WaitTime>() {
             @Override
             public void done(List<WaitTime> objects, ParseException e) {

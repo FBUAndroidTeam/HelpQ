@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.student_views;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

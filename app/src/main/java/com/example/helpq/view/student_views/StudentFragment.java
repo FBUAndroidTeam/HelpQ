@@ -1,4 +1,4 @@
-package com.example.helpq.view;
+package com.example.helpq.view.student_views;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -25,46 +25,45 @@ import com.parse.ParseQuery;
 
 import java.util.List;
 
-public class AdminFragment extends Fragment {
+public class StudentFragment extends Fragment {
 
-    public static final String TAG = "AdminFragment";
+    public static final String TAG = "StudentFragment";
     private FragmentPagerAdapter mAdapterViewPager;
     private ViewPager vpPager;
     private BottomNavigationView mNavigationView;
     private NotificationHelper mHelper;
 
-    public static AdminFragment newInstance() {
-        return new AdminFragment();
+    public static StudentFragment newInstance() {
+        return new StudentFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_admin, container, false);
+        return inflater.inflate(R.layout.fragment_student, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         vpPager = view.findViewById(R.id.vpPager);
-        mAdapterViewPager = new AdminPagerAdapter(getFragmentManager(), getContext());
-        mNavigationView = view.findViewById(R.id.admin_navigation);
+        mNavigationView = view.findViewById(R.id.student_navigation);
+        mAdapterViewPager = new StudentPagerAdapter(getFragmentManager(), getContext());
 
         vpPager.setAdapter(mAdapterViewPager);
         vpPager.setCurrentItem(2);
         mNavigationView.setSelectedItemId(R.id.action_queue);
-        vpPager.setOnPageChangeListener(new AdminPageChanger());
+        vpPager.setOnPageChangeListener(new StudentPageChanger());
 
         mHelper = new NotificationHelper(mNavigationView, getContext());
-
         addNotificationBadges();
         setupNavigationView();
     }
 
     // Add badges to the tabs that have notifications.
     private void addNotificationBadges() {
-        ParseQuery<Notification> query = QueryFactory.NotificationQuery.getNotifications();
+        ParseQuery<Notification> query = QueryFactory.Notifications.getNotifications();
         query.findInBackground(new FindCallback<Notification>() {
             @Override
             public void done(List<Notification> objects, ParseException e) {
@@ -74,9 +73,9 @@ public class AdminFragment extends Fragment {
                 }
 
                 int profileCount = 0;
-                int enrolledCount = 0;
-                int queueCount = 0;
                 int workshopsCount = 0;
+                int queueCount = 0;
+                int inboxCount = 0;
                 int boardCount = 0;
 
                 for (Notification notification : objects) {
@@ -85,13 +84,13 @@ public class AdminFragment extends Fragment {
                             profileCount++;
                             break;
                         case 1:
-                            enrolledCount++;
+                            workshopsCount++;
                             break;
                         case 2:
                             queueCount++;
                             break;
                         case 3:
-                            workshopsCount++;
+                            inboxCount++;
                             break;
                         case 4:
                             boardCount++;
@@ -100,9 +99,9 @@ public class AdminFragment extends Fragment {
                 }
 
                 if (profileCount > 0) mHelper.addBadge(R.id.action_profile, profileCount);
-                if (enrolledCount > 0) mHelper.addBadge(R.id.action_workshop, enrolledCount);
+                if (workshopsCount > 0) mHelper.addBadge(R.id.action_workshop, workshopsCount);
                 if (queueCount > 0) mHelper.addBadge(R.id.action_queue, queueCount);
-                if (workshopsCount > 0) mHelper.addBadge(R.id.action_inbox, workshopsCount);
+                if (inboxCount > 0) mHelper.addBadge(R.id.action_inbox, inboxCount);
                 if (boardCount > 0) mHelper.addBadge(R.id.action_board, boardCount);
             }
         });
@@ -110,15 +109,15 @@ public class AdminFragment extends Fragment {
 
     // Remove notifications badge from this tab, if one exists.
     private void removeNotificationBadges(int tab, final int itemId) {
-        ParseQuery<Notification> query = QueryFactory.NotificationQuery.getNotificationsForTab(tab);
+        ParseQuery<Notification> query = QueryFactory.Notifications.getNotificationsForTab(tab);
         query.findInBackground(new FindCallback<Notification>() {
             @Override
             public void done(List<Notification> objects, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error querying for notifications");
-                    return;
-                }
                 for (Notification notification : objects) {
+                    if (e != null) {
+                        Log.e(TAG, "Error querying for notifications");
+                        return;
+                    }
                     try {
                         notification.delete();
                     } catch (ParseException e1) {
@@ -134,36 +133,36 @@ public class AdminFragment extends Fragment {
     private void setupNavigationView() {
         mNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.action_profile:
-                                vpPager.setCurrentItem(0);
-                                return true;
-                            case R.id.action_enrolled:
-                                vpPager.setCurrentItem(1);
-                                return true;
-                            case R.id.action_queue:
-                                vpPager.setCurrentItem(2);
-                                return true;
-                            case R.id.action_workshop:
-                                vpPager.setCurrentItem(3);
-                                return true;
-                            case R.id.action_board:
-                                vpPager.setCurrentItem(4);
-                                return true;
-                        }
-                        return false;
-                    }
-                });
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.action_profile:
+                        vpPager.setCurrentItem(0);
+                        return true;
+                    case R.id.action_workshop:
+                        vpPager.setCurrentItem(1);
+                        return true;
+                    case R.id.action_queue:
+                        vpPager.setCurrentItem(2);
+                        return true;
+                    case R.id.action_inbox:
+                        vpPager.setCurrentItem(3);
+                        return true;
+                    case R.id.action_board:
+                        vpPager.setCurrentItem(4);
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
-    public static class AdminPagerAdapter extends FragmentPagerAdapter {
+    public static class StudentPagerAdapter extends FragmentPagerAdapter {
 
         private static int NUM_ITEMS = 5; // Number of pages
         private Context mContext;
 
-        public AdminPagerAdapter(FragmentManager fm, Context context) {
+        public StudentPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
             mContext = context;
         }
@@ -179,15 +178,15 @@ public class AdminFragment extends Fragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return AdminProfileFragment.newInstance();
+                    return StudentProfileFragment.newInstance();
                 case 1:
-                    return AdminEnrolledFragment.newInstance();
+                    return StudentWorkshopFragment.newInstance();
                 case 2:
-                    return AdminQueueFragment.newInstance();
+                    return StudentQueueFragment.newInstance();
                 case 3:
-                    return AdminWorkshopFragment.newInstance();
+                    return StudentInboxFragment.newInstance();
                 case 4:
-                    return AdminBoardFragment.newInstance();
+                    return StudentBoardFragment.newInstance();
                 default:
                     return null;
             }
@@ -200,11 +199,11 @@ public class AdminFragment extends Fragment {
                 case 0:
                     return mContext.getResources().getString(R.string.profile_tab);
                 case 1:
-                    return mContext.getResources().getString(R.string.enrolled_tab);
+                    return mContext.getResources().getString(R.string.workshops_tab);
                 case 2:
                     return mContext.getResources().getString(R.string.queue_tab);
                 case 3:
-                    return mContext.getResources().getString(R.string.workshops_tab);
+                    return mContext.getResources().getString(R.string.inbox_tab);
                 case 4:
                     return mContext.getResources().getString(R.string.board_tab);
                 default:
@@ -213,7 +212,7 @@ public class AdminFragment extends Fragment {
         }
     }
 
-    public class AdminPageChanger implements ViewPager.OnPageChangeListener {
+    public class StudentPageChanger implements ViewPager.OnPageChangeListener {
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -227,16 +226,16 @@ public class AdminFragment extends Fragment {
                     removeNotificationBadges(0, R.id.action_profile);
                     break;
                 case 1:
-                    mNavigationView.setSelectedItemId(R.id.action_enrolled);
-                    removeNotificationBadges(1, R.id.action_enrolled);
+                    mNavigationView.setSelectedItemId(R.id.action_workshop);
+                    removeNotificationBadges(1, R.id.action_workshop);
                     break;
                 case 2:
                     mNavigationView.setSelectedItemId(R.id.action_queue);
                     removeNotificationBadges(2, R.id.action_queue);
                     break;
                 case 3:
-                    mNavigationView.setSelectedItemId(R.id.action_workshop);
-                    removeNotificationBadges(3, R.id.action_workshop);
+                    mNavigationView.setSelectedItemId(R.id.action_inbox);
+                    removeNotificationBadges(3, R.id.action_inbox);
                     break;
                 case 4:
                     mNavigationView.setSelectedItemId(R.id.action_board);

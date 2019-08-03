@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Workshop;
-import com.example.helpq.view.AdminWorkshopFragment;
+import com.example.helpq.view.admin_views.AdminWorkshopFragment;
 import com.parse.ParseException;
 
 import java.util.List;

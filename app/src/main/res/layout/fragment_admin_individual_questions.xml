@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#55000000">
+    android:background="@color/colorSubtleGray">
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/ivProfilePic"
@@ -30,7 +30,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:text="TextView"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorFBBlue"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/rvIndividualQuestions"
@@ -78,10 +78,31 @@
         android:id="@+id/pbLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/rvIndividualQuestions"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/rvIndividualQuestions"
         app:layout_constraintStart_toStartOf="@+id/rvIndividualQuestions"
         app:layout_constraintTop_toTopOf="@+id/rvIndividualQuestions" />
+
+    <TextView
+        android:id="@+id/tvNoQuestions"
+        android:layout_width="249dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="516dp"
+        android:text="@string/no_pending_student"
+        android:textColor="@color/colorFBBlue"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.342"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivProfilePic"
+        app:layout_constraintVertical_bias="1.0" />
 
 </android.support.constraint.ConstraintLayout>
