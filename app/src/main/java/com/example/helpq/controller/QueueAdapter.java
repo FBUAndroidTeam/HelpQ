@@ -41,10 +41,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     private QueueFragment mQueueFragment;
     private static ClickListener mClickListener;
 
-    // Animation offsets
-    private int ADMIN_IN_PERSON_DELTAX = -300;
-    private int ADMIN_WRITTEN_DELTAX = -425;
-
     // Constructor
     public QueueAdapter(Context context, List<Question> questions, QueueFragment fragment) {
         mContext = context;
@@ -107,8 +103,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     }
 
     // Archives this question
-    private void archiveQuestion(final int adapterPosition) {
-        Question question = mQuestions.get(adapterPosition);
+    private void archiveQuestion(Question question, final int adapterPosition) {
         question.setIsArchived(true);
         question.setAnsweredAt(new Date(System.currentTimeMillis()));
         question.saveInBackground(new SaveCallback() {
@@ -156,23 +151,38 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener, View.OnLongClickListener {
 
+        // View that contains all the elements that slide
+        private View vQuestionView;
+
         // Layout fields of item_question
         private TextView tvStudentName;
         private TextView tvPriorityEmoji;
         private TextView tvHelpEmoji;
         private TextView tvDescription;
         private TextView tvStartTime;
-        private View vQuestionView;
+        private TextView tvLikes;
+        private TextView tvSeeMore;
+        private String questionText;
+        private TextView tvWaitTime;
+
+        // Number of lines (needed to implement See More)
+        private int originalLines;
+
+        // ImageButtons contained within hidden slide menu
         private ImageButton ibDelete;
         private ImageButton ibReply;
         private ImageButton ibLike;
-        private TextView tvLikes;
         private ImageButton ibView;
-        private TextView tvSeeMore;
-        private String questionText;
-        private int originalLines;
-        private TextView tvWaitTime;
+
+        // Boolean variables
         private boolean isSlideMenuOpen;
+        private boolean isAdmin;
+        private boolean isWritten;
+        private boolean isPeer;
+
+        // How much the menu should slide
+        private int iSlideDeltaX;
+
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -180,146 +190,97 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
 
+            // Find views
+            vQuestionView = itemView.findViewById(R.id.clQuestion);
             tvStudentName = itemView.findViewById(R.id.tvStudentName);
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
             tvHelpEmoji = itemView.findViewById(R.id.tvHelpEmoji);
             tvDescription = itemView.findViewById(R.id.tvQuestion);
-            vQuestionView = itemView.findViewById(R.id.clQuestion);
             tvStartTime = itemView.findViewById(R.id.tvAnswerTime);
+            tvLikes = itemView.findViewById(R.id.tvLikes);
+            tvSeeMore = itemView.findViewById(R.id.tvSeeMore);
+            tvWaitTime = itemView.findViewById(R.id.tvWaitTime);
             ibDelete = itemView.findViewById(R.id.ibDelete);
             ibReply = itemView.findViewById(R.id.ibReply);
             ibLike = itemView.findViewById(R.id.ibLike);
-            tvLikes = itemView.findViewById(R.id.tvLikes);
-            tvSeeMore = itemView.findViewById(R.id.tvSeeMore);
             ibView = itemView.findViewById(R.id.ibView);
-            tvWaitTime = itemView.findViewById(R.id.tvWaitTime);
+
         }
 
         // Bind the view elements to the Question.
-        public void bind(Question question) {
+        public void bind(final Question question) {
             tvStudentName.setText(question.getAsker().getString(Question.KEY_FULL_NAME));
             tvPriorityEmoji.setText(question.getPriority());
             questionText = question.getText();
             setInitialQuestionText();
             tvStartTime.setText(question.getCreatedTimeAgo());
             setHelpType(question.getHelpType());
-            setLikeButton(ibLike, question.isLiked());
+            setLikeButtonImage(ibLike, question.isLiked());
             setLikeText(question, tvLikes);
             setWaitTimeText(question, tvWaitTime);
+
+            isAdmin = User.isAdmin(ParseUser.getCurrentUser());
+            isWritten = question.getHelpType()
+                    .equals(mContext.getResources().getString(R.string.written));
+            isPeer = !User.getFullName(ParseUser.getCurrentUser())
+                    .equals(tvStudentName.getText().toString());
+
+            setupSlideDeltaX();
+            setupDeleteButton(question);
+            setupReplyButton(question);
+            setupLikeButton();
+            setupViewButton(question);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (originalLines > 1) {
+                setTextExpansion();
+            }
+
+            // Display correct slide-back menu
+            if (isAdmin) {
+                if (isWritten) hideActions(v, iSlideDeltaX);
+                else hideActions(v, iSlideDeltaX);
+            } else {
+                hideActions(v, iSlideDeltaX);
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            mClickListener.onItemLongClick(getAdapterPosition(), v);
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            if (isAdmin) {
+                adminSlideMenu(v);
+            } else {
+                studentSlideMenu(v, currentUser);
+            }
+            return true;
+        }
+
+        private void setupViewButton(final Question question) {
+            ibView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    replyToQuestion(question);
+                    resetRecyclerCell(iSlideDeltaX);
+                }
+            });
+            ibView.setClickable(false);
+        }
+
+        private void setupSlideDeltaX() {
+            if (isAdmin && isWritten) iSlideDeltaX = -425;
+            if (isAdmin && !isWritten) iSlideDeltaX = -300;
+            if (!isAdmin && isWritten) iSlideDeltaX = -300;
+            if (!isAdmin && !isWritten) iSlideDeltaX = -150;
+            if (isPeer && isWritten) iSlideDeltaX = -300;
+            if (isPeer && !isWritten) iSlideDeltaX = -300;
             isSlideMenuOpen = false;
         }
 
-        private void adminSlideMenu(View v, int position) {
-            ibDelete.setVisibility(View.VISIBLE);
-            ibView.setVisibility(View.VISIBLE);
-            ibDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    archiveQuestion(getAdapterPosition());
-                }
-            });
-
-            // If help is written, set written help slide animation
-            if (mQuestions.get(position).getHelpType()
-                    .equals(mContext.getResources().getString(R.string.written))
-                    && !isSlideMenuOpen) {
-                vQuestionView.startAnimation(slideRecyclerCell(v, ADMIN_WRITTEN_DELTAX));
-                setupAdminReply();
-            } else if (!isSlideMenuOpen) {
-                // Set in person slide animation
-                vQuestionView.startAnimation(slideRecyclerCell(v, ADMIN_IN_PERSON_DELTAX));
-            }
-
-            ibView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Question question = mQuestions.get(getAdapterPosition());
-                    replyToQuestion(question);
-                    if (question.getHelpType()
-                            .equals(mContext.getResources().getString(R.string.written))) {
-                        resetRecyclerCell(ADMIN_WRITTEN_DELTAX);
-                    }
-                    else {
-                        resetRecyclerCell(ADMIN_IN_PERSON_DELTAX);
-                    }
-                }
-            });
-        }
-
-        private void setupAdminReply() {
-            ibReply.setVisibility(View.VISIBLE);
-            ibReply.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    answerQuestion(getAdapterPosition());
-                    resetRecyclerCell(ADMIN_WRITTEN_DELTAX);
-                }
-            });
-        }
-
-        private void studentSlideMenu(View v, ParseUser currentUser) {
-            ibDelete.setVisibility(View.VISIBLE);
-            final Question q = mQuestions.get(getAdapterPosition());
-            if(User.getFullName(currentUser)
-                    .equals(tvStudentName.getText().toString()) && q.getHelpType().equals("written")) {
-                currentUserWrittenMenu(v, q);
-            } else if(User.getFullName(currentUser)
-                    .equals(tvStudentName.getText().toString()) && q.getHelpType().equals("in-person")) {
-                currentUserInpersonMenu(v, q);
-            } else {
-                peerQuestionMenu(v, q);
-            }
-        }
-
-        private void currentUserWrittenMenu(View v, final Question q) {
-            vQuestionView.startAnimation(slideRecyclerCell(v, -300));
-            ibDelete.setVisibility(View.VISIBLE);
-            ibDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    q.setIsArchived(true);
-                    q.setAnsweredAt(Calendar.getInstance().getTime());
-                    q.saveInBackground();
-                    removeAt(getAdapterPosition());
-                    mQueueFragment.createSnackbar(getAdapterPosition(), q);
-                    ibDelete.setVisibility(View.GONE);
-                    resetRecyclerCell(0);
-                }
-            });
-            ibView.setVisibility(View.VISIBLE);
-            ibView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    replyToQuestion(mQuestions.get(getAdapterPosition()));
-                    ibView.setVisibility(View.GONE);
-                    resetRecyclerCell(0);
-                }
-            });
-        }
-
-        private void currentUserInpersonMenu(View v, final Question q) {
-            vQuestionView.startAnimation(slideRecyclerCell(v, -150));
-            ibDelete.setVisibility(View.VISIBLE);
-            ibDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    q.setIsArchived(true);
-                    q.setAnsweredAt(Calendar.getInstance().getTime());
-                    q.saveInBackground();
-                    removeAt(getAdapterPosition());
-                    mQueueFragment.createSnackbar(getAdapterPosition(), q);
-                    ibDelete.setVisibility(View.GONE);
-                    resetRecyclerCell(0);
-                }
-            });
-        }
-
-        private void peerQuestionMenu(View v, final Question q) {
-            vQuestionView.startAnimation(slideRecyclerCell(v, -300));
-            ibReply.setVisibility(View.VISIBLE);
-            ibDelete.setVisibility(View.GONE);
-            ibLike.setVisibility(View.VISIBLE);
-
+        private void setupLikeButton() {
             ibLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -331,24 +292,102 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                         question.unlikeQuestion(ParseUser.getCurrentUser());
                     }
                     question.saveInBackground();
-                    setLikeButton(ibLike, !isLiked);
+                    setLikeButtonImage(ibLike, !isLiked);
                     setLikeText(question, tvLikes);
                 }
             });
+            ibLike.setClickable(false);
+        }
+
+        private void setupReplyButton(final Question question) {
             ibReply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(q.getHelpType().equals(mContext.getResources().getString(R.string.written))) {
-                        replyToQuestion(q);
-                        ibReply.setVisibility(View.GONE);
+                    if (isAdmin) {
+                        answerQuestion(getAdapterPosition());
                     } else {
-                        Toast.makeText(mContext,
-                                mContext.getResources().getString(R.string.reply_in_person_help),
-                                Toast.LENGTH_LONG).show();
+                        if (isWritten) {
+                            replyToQuestion(question);
+                        } else {
+                            Toast.makeText(mContext,
+                                    mContext.getResources().getString(R.string.reply_in_person_help),
+                                    Toast.LENGTH_LONG).show();
+                        }
                     }
-                    resetRecyclerCell(0);
+                    resetRecyclerCell(iSlideDeltaX);
                 }
             });
+            ibReply.setClickable(false);
+        }
+
+        private void setupDeleteButton(final Question question) {
+            ibDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isAdmin) {
+                        archiveQuestion(question, getAdapterPosition());
+                    } else {
+                        question.setIsArchived(true);
+                        question.setAnsweredAt(Calendar.getInstance().getTime());
+                        question.saveInBackground();
+                        removeAt(getAdapterPosition());
+                        mQueueFragment.createSnackbar(getAdapterPosition(), question);
+                        ibDelete.setVisibility(View.GONE);
+                        resetRecyclerCell(iSlideDeltaX);
+                    }
+                }
+            });
+            ibDelete.setClickable(false);
+        }
+
+        private void adminSlideMenu(View v) {
+            ibDelete.setVisibility(View.VISIBLE);
+            ibView.setVisibility(View.VISIBLE);
+            ibDelete.setClickable(true);
+            ibView.setClickable(true);
+            if (isWritten) {
+                ibReply.setVisibility(View.VISIBLE);
+                ibReply.setClickable(true);
+            }
+            vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
+        }
+
+        private void studentSlideMenu(View v, ParseUser currentUser) {
+            ibDelete.setVisibility(View.VISIBLE);
+            final Question q = mQuestions.get(getAdapterPosition());
+
+            if (isPeer) {
+                peerQuestionMenu(v, q);
+                return;
+            }
+            if (isWritten) {
+                currentUserWrittenMenu(v, q);
+                return;
+            }
+            currentUserInpersonMenu(v, q);
+        }
+
+        private void currentUserWrittenMenu(View v, final Question q) {
+            vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
+            ibDelete.setVisibility(View.VISIBLE);
+            ibDelete.setClickable(true);
+            ibView.setVisibility(View.VISIBLE);
+            ibView.setClickable(true);
+        }
+
+        private void currentUserInpersonMenu(View v, final Question q) {
+            vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
+            ibDelete.setVisibility(View.VISIBLE);
+            ibDelete.setClickable(true);
+        }
+
+        private void peerQuestionMenu(View v, final Question q) {
+            vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
+            ibReply.setVisibility(View.VISIBLE);
+            ibReply.setClickable(true);
+            ibDelete.setVisibility(View.GONE);
+            ibLike.setVisibility(View.VISIBLE);
+            ibLike.setClickable(true);
         }
 
         private TranslateAnimation slideRecyclerCell(View v, int deltaX) {
@@ -382,7 +421,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     tvDescription.setText(questionText);
                     tvDescription.setMaxLines(1);
                     originalLines = tvDescription.getLineCount();
-                    if(originalLines > 1) {
+                    if (originalLines > 1) {
                         tvSeeMore.setVisibility(View.VISIBLE);
                     } else {
                         tvSeeMore.setVisibility(View.GONE);
@@ -403,24 +442,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             }
         }
 
-        @Override
-        public void onClick(View v) {
-            if (originalLines > 1) {
-                setTextExpansion();
-            }
-
-            boolean isWritten = mQuestions.get(getAdapterPosition())
-                    .getHelpType().equals(mContext.getResources().getString(R.string.written));
-
-            // Display correct slide-back menu
-            if (User.isAdmin(ParseUser.getCurrentUser())) {
-                if (isWritten) hideActions(v, ADMIN_WRITTEN_DELTAX);
-                else hideActions(v, ADMIN_IN_PERSON_DELTAX);
-            } else {
-                hideActions(v, 0);
-            }
-        }
-
         private void hideActions(View v, int deltaX) {
             if (isSlideMenuOpen) {
                 mClickListener.onItemClick(getAdapterPosition(), v);
@@ -437,29 +458,17 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             );
             animate.setDuration(300);
             animate.setFillAfter(true);
-            ibLike.setOnClickListener(null);
-            ibView.setOnClickListener(null);
-            ibReply.setOnClickListener(null);
-            ibDelete.setOnClickListener(null);
+            ibLike.setClickable(false);
+            ibView.setClickable(false);
+            ibReply.setClickable(false);
+            ibDelete.setClickable(false);
             vQuestionView.startAnimation(animate);
             isSlideMenuOpen = false;
         }
-
-        @Override
-        public boolean onLongClick(View v) {
-            mClickListener.onItemLongClick(getAdapterPosition(), v);
-            ParseUser currentUser = ParseUser.getCurrentUser();
-            if (User.isAdmin(currentUser)) {
-                adminSlideMenu(v, getAdapterPosition());
-            } else {
-                studentSlideMenu(v, currentUser);
-            }
-            return true;
-        }
     }
 
-    // Set the like button, depending on whether it is active.
-    private void setLikeButton(ImageButton ib, boolean isActive) {
+    // Set the like button image, depending on whether it is active.
+    private void setLikeButtonImage(ImageButton ib, boolean isActive) {
         ib.setBackgroundResource(isActive ? R.drawable.heart_icon_active : R.drawable.heart_icon);
     }
 

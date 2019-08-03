@@ -169,8 +169,8 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                     setLikeText(question, tvLikes);
                 }
             });
-            ibView.setEnabled(false);
-            ibLike.setEnabled(false);
+            ibView.setClickable(false);
+            ibLike.setClickable(false);
             isSlideMenuOpen = false;
         }
 
@@ -217,8 +217,8 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             animate.setFillAfter(true);
             vQuestionView.startAnimation(animate);
             isSlideMenuOpen = false;
-            ibView.setEnabled(false);
-            ibLike.setEnabled(false);
+            ibView.setClickable(false);
+            ibLike.setClickable(false);
         }
 
         private void studentMenu(View v) {
@@ -227,8 +227,8 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             }
             ibView.setVisibility(View.VISIBLE);
             ibLike.setVisibility(View.VISIBLE);
-            ibView.setEnabled(true);
-            ibLike.setEnabled(true);
+            ibView.setClickable(true);
+            ibLike.setClickable(true);
         }
 
         private void adminMenu(View v) {
@@ -237,7 +237,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             }
             ibLike.setVisibility(View.GONE);
             ibView.setVisibility(View.VISIBLE);
-            ibView.setEnabled(true);
+            ibView.setClickable(true);
         }
     }
 }
