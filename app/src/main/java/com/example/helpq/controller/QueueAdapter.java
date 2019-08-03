@@ -259,6 +259,16 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             return true;
         }
 
+        private void setupSlideDeltaX() {
+            if (isAdmin && isWritten) iSlideDeltaX = -425;
+            if (isAdmin && !isWritten) iSlideDeltaX = -300;
+            if (!isAdmin && isWritten) iSlideDeltaX = -300;
+            if (!isAdmin && !isWritten) iSlideDeltaX = -160;
+            if (isPeer && isWritten) iSlideDeltaX = -300;
+            if (isPeer && !isWritten) iSlideDeltaX = -160;
+            isSlideMenuOpen = false;
+        }
+
         private void setupViewButton(final Question question) {
             ibView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -268,16 +278,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 }
             });
             ibView.setClickable(false);
-        }
-
-        private void setupSlideDeltaX() {
-            if (isAdmin && isWritten) iSlideDeltaX = -425;
-            if (isAdmin && !isWritten) iSlideDeltaX = -300;
-            if (!isAdmin && isWritten) iSlideDeltaX = -300;
-            if (!isAdmin && !isWritten) iSlideDeltaX = -150;
-            if (isPeer && isWritten) iSlideDeltaX = -300;
-            if (isPeer && !isWritten) iSlideDeltaX = -300;
-            isSlideMenuOpen = false;
+            ibView.setVisibility(View.GONE);
         }
 
         private void setupLikeButton() {
@@ -297,6 +298,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 }
             });
             ibLike.setClickable(false);
+            ibLike.setVisibility(View.GONE);
         }
 
         private void setupReplyButton(final Question question) {
@@ -306,18 +308,13 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     if (isAdmin) {
                         answerQuestion(getAdapterPosition());
                     } else {
-                        if (isWritten) {
-                            replyToQuestion(question);
-                        } else {
-                            Toast.makeText(mContext,
-                                    mContext.getResources().getString(R.string.reply_in_person_help),
-                                    Toast.LENGTH_LONG).show();
-                        }
+                        replyToQuestion(question);
                     }
                     resetRecyclerCell(iSlideDeltaX);
                 }
             });
             ibReply.setClickable(false);
+            ibReply.setVisibility(View.GONE);
         }
 
         private void setupDeleteButton(final Question question) {
@@ -338,6 +335,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 }
             });
             ibDelete.setClickable(false);
+            ibDelete.setVisibility(View.GONE);
         }
 
         private void adminSlideMenu(View v) {
@@ -349,7 +347,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 ibReply.setVisibility(View.VISIBLE);
                 ibReply.setClickable(true);
             }
-            vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
+            if (!isSlideMenuOpen) {
+                vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
+            }
         }
 
         private void studentSlideMenu(View v, ParseUser currentUser) {
@@ -368,7 +368,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         }
 
         private void currentUserWrittenMenu(View v, final Question q) {
-            vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
+            if (!isSlideMenuOpen) {
+                vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
+            }
             ibDelete.setVisibility(View.VISIBLE);
             ibDelete.setClickable(true);
             ibView.setVisibility(View.VISIBLE);
@@ -376,18 +378,24 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         }
 
         private void currentUserInpersonMenu(View v, final Question q) {
-            vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
+            if (!isSlideMenuOpen) {
+                vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
+            }
             ibDelete.setVisibility(View.VISIBLE);
             ibDelete.setClickable(true);
         }
 
         private void peerQuestionMenu(View v, final Question q) {
-            vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
-            ibReply.setVisibility(View.VISIBLE);
-            ibReply.setClickable(true);
-            ibDelete.setVisibility(View.GONE);
+            if (!isSlideMenuOpen) {
+                vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
+            }
+            if (isWritten) {
+                ibReply.setVisibility(View.VISIBLE);
+                ibReply.setClickable(true);
+            }
             ibLike.setVisibility(View.VISIBLE);
             ibLike.setClickable(true);
+            ibDelete.setVisibility(View.GONE);
         }
 
         private TranslateAnimation slideRecyclerCell(View v, int deltaX) {
