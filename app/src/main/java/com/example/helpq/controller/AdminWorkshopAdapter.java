@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.helpq.R;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.Workshop;
 import com.example.helpq.view.admin_views.AdminWorkshopFragment;
 import com.parse.ParseException;
@@ -96,6 +97,7 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
             ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Sound.delete(mContext);
                     deleteWorkshop(mWorkshops.get(getAdapterPosition()));
                     removeAt(getAdapterPosition());
                 }

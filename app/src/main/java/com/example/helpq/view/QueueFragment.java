@@ -119,6 +119,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                Sound.refreshPage(getContext());
                 fetchQueueAsync(svQueueSearch.getQuery().toString());
             }
         });

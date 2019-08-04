@@ -42,4 +42,16 @@ public class Sound {
         player = MediaPlayer.create(context, R.raw.zapsplat_cartoon_pop_mouth_006_28806);
         player.start();
     }
+
+    public static void delete(Context context) {
+        player = MediaPlayer.create(context, R.raw.technology_laptop_notebook_delete_key_press);
+        player.start();
+    }
+
+    public static void refreshPage(Context context) {
+        player = MediaPlayer.create(context, R.raw.zapsplat_cartoon_slip_trip_up_001_18133);
+        player.start();
+    }
+
+
 }

@@ -101,6 +101,7 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                Sound.refreshPage(getContext());
                 fetchWorkshopsAsync();
             }
         });

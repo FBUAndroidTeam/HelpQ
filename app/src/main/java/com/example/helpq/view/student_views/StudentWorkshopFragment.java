@@ -28,6 +28,7 @@ import com.example.helpq.controller.StudentWorkshopAdapter;
 import com.example.helpq.model.AlertReceiver;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.model.Workshop;
 import com.parse.FindCallback;
@@ -103,6 +104,7 @@ public class StudentWorkshopFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                Sound.refreshPage(getContext());
                 fetchQueueAsync();
             }
         });

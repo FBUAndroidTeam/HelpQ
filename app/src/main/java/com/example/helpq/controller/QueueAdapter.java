@@ -338,6 +338,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Sound.delete(mContext);
                     if (isAdmin) {
                         archiveQuestion(question, getAdapterPosition());
                     } else {

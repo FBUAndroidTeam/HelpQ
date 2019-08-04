@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.helpq.R;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.view.admin_views.AdminEnrolledFragment;
 import com.example.helpq.view.admin_views.AdminIndividualQuestionsFragment;
@@ -72,6 +73,7 @@ public class EnrolledStudentsAdapter extends
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Sound.fabPopUp(mContext);
                     AdminIndividualQuestionsFragment fragment = AdminIndividualQuestionsFragment
                             .newInstance(mEnrolledStudents.get(getAdapterPosition()));
                     fragment.setTargetFragment(mAdminEnrolledFragment, 300);

@@ -22,6 +22,7 @@ import com.example.helpq.R;
 import com.example.helpq.controller.InboxAdapter;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Search;
+import com.example.helpq.model.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +109,7 @@ public class InboxFragment extends Fragment {
         mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                Sound.refreshPage(getContext());
                 fetchInboxAsync(svSearch.getQuery().toString());
             }
         });
