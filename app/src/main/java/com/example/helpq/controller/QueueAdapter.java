@@ -444,6 +444,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvDescription.post(new Runnable() {
                 @Override
                 public void run() {
+                    tvDescription.setMaxLines(Integer.MAX_VALUE);
                     tvDescription.setText(questionText);
                     tvDescription.setMaxLines(1);
                     originalLines = tvDescription.getLineCount();
@@ -451,7 +452,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                         tvSeeMore.setVisibility(View.VISIBLE);
                     } else {
                         tvSeeMore.setVisibility(View.GONE);
-                        tvDescription.setMaxLines(Integer.MAX_VALUE);
                     }
                 }
             });
