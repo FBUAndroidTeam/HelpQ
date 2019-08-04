@@ -22,7 +22,8 @@ public class StudentInboxFragment extends InboxFragment {
     }
 
     // Query for messages intended for this student
-    protected void queryMessages() {
+    protected void queryMessages(final String input) {
+        pbLoading.setVisibility(View.VISIBLE);
         final ParseQuery<Question> query = QueryFactory.Questions.getStudentInboxMessages();
         query.findInBackground(new FindCallback<Question>() {
             @Override
@@ -41,13 +42,11 @@ public class StudentInboxFragment extends InboxFragment {
 
                 // Retrieve the messages that should be displayed
                 List<Question> messages = getInboxMessages(objects);
-                mMessages.addAll(messages);
                 mAllMessages.addAll(messages);
-                mAdapter.notifyDataSetChanged();
-                pbLoading.setVisibility(View.INVISIBLE);
+                findMatches(input);
 
                 // Display a notice if the user has no messages
-                if (mMessages.size() == 0) {
+                if (messages.size() == 0) {
                     tvNotice.setVisibility(View.VISIBLE);
                 }
             }

@@ -73,7 +73,7 @@ public class InboxFragment extends Fragment {
         rvMessages.setLayoutManager(layoutManager);
 
         setupSwipeToRefresh(view);
-        queryMessages();
+        queryMessages("");
         search();
 
         mAdapter.setOnItemClickListener(new InboxAdapter.ClickListener() {
@@ -125,11 +125,7 @@ public class InboxFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText.isEmpty()) {
-                    mMessages.clear();
-                    queryMessages();
-                    return false;
-                } else {
+                if (!newText.isEmpty()) {
                     tvSearch.setVisibility(View.GONE);
                 }
                 findMatches(newText);
@@ -139,31 +135,37 @@ public class InboxFragment extends Fragment {
     }
 
     // Search for matches, and add them to the list to be displayed.
-    protected void findMatches(String query) {
-        List<Question> result = Search.mSearch(mAllMessages, query);
+    protected void findMatches(String input) {
         mMessages.clear();
-        mMessages.addAll(result);
+
+        // If input is empty, display all messages; else, display all matches
+        if (input.isEmpty()) {
+            mMessages.addAll(mAllMessages);
+        } else {
+            List<Question> result = Search.mSearch(mAllMessages, input);
+            mMessages.addAll(result);
+        }
         mAdapter.notifyDataSetChanged();
-        if (mMessages.size() == 0) {
+
+        // Display a notice if no results match the search
+        if (mMessages.size() == 0 && mAllMessages.size() != 0) {
             tvSearchNotice.setVisibility(View.VISIBLE);
         }
-        else {
-            tvSearchNotice.setVisibility(View.GONE);
-        }
+        else tvSearchNotice.setVisibility(View.GONE);
+
         pbLoading.setVisibility(View.INVISIBLE);
     }
 
     // Reload inbox.
-    protected void fetchInboxAsync(String query) {
+    protected void fetchInboxAsync(String input) {
         mAdapter.clear();
         tvNotice.setVisibility(View.GONE);
         tvSearchNotice.setVisibility(View.GONE);
-        if ((query.isEmpty())) queryMessages();
-        else findMatches(query);
+        queryMessages(input);
         swipeContainer.setRefreshing(false);
     }
 
     // Query for messages intended for the current user
-    protected void queryMessages() {
+    protected void queryMessages(String input) {
     }
 }
