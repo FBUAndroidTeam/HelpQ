@@ -28,6 +28,7 @@ import com.example.helpq.R;
 import com.example.helpq.controller.ReplyAdapter;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Reply;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.parse.FindCallback;
@@ -128,6 +129,7 @@ public class ReplyQuestionFragment extends DialogFragment {
         ibCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Sound.closeWindow(getContext());
                 dismiss();
             }
         });

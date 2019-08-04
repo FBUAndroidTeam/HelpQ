@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.helpq.R;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Notification;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.model.Workshop;
 import com.parse.FindCallback;
@@ -117,6 +118,7 @@ public class CreateWorkshopFragment extends DialogFragment {
         ibCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Sound.closeWindow(getContext());
                 dismiss();
             }
         });

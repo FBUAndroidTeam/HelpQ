@@ -23,6 +23,7 @@ import com.example.helpq.R;
 import com.example.helpq.controller.AdminWorkshopAdapter;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.QueryFactory;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.Workshop;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -67,6 +68,7 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
         fabAddWorkshop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Sound.fabPopUp(getContext());
                 CreateWorkshopFragment createWorkshopFragment =
                         CreateWorkshopFragment.newInstance("Some Title");
                 createWorkshopFragment.setTargetFragment(AdminWorkshopFragment.this,

@@ -19,6 +19,7 @@ import com.example.helpq.R;
 import com.example.helpq.model.Notification;
 import com.example.helpq.model.NotificationHelper;
 import com.example.helpq.model.QueryFactory;
+import com.example.helpq.model.Sound;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -245,6 +246,7 @@ public class AdminFragment extends Fragment {
                 default:
                     break;
             }
+            Sound.swipePages(getContext());
         }
         @Override
         public void onPageScrollStateChanged(int state) {

@@ -16,12 +16,13 @@ import android.widget.Toast;
 import com.example.helpq.R;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.model.WaitTime;
 import com.example.helpq.model.WaitTimeHelper;
-import com.example.helpq.view.admin_views.AnswerQuestionFragment;
 import com.example.helpq.view.QueueFragment;
 import com.example.helpq.view.ReplyQuestionFragment;
+import com.example.helpq.view.admin_views.AnswerQuestionFragment;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -246,11 +247,14 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         @Override
         public void onClick(View v) {
             // Display correct slide-back menu
-            if (isAdmin) {
-                if (isWritten) hideActions(v, iSlideDeltaX);
-                else hideActions(v, iSlideDeltaX);
-            } else {
-                hideActions(v, iSlideDeltaX);
+            if(isSlideMenuOpen) {
+                Sound.slideBack(mContext);
+                if (isAdmin) {
+                    if (isWritten) hideActions(v, iSlideDeltaX);
+                    else hideActions(v, iSlideDeltaX);
+                } else {
+                    hideActions(v, iSlideDeltaX);
+                }
             }
         }
 
@@ -258,10 +262,13 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         public boolean onLongClick(View v) {
             mClickListener.onItemLongClick(getAdapterPosition(), v);
             ParseUser currentUser = ParseUser.getCurrentUser();
-            if (isAdmin) {
-                adminSlideMenu(v);
-            } else {
-                studentSlideMenu(v, currentUser);
+            if(!isSlideMenuOpen) {
+                Sound.slideMenuSound(mContext);
+                if (isAdmin) {
+                    adminSlideMenu(v);
+                } else {
+                    studentSlideMenu(v, currentUser);
+                }
             }
             return true;
         }
@@ -280,6 +287,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             ibView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Sound.fabPopUp(mContext);
                     replyToQuestion(question);
                     resetRecyclerCell(iSlideDeltaX);
                 }
@@ -292,6 +300,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             ibLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Sound.likeClicked(mContext);
                     Question question = mQuestions.get(getAdapterPosition());
                     boolean isLiked = question.isLiked();
                     if (!isLiked) {
@@ -312,6 +321,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             ibReply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Sound.fabPopUp(mContext);
                     if (isAdmin) {
                         answerQuestion(getAdapterPosition());
                     } else {

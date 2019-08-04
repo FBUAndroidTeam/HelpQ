@@ -24,6 +24,7 @@ import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Notification;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.WaitTime;
 import com.example.helpq.model.WaitTimeHelper;
 import com.parse.FindCallback;
@@ -116,6 +117,7 @@ public class CreateQuestionFragment extends DialogFragment {
         ibCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Sound.closeWindow(getContext());
                 dismiss();
             }
         });

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.helpq.R;
+import com.example.helpq.model.Sound;
 import com.example.helpq.view.QueueFragment;
 
 public class StudentQueueFragment extends Fragment {
@@ -42,6 +43,7 @@ public class StudentQueueFragment extends Fragment {
         fabCreateQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Sound.fabPopUp(getContext());
                 FragmentManager fm = getChildFragmentManager();
                 CreateQuestionFragment createQuestionFragment =
                         CreateQuestionFragment.newInstance("Some Title");

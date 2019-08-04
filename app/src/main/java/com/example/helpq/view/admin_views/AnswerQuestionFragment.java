@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -20,6 +21,7 @@ import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Notification;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.model.WaitTime;
 import com.example.helpq.model.WaitTimeHelper;
@@ -39,6 +41,7 @@ public class AnswerQuestionFragment extends DialogFragment {
 
     public static final String TAG = "AnswerQuestionFragment";
     private Question mQuestion;
+    private ImageButton ibCancel;
 
     // Layout fields
     private TextView tvStudent;
@@ -76,6 +79,8 @@ public class AnswerQuestionFragment extends DialogFragment {
         etAnswer.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         btnSubmit = view.findViewById(R.id.btnSubmit);
         tbPrivate = view.findViewById(R.id.tbPrivate);
+        ibCancel = view.findViewById(R.id.ibCancel);
+        setCancelButton();
 
         // Show soft keyboard automatically and request focus to text
         etAnswer.requestFocus();
@@ -84,6 +89,16 @@ public class AnswerQuestionFragment extends DialogFragment {
         tvStudent.setText(studentName + "'s question:");
         tvDescription.setText(mQuestion.getText());
         setupSubmitButton();
+    }
+
+    private void setCancelButton() {
+        ibCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Sound.closeWindow(getContext());
+                dismiss();
+            }
+        });
     }
 
     private void setupSubmitButton() {

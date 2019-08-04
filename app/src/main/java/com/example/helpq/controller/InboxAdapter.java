@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.view.student_views.InboxFragment;
 import com.example.helpq.view.ReplyQuestionFragment;
@@ -150,6 +151,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             ibView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Sound.fabPopUp(mContext);
                     replyToQuestion(mMessages.get(getAdapterPosition()));
                     resetRecyclerCell(iSlideDeltaX);
                 }
@@ -157,6 +159,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             ibLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Sound.likeClicked(mContext);
                     Question question = mMessages.get(getAdapterPosition());
                     boolean isLiked = question.isLiked();
                     if (!isLiked) {
@@ -177,6 +180,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         @Override
         public void onClick(View v) {
             if (isSlideMenuOpen) {
+                Sound.slideBack(mContext);
                 resetRecyclerCell(iSlideDeltaX);
             }
         }
@@ -184,12 +188,14 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         @Override
         public boolean onLongClick(View v) {
             mClickListener.onItemLongClick(getAdapterPosition(), v);
-            if (User.isAdmin(ParseUser.getCurrentUser())) {
-                adminMenu(v);
-            } else {
-                studentMenu(v);
+            if(!isSlideMenuOpen) {
+                Sound.slideMenuSound(mContext);
+                if (User.isAdmin(ParseUser.getCurrentUser())) {
+                    adminMenu(v);
+                } else {
+                    studentMenu(v);
+                }
             }
-
             return true;
         }
 
