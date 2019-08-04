@@ -53,7 +53,6 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        setRetainInstance(true);
         return inflater.inflate(R.layout.fragment_queue, container, false);
     }
 
@@ -123,7 +122,10 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        getRetainInstance();
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ||
+                newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
     }
 
     private void queryQuestions() {
@@ -242,10 +244,11 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                tvSearchNotice.setVisibility(View.GONE);
                 if (newText.isEmpty()) {
                     mQuestions.clear();
                     queryQuestions();
+                } else {
+                    tvSearchNotice.setVisibility(View.GONE);
                 }
                 return false;
             }

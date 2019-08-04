@@ -1,5 +1,6 @@
 package com.example.helpq.view;
 
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -140,7 +142,7 @@ public class ReplyQuestionFragment extends DialogFragment {
     private void submitReply() {
         btnReply.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if(!etReply.getText().toString().equals("")) {
                     final Reply newReply = new Reply();
                     newReply.setText(etReply.getText().toString());
@@ -152,7 +154,9 @@ public class ReplyQuestionFragment extends DialogFragment {
                         public void done(ParseException e) {
                             if (e == null) {
                                 etReply.setText("");
-                                //hide keyboard
+                                ((InputMethodManager) getContext()
+                                        .getSystemService(Activity.INPUT_METHOD_SERVICE))
+                                        .hideSoftInputFromWindow(v.getWindowToken(), 0);
                                 mReplies.add(newReply);
                                 adapter.notifyItemInserted(mReplies.size() - 1);
                                 rvReplies.getLayoutManager().scrollToPosition(mReplies.size() - 1);
