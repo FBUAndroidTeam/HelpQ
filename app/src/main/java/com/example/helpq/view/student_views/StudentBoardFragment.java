@@ -50,6 +50,7 @@ public class StudentBoardFragment extends InboxFragment {
                 if (messages.size() == 0) {
                     tvNotice.setVisibility(View.VISIBLE);
                 }
+                runLayoutAnimation();
             }
         });
     }

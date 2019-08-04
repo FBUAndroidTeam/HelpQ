@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -42,7 +44,7 @@ public class StudentWorkshopFragment extends Fragment {
     public static final String TAG = "StudentWorkshopFragment";
     public static final long ONE_MINUTE_IN_MILLIS = 60000;
     private RecyclerView rvWorkshops;
-    private StudentWorkshopAdapter adapter;
+    private StudentWorkshopAdapter mAdapter;
     private List<Workshop> mWorkshops;
     private SwipeRefreshLayout swipeContainer;
     private TextView tvNotice;
@@ -84,9 +86,9 @@ public class StudentWorkshopFragment extends Fragment {
         tvNotice = view.findViewById(R.id.tvNotice);
         tvNotice.setVisibility(View.GONE);
         mWorkshops = new ArrayList<>();
-        adapter = new StudentWorkshopAdapter(getContext(), mWorkshops, this);
+        mAdapter = new StudentWorkshopAdapter(getContext(), mWorkshops, this);
         rvWorkshops = view.findViewById(R.id.rvStudentWorkshops);
-        rvWorkshops.setAdapter(adapter);
+        rvWorkshops.setAdapter(mAdapter);
         rvWorkshops.setLayoutManager(new LinearLayoutManager(getContext()));
 
         queryWorkshops();
@@ -113,7 +115,7 @@ public class StudentWorkshopFragment extends Fragment {
 
     // Refresh the queue, and load workshops.
     protected void fetchQueueAsync() {
-        adapter.clear();
+        mAdapter.clear();
         queryWorkshops();
         swipeContainer.setRefreshing(false);
     }
@@ -129,6 +131,7 @@ public class StudentWorkshopFragment extends Fragment {
                     return;
                 }
                 addWorkshopsToAdapter(objects);
+                runLayoutAnimation();
             }
         });
     }
@@ -139,9 +142,9 @@ public class StudentWorkshopFragment extends Fragment {
             String name2 = User.getAdminName(ParseUser.getCurrentUser());
             if(name.equals(name2)) {
                 mWorkshops.add(objects.get(i));
-                adapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();
                 pbLoading.setVisibility(View.INVISIBLE);
-                Log.d(TAG, "adapter notified");
+                Log.d(TAG, "mAdapter notified");
             }
         }
         if(mWorkshops.size() == 0) {
@@ -178,5 +181,16 @@ public class StudentWorkshopFragment extends Fragment {
         long time = calendar.getTimeInMillis();
         Date alarmTime = new Date(time - (15 * ONE_MINUTE_IN_MILLIS));
         return alarmTime;
+    }
+
+    // Animate RecyclerView items falling onto the screen.
+    protected void runLayoutAnimation() {
+        final Context context = rvWorkshops.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_enter);
+
+        rvWorkshops.setLayoutAnimation(controller);
+        mAdapter.notifyDataSetChanged();
+        rvWorkshops.scheduleLayoutAnimation();
     }
 }

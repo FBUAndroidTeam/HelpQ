@@ -1,5 +1,6 @@
 package com.example.helpq.view.admin_views;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -28,7 +31,7 @@ public class AdminEnrolledFragment extends Fragment {
 
     public static final String TAG = "AdminEnrolledFragment";
     private RecyclerView rvEnrolledStudents;
-    private EnrolledStudentsAdapter adapter;
+    private EnrolledStudentsAdapter mAdapter;
     private List<ParseUser> mStudents;
     private TextView tvNotice;
     private ProgressBar pbLoading;
@@ -51,8 +54,8 @@ public class AdminEnrolledFragment extends Fragment {
         tvNotice.setVisibility(View.GONE);
         rvEnrolledStudents = view.findViewById(R.id.rvEnrolledStudents);
         mStudents = new ArrayList<>();
-        adapter = new EnrolledStudentsAdapter(getContext(), mStudents, this);
-        rvEnrolledStudents.setAdapter(adapter);
+        mAdapter = new EnrolledStudentsAdapter(getContext(), mStudents, this);
+        rvEnrolledStudents.setAdapter(mAdapter);
         rvEnrolledStudents.setLayoutManager(new LinearLayoutManager(getContext()));
         pbLoading = view.findViewById(R.id.pbLoading);
         pbLoading.setVisibility(View.VISIBLE);
@@ -72,10 +75,11 @@ public class AdminEnrolledFragment extends Fragment {
                 }
                 for(int i = 0; i < objects.size(); i++) {
                     mStudents.add(objects.get(i));
-                    adapter.notifyDataSetChanged();
+                    mAdapter.notifyDataSetChanged();
                     pbLoading.setVisibility(View.INVISIBLE);
                 }
                 isPageEmpty();
+                runLayoutAnimation();
             }
         });
     }
@@ -88,4 +92,14 @@ public class AdminEnrolledFragment extends Fragment {
         }
     }
 
+    // Animate RecyclerView items falling onto the screen.
+    protected void runLayoutAnimation() {
+        final Context context = rvEnrolledStudents.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_enter);
+
+        rvEnrolledStudents.setLayoutAnimation(controller);
+        mAdapter.notifyDataSetChanged();
+        rvEnrolledStudents.scheduleLayoutAnimation();
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.helpq.view.student_views;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -114,6 +117,17 @@ public class InboxFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
+    }
+
+    // Animate RecyclerView items falling onto the screen.
+    protected void runLayoutAnimation() {
+        final Context context = rvMessages.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_enter);
+
+        rvMessages.setLayoutAnimation(controller);
+        mAdapter.notifyDataSetChanged();
+        rvMessages.scheduleLayoutAnimation();
     }
 
     private void search() {

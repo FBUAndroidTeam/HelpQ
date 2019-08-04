@@ -1,5 +1,6 @@
 package com.example.helpq.view;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -170,21 +173,9 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                 if (messages.size() == 0) {
                     tvNotice.setVisibility(View.VISIBLE);
                 }
+                runLayoutAnimation();
             }
         });
-    }
-
-    private void addQuestionsToAdapter(List<Question> objects) {
-        tvNotice.setVisibility(View.GONE);
-        mQuestions.addAll(getQueueQuestions(objects));
-        Collections.sort(mQuestions);
-        mAdapter.notifyDataSetChanged();
-        if(mQuestions.size() == 0) {
-            tvNotice.setText(getParentFragment().getContext().getResources()
-                    .getString(R.string.empty_queue));
-            tvNotice.setVisibility(View.VISIBLE);
-        }
-        pbLoading.setVisibility(View.INVISIBLE);
     }
 
     // Return the list of questions that should appear on the current user's queue
@@ -291,5 +282,16 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         else tvSearchNotice.setVisibility(View.GONE);
 
         pbLoading.setVisibility(View.INVISIBLE);
+    }
+
+    // Animate RecyclerView items falling onto the screen.
+    protected void runLayoutAnimation() {
+        final Context context = rvQuestions.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_enter);
+
+        rvQuestions.setLayoutAnimation(controller);
+        mAdapter.notifyDataSetChanged();
+        rvQuestions.scheduleLayoutAnimation();
     }
 }
