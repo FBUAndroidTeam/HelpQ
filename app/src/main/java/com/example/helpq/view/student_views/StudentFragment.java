@@ -245,7 +245,7 @@ public class StudentFragment extends Fragment {
                 default:
                     break;
             }
-            Sound.swipePages(getContext());
+            Sound.changeTabs(getContext());
         }
         @Override
         public void onPageScrollStateChanged(int state) {

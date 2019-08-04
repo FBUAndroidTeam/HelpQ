@@ -43,7 +43,7 @@ public class StudentQueueFragment extends Fragment {
         fabCreateQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Sound.fabPopUp(getContext());
+                Sound.openDialogWindow(getContext());
                 FragmentManager fm = getChildFragmentManager();
                 CreateQuestionFragment createQuestionFragment =
                         CreateQuestionFragment.newInstance("Some Title");

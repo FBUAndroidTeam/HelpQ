@@ -73,7 +73,7 @@ public class EnrolledStudentsAdapter extends
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Sound.fabPopUp(mContext);
+                    Sound.openDialogWindow(mContext);
                     AdminIndividualQuestionsFragment fragment = AdminIndividualQuestionsFragment
                             .newInstance(mEnrolledStudents.get(getAdapterPosition()));
                     fragment.setTargetFragment(mAdminEnrolledFragment, 300);

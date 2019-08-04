@@ -118,7 +118,7 @@ public class CreateWorkshopFragment extends DialogFragment {
         ibCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Sound.closeWindow(getContext());
+                Sound.closeDialogWindow(getContext());
                 dismiss();
             }
         });

@@ -151,7 +151,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             ibView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Sound.fabPopUp(mContext);
+                    Sound.openDialogWindow(mContext);
                     replyToQuestion(mMessages.get(getAdapterPosition()));
                     resetRecyclerCell(iSlideDeltaX);
                 }
@@ -180,7 +180,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         @Override
         public void onClick(View v) {
             if (isSlideMenuOpen) {
-                Sound.slideBack(mContext);
+                Sound.closeSlideMenu(mContext);
                 resetRecyclerCell(iSlideDeltaX);
             }
         }
@@ -189,7 +189,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         public boolean onLongClick(View v) {
             mClickListener.onItemLongClick(getAdapterPosition(), v);
             if(!isSlideMenuOpen) {
-                Sound.slideMenuSound(mContext);
+                Sound.openSlideMenu(mContext);
                 if (User.isAdmin(ParseUser.getCurrentUser())) {
                     adminMenu(v);
                 } else {

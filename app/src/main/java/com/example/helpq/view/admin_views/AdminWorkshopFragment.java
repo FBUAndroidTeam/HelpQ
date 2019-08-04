@@ -68,7 +68,7 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
         fabAddWorkshop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Sound.fabPopUp(getContext());
+                Sound.openDialogWindow(getContext());
                 CreateWorkshopFragment createWorkshopFragment =
                         CreateWorkshopFragment.newInstance("Some Title");
                 createWorkshopFragment.setTargetFragment(AdminWorkshopFragment.this,

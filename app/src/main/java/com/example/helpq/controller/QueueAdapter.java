@@ -248,7 +248,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         public void onClick(View v) {
             // Display correct slide-back menu
             if(isSlideMenuOpen) {
-                Sound.slideBack(mContext);
+                Sound.closeSlideMenu(mContext);
                 if (isAdmin) {
                     if (isWritten) hideActions(v, iSlideDeltaX);
                     else hideActions(v, iSlideDeltaX);
@@ -263,7 +263,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             mClickListener.onItemLongClick(getAdapterPosition(), v);
             ParseUser currentUser = ParseUser.getCurrentUser();
             if(!isSlideMenuOpen) {
-                Sound.slideMenuSound(mContext);
+                Sound.openSlideMenu(mContext);
                 if (isAdmin) {
                     adminSlideMenu(v);
                 } else {
@@ -287,7 +287,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             ibView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Sound.fabPopUp(mContext);
+                    Sound.openDialogWindow(mContext);
                     replyToQuestion(question);
                     resetRecyclerCell(iSlideDeltaX);
                 }
@@ -321,7 +321,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             ibReply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Sound.fabPopUp(mContext);
+                    Sound.openDialogWindow(mContext);
                     if (isAdmin) {
                         answerQuestion(getAdapterPosition());
                     } else {
