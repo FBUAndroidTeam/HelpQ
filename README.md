@@ -29,9 +29,12 @@
 - [x] Login persists.
 - [x] In-app notifications.
 - [x] Students can like and reply to other student's questions on the queue.
+- [x] Admin can verify student replies to other student's questions.
 - [x] Live estimated wait time displayed on the queue.
 - [x] Seachable queue, board, and inbox.    
-- [x] Progress bars shown when loading.    
+- [x] Progress bars shown when loading. 
+- [x] queue, board, and inbox items animated.
+- [ ] Sound effects added.   
 - [ ] Orientation changes handled.
 - [x] Our own logo (: 
 
