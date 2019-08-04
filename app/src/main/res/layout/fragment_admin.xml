@@ -18,6 +18,7 @@
         android:id="@+id/admin_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorFaded"
         app:labelVisibilityMode="selected"
         app:itemBackground="@color/colorFaded"
         app:itemIconTint="@color/menu_item_color"

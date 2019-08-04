@@ -204,7 +204,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             ibReply = itemView.findViewById(R.id.ibReply);
             ibLike = itemView.findViewById(R.id.ibLike);
             ibView = itemView.findViewById(R.id.ibView);
-
+            onClickSeeMore();
         }
 
         // Bind the view elements to the Question.
@@ -232,12 +232,19 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             setupViewButton(question);
         }
 
+        private void onClickSeeMore() {
+            tvSeeMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (originalLines > 1) {
+                        setTextExpansion();
+                    }
+                }
+            });
+        }
+
         @Override
         public void onClick(View v) {
-            if (originalLines > 1) {
-                setTextExpansion();
-            }
-
             // Display correct slide-back menu
             if (isAdmin) {
                 if (isWritten) hideActions(v, iSlideDeltaX);

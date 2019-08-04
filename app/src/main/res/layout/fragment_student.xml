@@ -16,12 +16,13 @@
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/student_navigation"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:labelVisibilityMode="selected"
+        android:background="@color/colorFaded"
         app:itemBackground="@color/colorFaded"
         app:itemIconTint="@color/menu_item_color"
         app:itemTextColor="@color/menu_item_color"
+        app:labelVisibilityMode="selected"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
