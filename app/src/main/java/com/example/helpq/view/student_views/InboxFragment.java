@@ -26,15 +26,21 @@ import java.util.List;
 public class InboxFragment extends Fragment {
 
     public static final String TAG = "InboxFragment";
+
+    // RecyclerView, data sets, and adapter
     private RecyclerView rvMessages;
-    private SwipeRefreshLayout swipeContainer;
     protected List<Question> mMessages;
     protected List<Question> mAllMessages;
     protected InboxAdapter mAdapter;
+
+    // Text notices and search fields
     protected TextView tvNotice;
     protected TextView tvSearchNotice;
+    protected TextView tvSearchHint;
     protected SearchView svSearch;
-    protected TextView tvSearch;
+
+    // Swipe to refresh and progress bar
+    private SwipeRefreshLayout swipeContainer;
     protected ProgressBar pbLoading;
 
     public static InboxFragment newInstance() {
@@ -58,7 +64,7 @@ public class InboxFragment extends Fragment {
 
         svSearch = view.findViewById(R.id.svSearch);
         Search.setSearchUi(svSearch, getContext());
-        tvSearch = view.findViewById(R.id.tvSearch);
+        tvSearchHint = view.findViewById(R.id.tvSearchHint);
 
         pbLoading = view.findViewById(R.id.pbLoading);
         pbLoading.setVisibility(View.VISIBLE);
@@ -111,14 +117,14 @@ public class InboxFragment extends Fragment {
         svSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                tvSearch.setVisibility(View.VISIBLE);
+                tvSearchHint.setVisibility(View.VISIBLE);
                 return false;
             }
         });
         svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(final String query) {
-                tvSearch.setVisibility(View.GONE);
+                tvSearchHint.setVisibility(View.GONE);
                 findMatches(query);
                 return false;
             }
@@ -126,7 +132,7 @@ public class InboxFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (!newText.isEmpty()) {
-                    tvSearch.setVisibility(View.GONE);
+                    tvSearchHint.setVisibility(View.GONE);
                 }
                 findMatches(newText);
                 return false;

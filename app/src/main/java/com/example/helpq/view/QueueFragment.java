@@ -36,13 +36,19 @@ import java.util.List;
 public class QueueFragment extends Fragment implements DialogDismissListener {
 
     public static final String TAG = "QueueFragment";
+
+    // RecyclerView, data sets, and adapter
     private RecyclerView rvQuestions;
     private List<Question> mQuestions;
     private QueueAdapter mAdapter;
-    private SwipeRefreshLayout mSwipeContainer;
+
+    // Text notices and search fields
     private TextView tvNotice;
     private SearchView svQueueSearch;
-    private TextView tvSearchNotice;
+    private TextView tvSearchHint;
+
+    // Swipe to refresh and progress bar
+    private SwipeRefreshLayout mSwipeContainer;
     private ProgressBar pbLoading;
 
     public static QueueFragment newInstance() {
@@ -65,8 +71,8 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
 
         tvNotice = view.findViewById(R.id.tvNotice);
         tvNotice.setVisibility(View.GONE);
-        tvSearchNotice = view.findViewById(R.id.tvSearchNotice);
-        tvSearchNotice.setVisibility(View.VISIBLE);
+        tvSearchHint = view.findViewById(R.id.tvSearchHint);
+        tvSearchHint.setVisibility(View.VISIBLE);
         // Create data source, adapter, and layout manager
         mQuestions = new ArrayList<>();
         mAdapter = new QueueAdapter(getContext(), mQuestions, this);
@@ -215,7 +221,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         svQueueSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                tvSearchNotice.setVisibility(View.VISIBLE);
+                tvSearchHint.setVisibility(View.VISIBLE);
                 return false;
             }
         });
@@ -248,7 +254,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                     mQuestions.clear();
                     queryQuestions();
                 } else {
-                    tvSearchNotice.setVisibility(View.GONE);
+                    tvSearchHint.setVisibility(View.GONE);
                 }
                 return false;
             }
