@@ -40,12 +40,14 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     // RecyclerView, data sets, and adapter
     private RecyclerView rvQuestions;
     private List<Question> mQuestions;
+    private List<Question> mAllQuestions;
     private QueueAdapter mAdapter;
 
     // Text notices and search fields
     private TextView tvNotice;
-    private SearchView svQueueSearch;
+    private TextView tvSearchNotice;
     private TextView tvSearchHint;
+    private SearchView svQueueSearch;
 
     // Swipe to refresh and progress bar
     private SwipeRefreshLayout mSwipeContainer;
@@ -66,26 +68,31 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Initialize notices - initially invisible
+        tvNotice = view.findViewById(R.id.tvNotice);
+        tvSearchNotice = view.findViewById(R.id.tvSearchNotice);
+        tvNotice.setVisibility(View.GONE);
+        tvSearchNotice.setVisibility(View.GONE);
+
+        // Initialize search fields
+        svQueueSearch = view.findViewById(R.id.svQueueSearch);
+        Search.setSearchUi(svQueueSearch, getContext());
+        tvSearchHint = view.findViewById(R.id.tvSearchHint);
+
         pbLoading = view.findViewById(R.id.pbLoading);
         pbLoading.setVisibility(View.VISIBLE);
 
-        tvNotice = view.findViewById(R.id.tvNotice);
-        tvNotice.setVisibility(View.GONE);
-        tvSearchHint = view.findViewById(R.id.tvSearchHint);
-        tvSearchHint.setVisibility(View.VISIBLE);
         // Create data source, adapter, and layout manager
         mQuestions = new ArrayList<>();
+        mAllQuestions = new ArrayList<>();
         mAdapter = new QueueAdapter(getContext(), mQuestions, this);
         rvQuestions = view.findViewById(R.id.rvQuestions);
         rvQuestions.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvQuestions.setLayoutManager(layoutManager);
-        svQueueSearch = view.findViewById(R.id.svQueueSearch);
-        Search.setSearchUi(svQueueSearch, getContext());
 
-
-        queryQuestions();
         setupSwipeRefreshing(view);
+        queryQuestions("");
         search();
 
         mAdapter.setOnItemClickListener(new QueueAdapter.ClickListener() {
@@ -108,7 +115,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchQueueAsync();
+                fetchQueueAsync(svQueueSearch.getQuery().toString());
             }
         });
         // Configure the refreshing colors
@@ -119,9 +126,11 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     }
 
     // Refresh the queue, and load questions.
-    public void fetchQueueAsync() {
+    public void fetchQueueAsync(String input) {
         mAdapter.clear();
-        queryQuestions();
+        tvNotice.setVisibility(View.GONE);
+        tvSearchNotice.setVisibility(View.GONE);
+        queryQuestions(input);
         mSwipeContainer.setRefreshing(false);
     }
 
@@ -134,7 +143,8 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         }
     }
 
-    private void queryQuestions() {
+    private void queryQuestions(final String input) {
+        pbLoading.setVisibility(View.VISIBLE);
         final ParseQuery<Question> query = QueryFactory.Questions.getQuestionsForQueue();
         query.findInBackground(new FindCallback<Question>() {
             @Override
@@ -144,7 +154,22 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                     e.printStackTrace();
                     return;
                 }
-                addQuestionsToAdapter(objects);
+
+                // Hide notices and clear message lists
+                tvNotice.setVisibility(View.GONE);
+                tvSearchNotice.setVisibility(View.GONE);
+                mQuestions.clear();
+                mAllQuestions.clear();
+
+                // Retrieve the questions that should be displayed
+                List<Question> messages = getQueueQuestions(objects);
+                mAllQuestions.addAll(messages);
+                findMatches(input);
+
+                // Display a notice if the user has no messages
+                if (messages.size() == 0) {
+                    tvNotice.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -186,7 +211,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
 
     @Override
     public void onDismiss() {
-        fetchQueueAsync();
+        fetchQueueAsync("");
     }
 
     //created at, asker, text, priority, help type, set archived to false
@@ -229,35 +254,42 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         svQueueSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(final String query) {
-                tvNotice.setVisibility(View.GONE);
-                final ParseQuery<Question> queueQuestions =
-                        QueryFactory.Questions.getQuestionsForQueue();
-                queueQuestions.findInBackground(new FindCallback<Question>() {
-                    @Override
-                    public void done(List<Question> objects, ParseException e) {
-                        List<Question> result = Search.mSearch(getQueueQuestions(objects), query);
-                        mQuestions.clear();
-                        mQuestions.addAll(result);
-                        mAdapter.notifyDataSetChanged();
-                        if(mQuestions.isEmpty()) {
-                            tvNotice.setText(getResources().getString(R.string.search_notice));
-                            tvNotice.setVisibility(View.VISIBLE);
-                        }
-                    }
-                });
+                tvSearchHint.setVisibility(View.GONE);
+                findMatches(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText.isEmpty()) {
-                    mQuestions.clear();
-                    queryQuestions();
-                } else {
+                if (!newText.isEmpty()) {
                     tvSearchHint.setVisibility(View.GONE);
                 }
+                findMatches(newText);
                 return false;
             }
         });
+    }
+
+    // Search for matches, and add them to the list to be displayed.
+    protected void findMatches(String input) {
+        mQuestions.clear();
+
+        // If input is empty, display all questions; else, display all matches
+        if (input.isEmpty()) {
+            mQuestions.addAll(mAllQuestions);
+        } else {
+            List<Question> result = Search.mSearch(mAllQuestions, input);
+            mQuestions.addAll(result);
+        }
+        mAdapter.notifyDataSetChanged();
+        Collections.sort(mQuestions);
+
+        // Display a notice if no results match the search
+        if (mQuestions.size() == 0 && mAllQuestions.size() != 0) {
+            tvSearchNotice.setVisibility(View.VISIBLE);
+        }
+        else tvSearchNotice.setVisibility(View.GONE);
+
+        pbLoading.setVisibility(View.INVISIBLE);
     }
 }

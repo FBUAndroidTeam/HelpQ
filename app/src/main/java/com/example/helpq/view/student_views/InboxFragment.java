@@ -40,7 +40,7 @@ public class InboxFragment extends Fragment {
     protected SearchView svSearch;
 
     // Swipe to refresh and progress bar
-    private SwipeRefreshLayout swipeContainer;
+    private SwipeRefreshLayout mSwipeContainer;
     protected ProgressBar pbLoading;
 
     public static InboxFragment newInstance() {
@@ -57,11 +57,14 @@ public class InboxFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Initialize notices - initially invisible
         tvNotice = view.findViewById(R.id.tvNotice);
         tvSearchNotice = view.findViewById(R.id.tvSearchNotice);
         tvNotice.setVisibility(View.GONE);
         tvSearchNotice.setVisibility(View.GONE);
 
+        // Initialize search fields
         svSearch = view.findViewById(R.id.svSearch);
         Search.setSearchUi(svSearch, getContext());
         tvSearchHint = view.findViewById(R.id.tvSearchHint);
@@ -97,16 +100,16 @@ public class InboxFragment extends Fragment {
     // Handle logic for swipe to refresh.
     private void setupSwipeToRefresh(View view) {
         // Lookup the swipe container view
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        mSwipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 fetchInboxAsync(svSearch.getQuery().toString());
             }
         });
         // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+        mSwipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
@@ -168,7 +171,7 @@ public class InboxFragment extends Fragment {
         tvNotice.setVisibility(View.GONE);
         tvSearchNotice.setVisibility(View.GONE);
         queryMessages(input);
-        swipeContainer.setRefreshing(false);
+        mSwipeContainer.setRefreshing(false);
     }
 
     // Query for messages intended for the current user

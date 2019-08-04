@@ -335,7 +335,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                         question.setAnsweredAt(Calendar.getInstance().getTime());
                         question.saveInBackground();
                         removeAt(getAdapterPosition());
-                        mQueueFragment.createSnackbar(getAdapterPosition(), question);
+                        mQueueFragment.createSnackbar(getLayoutPosition(), question);
                         ibDelete.setVisibility(View.GONE);
                         resetRecyclerCell(iSlideDeltaX);
                     }
