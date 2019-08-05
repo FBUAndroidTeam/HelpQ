@@ -86,11 +86,16 @@ public class AdminIndividualQuestionsAdapter extends
         public void onClick(View v) {
             int position = getAdapterPosition();
             Log.d(TAG, "clicked: " + position);
-            ReplyQuestionFragment fragment = ReplyQuestionFragment
-                    .newInstance(mQuestions.get(position));
-            fragment.setTargetFragment(mAdminQuestionsFragment, 300);
-            FragmentManager manager = mAdminQuestionsFragment.getFragmentManager();
-            fragment.show(manager, ReplyQuestionFragment.TAG);
+            if(mQuestions.get(position).getHelpType().equals("in-person")) {
+                Toast.makeText(mContext, mContext.getResources()
+                        .getString(R.string.not_able_to_have_comments),Toast.LENGTH_LONG).show();
+            } else {
+                ReplyQuestionFragment fragment = ReplyQuestionFragment
+                        .newInstance(mQuestions.get(position));
+                fragment.setTargetFragment(mAdminQuestionsFragment, 300);
+                FragmentManager manager = mAdminQuestionsFragment.getFragmentManager();
+                fragment.show(manager, ReplyQuestionFragment.TAG);
+            }
         }
 
         public void bind(Question q) throws ParseException {

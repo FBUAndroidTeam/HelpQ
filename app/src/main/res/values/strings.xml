@@ -72,4 +72,5 @@
     <string name="search_notice">No results match your search.</string>
     <string name="no_pending_student">This student has no pending questions.</string>
     <string name="no_comments">This question has no comments.</string>
+    <string name="not_able_to_have_comments">In-person questions do not contain written replies.</string>
 </resources>
