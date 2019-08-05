@@ -1,9 +1,12 @@
 package com.example.helpq.view.admin_views;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -84,6 +87,17 @@ public class AdminListFragment extends DialogFragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        FragmentManager m = getFragmentManager();
+        FragmentTransaction transaction = m.beginTransaction();
+        AdminListFragment frag =
+                AdminListFragment.newInstance(TAG);
+        transaction.detach(this).attach(this).show(this);
+        frag.show(transaction, TAG);
     }
 
     private void setCancelButton() {

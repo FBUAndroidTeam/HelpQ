@@ -1,6 +1,7 @@
 package com.example.helpq.view;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -86,6 +87,15 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
                 adminListFragment.show(fragmentManager, AdminListFragment.TAG);
             }
         });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ||
+                newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
     }
 
     //checks to see if information user inputted is valid
