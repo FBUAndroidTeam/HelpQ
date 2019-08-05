@@ -95,17 +95,14 @@
         app:layout_constraintStart_toEndOf="@+id/ivMyProfilePic" />
 
     <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/ivMyProfilePic"
+        android:id="@+id/ivProfilePic"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/etReply"
+        app:layout_constraintTop_toBottomOf="@+id/ibCancel"
         fresco:placeholderImage="@drawable/com_facebook_profile_picture_blank_portrait"
-        fresco:placeholderImageScaleType="centerCrop"
         fresco:roundAsCircle="true" />
 
     <Button
