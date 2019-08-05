@@ -38,7 +38,7 @@
         android:gravity="top"
         android:hint="Type your answer here"
         android:imeOptions="actionDone"
-        android:inputType="textMultiLine|text"
+        android:inputType="textMultiLine|textCapSentences"
         android:minLines="2"
         android:padding="10dp"
         android:textColor="@color/colorFBBlue"

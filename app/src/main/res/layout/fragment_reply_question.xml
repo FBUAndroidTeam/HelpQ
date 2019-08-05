@@ -84,8 +84,9 @@
         android:background="@drawable/rounded_edittext"
         android:ems="10"
         android:hint="comment..."
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine|textCapSentences|textAutoCorrect|textPersonName"
         android:padding="10dp"
+        android:scrollbars="vertical"
         android:textColor="@color/colorFBBlue"
         android:textColorHint="@color/colorFBBlue"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -102,9 +103,10 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        fresco:placeholderImageScaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="@+id/etReply"
         fresco:placeholderImage="@drawable/com_facebook_profile_picture_blank_portrait"
-        fresco:roundAsCircle="true"/>
+        fresco:placeholderImageScaleType="centerCrop"
+        fresco:roundAsCircle="true" />
 
     <Button
         android:id="@+id/btnReply"
@@ -115,7 +117,8 @@
         android:layout_marginBottom="8dp"
         android:text="Reply"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etReply" />
 
     <ImageButton
         android:id="@+id/ibCancel"

@@ -97,7 +97,6 @@ public class ReplyQuestionFragment extends DialogFragment {
         btnReply = view.findViewById(R.id.btnReply);
         tvNoComments = view.findViewById(R.id.tvNoComments);
         etReply = view.findViewById(R.id.etReply);
-        etReply.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         ibCancel = view.findViewById(R.id.ibCancel);
         setCancelButton();
 
