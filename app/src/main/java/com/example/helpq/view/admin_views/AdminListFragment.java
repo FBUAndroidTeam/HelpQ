@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.helpq.R;
@@ -34,6 +35,7 @@ public class AdminListFragment extends DialogFragment {
     private List<ParseUser> mAdmins;
     private AdminListAdapter adapter;
     private Button btnSelect;
+    private ProgressBar pbLoading;
 
     public static AdminListFragment newInstance(String title) {
         AdminListFragment frag = new AdminListFragment();
@@ -53,6 +55,8 @@ public class AdminListFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        pbLoading = view.findViewById(R.id.pbLoading);
+        pbLoading.setVisibility(View.VISIBLE);
         btnSelect = view.findViewById(R.id.btnSelect);
         rvAdmins = view.findViewById(R.id.rvAdmins);
         mAdmins = new ArrayList<>();
@@ -88,6 +92,7 @@ public class AdminListFragment extends DialogFragment {
             public void done(List<ParseUser> objects, ParseException e) {
                 mAdmins.addAll(objects);
                 adapter.notifyDataSetChanged();
+                pbLoading.setVisibility(View.INVISIBLE);
                 Log.d(TAG, "Admins found");
             }
         });

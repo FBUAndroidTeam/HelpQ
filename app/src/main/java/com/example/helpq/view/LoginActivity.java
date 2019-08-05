@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.helpq.R;
+import com.example.helpq.model.User;
 import com.facebook.FacebookSdk;
 import com.facebook.LoggingBehavior;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -40,9 +41,13 @@ public class LoginActivity extends AppCompatActivity {
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
             // do stuff with the user
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            if(User.getFullName(currentUser) != null) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                ParseUser.logOut();
+            }
         }
         btnFacebookLogin = findViewById(R.id.btnFacebookLogin);
         faceBookLogin();
@@ -80,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //handles what page the user is taken to depending on whether they are a new user or not
     private void handleValidUser(ParseUser user) {
-        if (user.isNew()) {
+        if (user.isNew() || User.getFullName(user) == null) {
             startActivity(new Intent(LoginActivity.this,
                     RegistrationActivity.class));
         } else {

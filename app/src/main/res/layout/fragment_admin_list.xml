@@ -41,4 +41,14 @@
         app:layout_constraintHorizontal_bias="0.972"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rvAdmins" />
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/rvAdmins"
+        app:layout_constraintEnd_toEndOf="@+id/rvAdmins"
+        app:layout_constraintStart_toStartOf="@+id/rvAdmins"
+        app:layout_constraintTop_toTopOf="@+id/rvAdmins" />
 </android.support.constraint.ConstraintLayout>
