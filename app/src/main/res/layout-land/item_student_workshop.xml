@@ -18,8 +18,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="13dp"
         android:text="Let's learn JSON stuffff"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorAccent"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tvStudentWorkshopDate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +33,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginBottom="8dp"
         android:text="Mon 12:45pm"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorFBBlue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvStudentWorkshopName" />
@@ -45,7 +46,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
         android:text="123 attendees"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorFBBlue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -57,7 +58,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="MPK 21.65.23"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorFBBlue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvStudentWorkshopSignedUpCount"
         app:layout_constraintHorizontal_bias="0.027"
@@ -75,7 +76,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/sign_up"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorFBBlue"
         app:layout_constraintBottom_toTopOf="@+id/tvStudentWorkshopSignedUpCount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.978"
