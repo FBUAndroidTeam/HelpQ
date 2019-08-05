@@ -111,7 +111,6 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         private ImageButton ibLike;
         private ImageButton ibView;
         private View vQuestionView;
-        private boolean isSlideMenuOpen;
         private int iSlideDeltaX;
 
         public ViewHolder(@NonNull final View itemView) {
@@ -139,7 +138,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
 
         @Override
         public void onClick(View v) {
-            if (isSlideMenuOpen) {
+            if (mOpenItemArray.get(getAdapterPosition())) {
                 Sound.closeSlideMenu(mContext);
                 resetRecyclerCell(DURATION);
             }
@@ -148,7 +147,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         @Override
         public boolean onLongClick(View v) {
             mClickListener.onItemLongClick(getAdapterPosition(), v);
-            if (!isSlideMenuOpen) {
+            if (!mOpenItemArray.get(getAdapterPosition())) {
                 Sound.openSlideMenu(mContext);
                 getMenu(DURATION);
             }
@@ -200,17 +199,15 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         }
 
         private void openMenuIfApplicable() {
-            boolean shouldBeOpen = mOpenItemArray.get(getAdapterPosition());
-            if (shouldBeOpen) {
+            if (mOpenItemArray.get(getAdapterPosition())) {
+                resetRecyclerCell(0);
                 getMenu(0);
                 return;
-            }
-            if (isSlideMenuOpen && !shouldBeOpen) {
+            } else {
                 resetRecyclerCell(0);
+                ibView.setClickable(false);
+                ibLike.setClickable(false);
             }
-            ibView.setClickable(false);
-            ibLike.setClickable(false);
-            isSlideMenuOpen = false;
         }
 
         private void getMenu(int duration) {
@@ -222,14 +219,14 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         }
 
         private void adminMenu(int duration) {
-            if (!isSlideMenuOpen) slideRecyclerCell(duration);
+            if (!mOpenItemArray.get(getAdapterPosition())) slideRecyclerCell(duration);
             ibLike.setVisibility(View.GONE);
             ibView.setVisibility(View.VISIBLE);
             ibView.setClickable(true);
         }
 
         private void studentMenu(int duration) {
-            if (!isSlideMenuOpen) slideRecyclerCell(duration);
+            if (!mOpenItemArray.get(getAdapterPosition())) slideRecyclerCell(duration);
             ibView.setVisibility(View.VISIBLE);
             ibLike.setVisibility(View.VISIBLE);
             ibView.setClickable(true);
@@ -241,16 +238,14 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                     "translationX", iSlideDeltaX);
             animation.setDuration(duration);
             animation.start();
-            isSlideMenuOpen = true;
             mOpenItemArray.put(getAdapterPosition(), true);
         }
 
         private void resetRecyclerCell(int duration) {
             ObjectAnimator animation = ObjectAnimator.ofFloat(vQuestionView,
-                    "translationX", vQuestionView.getX() - iSlideDeltaX);
+                    "x", 0);
             animation.setDuration(duration);
             animation.start();
-            isSlideMenuOpen = false;
             mOpenItemArray.put(getAdapterPosition(), false);
             ibView.setClickable(false);
             ibLike.setClickable(false);
