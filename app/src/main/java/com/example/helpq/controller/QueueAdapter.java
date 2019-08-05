@@ -31,7 +31,6 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -76,13 +75,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    // Add a list of items
-    public void addAll(List<Question> list) {
-        mQuestions.addAll(list);
-        Collections.sort(mQuestions);
-        notifyDataSetChanged();
-    }
-
     // Answers this question
     private void answerQuestion(int adapterPosition) {
         Question question = mQuestions.get(adapterPosition);
@@ -90,9 +82,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             AnswerQuestionFragment fragment = AnswerQuestionFragment.newInstance(question);
             fragment.setTargetFragment(mQueueFragment, 300);
             FragmentManager manager = mQueueFragment.getFragmentManager();
-            //((MainActivity) mContext).getSupportFragmentManager();
-            //List<Fragment> fragmentList = manager.getFragments();
-            //FragmentManager queueFragManager = fragmentList.get(1).getChildFragmentManager();
             fragment.show(manager, AnswerQuestionFragment.TAG);
         } else {
             Toast.makeText(mContext, R.string.request_in_person,
@@ -105,25 +94,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         fragment.setTargetFragment(mQueueFragment, 300);
         FragmentManager manager = mQueueFragment.getFragmentManager();
         fragment.show(manager, ReplyQuestionFragment.TAG);
-    }
-
-    // Archives this question
-    private void archiveQuestion(Question question, final int adapterPosition) {
-        question.setIsArchived(true);
-        question.setAnsweredAt(new Date(System.currentTimeMillis()));
-        question.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(e == null) {
-                    Toast.makeText(mContext, R.string.archive_question, Toast.LENGTH_LONG).show();
-                    removeAt(adapterPosition);
-                } else {
-                    Log.d(TAG, "Failed to archive question");
-                    e.printStackTrace();
-                }
-            }
-        });
-        updateWaitTime(mQuestions.get(adapterPosition));
     }
 
     // Deletes this question from parse
@@ -334,15 +304,31 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 public void onClick(View v) {
                     Sound.delete(mContext);
                     if (isAdmin) {
-                        archiveQuestion(question, getAdapterPosition());
+                        question.setIsArchived(true);
+                        question.setAnsweredAt(new Date(System.currentTimeMillis()));
+                        question.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if(e == null) {
+                                    Toast.makeText(mContext, R.string.archive_question,
+                                            Toast.LENGTH_LONG).show();
+                                    resetRecyclerCell(400);
+                                    removeAt(getAdapterPosition());
+                                } else {
+                                    Log.d(TAG, "Failed to archive question");
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        updateWaitTime(mQuestions.get(getAdapterPosition()));
                     } else {
                         question.setIsArchived(true);
                         question.setAnsweredAt(Calendar.getInstance().getTime());
                         question.saveInBackground();
+                        resetRecyclerCell(400);
                         removeAt(getAdapterPosition());
                         mQueueFragment.createSnackbar(getLayoutPosition(), question);
                         ibDelete.setVisibility(View.GONE);
-                        resetRecyclerCell(400);
                     }
                 }
             });
