@@ -1,14 +1,15 @@
 package com.example.helpq.controller;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     private List<Question> mQuestions;
     private QueueFragment mQueueFragment;
     private static ClickListener mClickListener;
+
+    // Array to store state of adapter items (open/closed menu)
+    private SparseBooleanArray mOpenItemArray = new SparseBooleanArray();
 
     // Constructor
     public QueueAdapter(Context context, List<Question> questions, QueueFragment fragment) {
@@ -231,6 +235,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             setupReplyButton(question);
             setupLikeButton();
             setupViewButton(question);
+            openMenuIfApplicable();
         }
 
         private void onClickSeeMore() {
@@ -247,27 +252,21 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         @Override
         public void onClick(View v) {
             // Display correct slide-back menu
-            if(isSlideMenuOpen) {
+            if (isSlideMenuOpen) {
                 Sound.closeSlideMenu(mContext);
-                if (isAdmin) {
-                    if (isWritten) hideActions(v, iSlideDeltaX);
-                    else hideActions(v, iSlideDeltaX);
-                } else {
-                    hideActions(v, iSlideDeltaX);
-                }
+                hideActions(v);
             }
         }
 
         @Override
         public boolean onLongClick(View v) {
             mClickListener.onItemLongClick(getAdapterPosition(), v);
-            ParseUser currentUser = ParseUser.getCurrentUser();
             if(!isSlideMenuOpen) {
                 Sound.openSlideMenu(mContext);
                 if (isAdmin) {
-                    adminSlideMenu(v);
+                    adminSlideMenu(400);
                 } else {
-                    studentSlideMenu(v, currentUser);
+                    studentSlideMenu(400);
                 }
             }
             return true;
@@ -278,9 +277,8 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             if (isAdmin && !isWritten) iSlideDeltaX = -160;
             if (!isAdmin && isWritten) iSlideDeltaX = -300;
             if (!isAdmin && !isWritten) iSlideDeltaX = -160;
-            if (isPeer && isWritten) iSlideDeltaX = -300;
-            if (isPeer && !isWritten) iSlideDeltaX = -160;
-            isSlideMenuOpen = false;
+            if (!isAdmin && isPeer && isWritten) iSlideDeltaX = -300;
+            if (!isAdmin && isPeer && !isWritten) iSlideDeltaX = -160;
         }
 
         private void setupViewButton(final Question question) {
@@ -289,10 +287,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 public void onClick(View v) {
                     Sound.openDialogWindow(mContext);
                     replyToQuestion(question);
-                    resetRecyclerCell(iSlideDeltaX);
+                    resetRecyclerCell(400);
                 }
             });
-            ibView.setClickable(false);
             ibView.setVisibility(View.GONE);
         }
 
@@ -313,7 +310,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     setLikeText(question, tvLikes);
                 }
             });
-            ibLike.setClickable(false);
             ibLike.setVisibility(View.GONE);
         }
 
@@ -327,10 +323,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     } else {
                         replyToQuestion(question);
                     }
-                    resetRecyclerCell(iSlideDeltaX);
+                    resetRecyclerCell(400);
                 }
             });
-            ibReply.setClickable(false);
             ibReply.setVisibility(View.GONE);
         }
 
@@ -348,15 +343,39 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                         removeAt(getAdapterPosition());
                         mQueueFragment.createSnackbar(getLayoutPosition(), question);
                         ibDelete.setVisibility(View.GONE);
-                        resetRecyclerCell(iSlideDeltaX);
+                        resetRecyclerCell(400);
                     }
                 }
             });
-            ibDelete.setClickable(false);
             ibDelete.setVisibility(View.GONE);
         }
 
-        private void adminSlideMenu(View v) {
+        private void openMenuIfApplicable() {
+            boolean shouldBeOpen = mOpenItemArray.get(getAdapterPosition());
+            if (shouldBeOpen) {
+                resetRecyclerCell(0);
+                getMenu(0);
+                return;
+            }
+            if (isSlideMenuOpen && !shouldBeOpen) {
+                resetRecyclerCell(0);
+            }
+            ibView.setClickable(false);
+            ibLike.setClickable(false);
+            ibDelete.setClickable(false);
+            ibReply.setClickable(false);
+            isSlideMenuOpen = false;
+        }
+
+        private void getMenu(int duration) {
+            if (User.isAdmin(ParseUser.getCurrentUser())) {
+                adminSlideMenu(duration);
+            } else {
+                studentSlideMenu(duration);
+            }
+        }
+
+        private void adminSlideMenu(int duration) {
             ibDelete.setVisibility(View.VISIBLE);
             ibDelete.setClickable(true);
             if (isWritten) {
@@ -365,48 +384,39 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 ibView.setVisibility(View.VISIBLE);
                 ibView.setClickable(true);
             }
-            if (!isSlideMenuOpen) {
-                vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
-            }
+            if (!isSlideMenuOpen) slideRecyclerCell(duration);
         }
 
-        private void studentSlideMenu(View v, ParseUser currentUser) {
+        private void studentSlideMenu(int duration) {
             ibDelete.setVisibility(View.VISIBLE);
-            final Question q = mQuestions.get(getAdapterPosition());
-
             if (isPeer) {
-                peerQuestionMenu(v, q);
+                peerQuestionMenu(duration);
                 return;
             }
             if (isWritten) {
-                currentUserWrittenMenu(v, q);
+                currentUserWrittenMenu(duration);
                 return;
             }
-            currentUserInpersonMenu(v, q);
+            currentUserInpersonMenu(duration);
         }
 
-        private void currentUserWrittenMenu(View v, final Question q) {
-            if (!isSlideMenuOpen) {
-                vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
-            }
+        private void currentUserWrittenMenu(int duration) {
+            if (!isSlideMenuOpen) slideRecyclerCell(duration);
             ibDelete.setVisibility(View.VISIBLE);
             ibDelete.setClickable(true);
             ibView.setVisibility(View.VISIBLE);
             ibView.setClickable(true);
         }
 
-        private void currentUserInpersonMenu(View v, final Question q) {
-            if (!isSlideMenuOpen) {
-                vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
-            }
+        private void currentUserInpersonMenu(int duration) {
+            if (!isSlideMenuOpen) slideRecyclerCell(duration);
             ibDelete.setVisibility(View.VISIBLE);
             ibDelete.setClickable(true);
         }
 
-        private void peerQuestionMenu(View v, final Question q) {
-            if (!isSlideMenuOpen) {
-                vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
-            }
+        private void peerQuestionMenu(int duration) {
+            if (!isSlideMenuOpen) slideRecyclerCell(duration);
+
             if (isWritten) {
                 ibReply.setVisibility(View.VISIBLE);
                 ibReply.setClickable(true);
@@ -414,19 +424,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             ibLike.setVisibility(View.VISIBLE);
             ibLike.setClickable(true);
             ibDelete.setVisibility(View.GONE);
-        }
-
-        private TranslateAnimation slideRecyclerCell(View v, int deltaX) {
-            TranslateAnimation animate = new TranslateAnimation(
-                    v.getX(),
-                    deltaX,
-                    0,
-                    0
-            );
-            animate.setDuration(300);
-            animate.setFillAfter(true);
-            isSlideMenuOpen = true;
-            return animate;
         }
 
         private void setHelpType(String helpType) {
@@ -468,28 +465,33 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             }
         }
 
-        private void hideActions(View v, int deltaX) {
+        private void hideActions(View v) {
             if (isSlideMenuOpen) {
                 mClickListener.onItemClick(getAdapterPosition(), v);
-                resetRecyclerCell(deltaX);
+                resetRecyclerCell(400);
             }
         }
 
-        private void resetRecyclerCell(int deltaX) {
-            TranslateAnimation animate = new TranslateAnimation(
-                    itemView.getX() + deltaX,
-                    0,
-                    0,
-                    0
-            );
-            animate.setDuration(300);
-            animate.setFillAfter(true);
+        private void slideRecyclerCell(int duration) {
+            ObjectAnimator animation = ObjectAnimator.ofFloat(vQuestionView,
+                    "translationX", iSlideDeltaX);
+            animation.setDuration(duration);
+            animation.start();
+            isSlideMenuOpen = true;
+            mOpenItemArray.put(getAdapterPosition(), true);
+        }
+
+        private void resetRecyclerCell(int duration) {
+            ObjectAnimator animation = ObjectAnimator.ofFloat(vQuestionView,
+                    "x", 0);
+            animation.setDuration(duration);
+            animation.start();
+            isSlideMenuOpen = false;
+            mOpenItemArray.put(getAdapterPosition(), false);
             ibLike.setClickable(false);
             ibView.setClickable(false);
             ibReply.setClickable(false);
             ibDelete.setClickable(false);
-            vQuestionView.startAnimation(animate);
-            isSlideMenuOpen = false;
         }
     }
 
