@@ -78,7 +78,7 @@ public class ReplyQuestionFragment extends DialogFragment {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ||
                 newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            FragmentManager m = getParentFragment().getChildFragmentManager();
+            FragmentManager m = getFragmentManager();
             FragmentTransaction transaction = m.beginTransaction();
             ReplyQuestionFragment frag =
                     ReplyQuestionFragment.newInstance((Question) getArguments().get("Question"));
