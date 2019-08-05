@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.helpq.R;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.QueryFactory;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.view.admin_views.AdminListFragment;
 import com.facebook.AccessToken;
@@ -77,6 +78,7 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
         tvAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Sound.openDialogWindow(getContext());
                 fragmentManager = getFragmentManager();
                 adminListFragment = AdminListFragment.newInstance("adminListFragment");
                 adminListFragment.setTargetFragment(RegistrationFragment.this,

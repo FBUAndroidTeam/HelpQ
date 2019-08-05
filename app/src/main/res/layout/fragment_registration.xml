@@ -18,6 +18,8 @@
         android:layout_marginRight="8dp"
         android:ems="10"
         android:hint="Username"
+        android:textSize="20dp"
+        android:maxLength="30"
         android:inputType="textPersonName"
         android:textColor="@color/colorFaded"
         android:textColorHint="@color/colorFaded"
@@ -36,16 +38,16 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Complete Registration"
-        android:fontFamily="monospace"
         android:background="@color/realFBBlue"
+        android:fontFamily="monospace"
+        android:text="Complete Registration"
         android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvAdmin"
-        app:layout_constraintVertical_bias="0.201" />
+        app:layout_constraintVertical_bias="0.14999998" />
 
     <TextView
         android:id="@+id/tvAdmin"
@@ -56,6 +58,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:textSize="20dp"
         android:hint="Click to find your admin"
         android:textColor="@color/colorFaded"
         android:textColorHint="@color/colorFaded"

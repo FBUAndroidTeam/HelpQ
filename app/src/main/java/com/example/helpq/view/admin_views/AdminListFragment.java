@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import com.example.helpq.R;
 import com.example.helpq.controller.AdminListAdapter;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.QueryFactory;
+import com.example.helpq.model.Sound;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -36,6 +38,7 @@ public class AdminListFragment extends DialogFragment {
     private AdminListAdapter adapter;
     private Button btnSelect;
     private ProgressBar pbLoading;
+    private ImageButton ibCancel;
 
     public static AdminListFragment newInstance(String title) {
         AdminListFragment frag = new AdminListFragment();
@@ -55,6 +58,8 @@ public class AdminListFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ibCancel = view.findViewById(R.id.ibCancel);
+        setCancelButton();
         pbLoading = view.findViewById(R.id.pbLoading);
         pbLoading.setVisibility(View.VISIBLE);
         btnSelect = view.findViewById(R.id.btnSelect);
@@ -77,6 +82,16 @@ public class AdminListFragment extends DialogFragment {
                     listener.onDismiss();
                     dismiss();
                 }
+            }
+        });
+    }
+
+    private void setCancelButton() {
+        ibCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Sound.closeDialogWindow(getContext());
+                dismiss();
             }
         });
     }
