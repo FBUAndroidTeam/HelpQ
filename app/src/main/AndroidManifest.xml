@@ -33,7 +33,8 @@
             android:name="com.facebook.sdk.PERMISSIONS"
             android:value="email" />
 
-        <activity android:name=".view.RegistrationActivity"></activity>
+        <activity android:name=".view.RegistrationActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"></activity>
         <activity android:name=".view.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

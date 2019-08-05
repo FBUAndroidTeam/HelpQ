@@ -1,9 +1,12 @@
 package com.example.helpq.view.admin_views;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,12 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.AdminListAdapter;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.QueryFactory;
+import com.example.helpq.model.Sound;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -34,6 +40,8 @@ public class AdminListFragment extends DialogFragment {
     private List<ParseUser> mAdmins;
     private AdminListAdapter adapter;
     private Button btnSelect;
+    private ProgressBar pbLoading;
+    private ImageButton ibCancel;
 
     public static AdminListFragment newInstance(String title) {
         AdminListFragment frag = new AdminListFragment();
@@ -53,6 +61,10 @@ public class AdminListFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ibCancel = view.findViewById(R.id.ibCancel);
+        setCancelButton();
+        pbLoading = view.findViewById(R.id.pbLoading);
+        pbLoading.setVisibility(View.VISIBLE);
         btnSelect = view.findViewById(R.id.btnSelect);
         rvAdmins = view.findViewById(R.id.rvAdmins);
         mAdmins = new ArrayList<>();
@@ -77,6 +89,27 @@ public class AdminListFragment extends DialogFragment {
         });
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        FragmentManager m = getFragmentManager();
+        FragmentTransaction transaction = m.beginTransaction();
+        AdminListFragment frag =
+                AdminListFragment.newInstance(TAG);
+        transaction.detach(this).attach(this).show(this);
+        frag.show(transaction, TAG);
+    }
+
+    private void setCancelButton() {
+        ibCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Sound.closeDialogWindow(getContext());
+                dismiss();
+            }
+        });
+    }
+
     public ParseUser getSelectedAdmin() {
         return mAdmins.get(adapter.getSelectedPosition());
     }
@@ -88,6 +121,7 @@ public class AdminListFragment extends DialogFragment {
             public void done(List<ParseUser> objects, ParseException e) {
                 mAdmins.addAll(objects);
                 adapter.notifyDataSetChanged();
+                pbLoading.setVisibility(View.INVISIBLE);
                 Log.d(TAG, "Admins found");
             }
         });

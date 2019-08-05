@@ -72,6 +72,7 @@ public class InboxFragment extends Fragment {
         svSearch = view.findViewById(R.id.svSearch);
         Search.setSearchUi(svSearch, getContext());
         tvSearchHint = view.findViewById(R.id.tvSearchHint);
+        setSearchHintListener();
 
         pbLoading = view.findViewById(R.id.pbLoading);
         pbLoading.setVisibility(View.VISIBLE);
@@ -97,6 +98,15 @@ public class InboxFragment extends Fragment {
             @Override
             public void onItemLongClick(int position, View v) {
                 Log.d(TAG, "onItemLongClick position: " + position);
+            }
+        });
+    }
+
+    private void setSearchHintListener() {
+        tvSearchHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                svSearch.setIconified(false);
             }
         });
     }

@@ -30,7 +30,9 @@
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ppvPicture" />
+        app:layout_constraintStart_toEndOf="@+id/ppvPicture"
+        app:layout_constraintTop_toBottomOf="@+id/tvFullName"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tvFullName"
@@ -38,27 +40,22 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:text="TextView"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tvReply"
+        app:layout_constraintEnd_toStartOf="@+id/tvVerification"
         app:layout_constraintStart_toEndOf="@+id/ppvPicture"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/ppvPicture" />
 
     <ImageView
         android:id="@+id/ivVerified"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/tvVerification"
+        app:layout_constraintBottom_toBottomOf="@+id/tvFullName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/tvFullName"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvFullName"
         app:srcCompat="@drawable/ic_verified"
         tools:ignore="VectorDrawableCompat" />
 
@@ -66,14 +63,13 @@
         android:id="@+id/tvVerification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/verfication"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/tvReply"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/tvFullName" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ivVerified"
+        app:layout_constraintTop_toTopOf="@+id/tvFullName"
+        app:layout_constraintVertical_bias="0.0" />
+
 </android.support.constraint.ConstraintLayout>

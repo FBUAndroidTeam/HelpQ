@@ -82,6 +82,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         svQueueSearch = view.findViewById(R.id.svQueueSearch);
         Search.setSearchUi(svQueueSearch, getContext());
         tvSearchHint = view.findViewById(R.id.tvSearchHint);
+        setSearchHintListener();
 
         pbLoading = view.findViewById(R.id.pbLoading);
         pbLoading.setVisibility(View.VISIBLE);
@@ -233,6 +234,15 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                     }
                 })
                 .show();
+    }
+
+    private void setSearchHintListener() {
+        tvSearchHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                svQueueSearch.setIconified(false);
+            }
+        });
     }
 
     protected void search() {

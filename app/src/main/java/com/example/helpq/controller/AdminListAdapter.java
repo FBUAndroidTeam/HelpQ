@@ -51,7 +51,7 @@ public class AdminListAdapter extends RecyclerView.Adapter<AdminListAdapter.View
         return selected;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView tvAdmin;
         private RadioButton rbSelect;
@@ -63,17 +63,28 @@ public class AdminListAdapter extends RecyclerView.Adapter<AdminListAdapter.View
             rbSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(lastSelected != null) {
-                        lastSelected.setChecked(false);
-                    }
-                    selected = getAdapterPosition();
-                    lastSelected = rbSelect;
+                    trackCurrSelection();
                 }
             });
+            itemView.setOnClickListener(this);
         }
 
         public void bind(ParseUser admin) {
             tvAdmin.setText(admin.getString(KEY_FULL_NAME));
+        }
+
+        @Override
+        public void onClick(View v) {
+            trackCurrSelection();
+            rbSelect.setChecked(true);
+        }
+
+        private void trackCurrSelection() {
+            if(lastSelected != null) {
+                lastSelected.setChecked(false);
+            }
+            selected = getAdapterPosition();
+            lastSelected = rbSelect;
         }
     }
 }

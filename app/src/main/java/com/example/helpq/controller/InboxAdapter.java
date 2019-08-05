@@ -99,6 +99,8 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
             View.OnLongClickListener {
 
+        private static final int DURATION = 400;
+
         // Layout fields of item_message
         private TextView tvQuestion;
         private TextView tvPriorityEmoji;
@@ -138,7 +140,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         public void onClick(View v) {
             if (mOpenItemArray.get(getAdapterPosition())) {
                 Sound.closeSlideMenu(mContext);
-                resetRecyclerCell(400);
+                resetRecyclerCell(DURATION);
             }
         }
 
@@ -147,7 +149,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             mClickListener.onItemLongClick(getAdapterPosition(), v);
             if (!mOpenItemArray.get(getAdapterPosition())) {
                 Sound.openSlideMenu(mContext);
-                getMenu(400);
+                getMenu(DURATION);
             }
             return true;
         }
@@ -175,7 +177,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                 public void onClick(View v) {
                     Sound.openDialogWindow(mContext);
                     replyToQuestion(mMessages.get(getAdapterPosition()));
-                    resetRecyclerCell(400);
+                    resetRecyclerCell(DURATION);
                 }
             });
             ibLike.setOnClickListener(new View.OnClickListener() {

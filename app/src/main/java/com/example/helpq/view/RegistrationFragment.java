@@ -1,6 +1,7 @@
 package com.example.helpq.view;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.example.helpq.R;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.QueryFactory;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.view.admin_views.AdminListFragment;
 import com.facebook.AccessToken;
@@ -77,6 +79,7 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
         tvAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Sound.openDialogWindow(getContext());
                 fragmentManager = getFragmentManager();
                 adminListFragment = AdminListFragment.newInstance("adminListFragment");
                 adminListFragment.setTargetFragment(RegistrationFragment.this,
@@ -84,6 +87,15 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
                 adminListFragment.show(fragmentManager, AdminListFragment.TAG);
             }
         });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ||
+                newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
     }
 
     //checks to see if information user inputted is valid
