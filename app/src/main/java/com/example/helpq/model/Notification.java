@@ -26,5 +26,4 @@ public class Notification extends ParseObject {
         Integer tabObject = new Integer(tab);
         put(KEY_TAB, tabObject);
     }
-
 }
