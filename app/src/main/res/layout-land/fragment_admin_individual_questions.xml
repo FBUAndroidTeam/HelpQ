@@ -42,8 +42,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvIndividualQuestions"
-        android:layout_width="360dp"
-        android:layout_height="550dp"
+        android:layout_width="550dp"
+        android:layout_height="200dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
