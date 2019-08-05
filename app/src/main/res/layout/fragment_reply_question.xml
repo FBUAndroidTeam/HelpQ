@@ -41,7 +41,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvReplies"
         android:layout_width="350dp"
-        android:layout_height="wrap_content"
+        android:layout_height="500dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="20dp"
@@ -150,8 +150,7 @@
         app:layout_constraintEnd_toEndOf="@+id/rvReplies"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="@+id/rvReplies"
-        app:layout_constraintTop_toTopOf="@+id/rvReplies"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/rvReplies" />
 
     <TextView
         android:id="@+id/tvNoComments"
@@ -162,13 +161,12 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="112dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/no_comments"
         android:textColor="@color/colorFBBlue"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/etReply"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvQuestion" />
 

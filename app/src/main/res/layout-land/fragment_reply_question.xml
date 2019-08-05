@@ -45,7 +45,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvReplies"
         android:layout_width="550dp"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="20dp"
