@@ -146,6 +146,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:text="See More"
+            android:textSize="18dp"
             android:textColor="@color/colorGray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
