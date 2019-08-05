@@ -245,7 +245,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
 
         private void resetRecyclerCell(int duration) {
             ObjectAnimator animation = ObjectAnimator.ofFloat(vQuestionView,
-                    "translationX", vQuestionView.getX() - iSlideDeltaX);
+                    "x", 0);
             animation.setDuration(duration);
             animation.start();
             isSlideMenuOpen = false;
