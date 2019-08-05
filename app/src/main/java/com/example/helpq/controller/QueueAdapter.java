@@ -275,7 +275,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
         private void setupSlideDeltaX() {
             if (isAdmin && isWritten) iSlideDeltaX = -425;
-            if (isAdmin && !isWritten) iSlideDeltaX = -300;
+            if (isAdmin && !isWritten) iSlideDeltaX = -160;
             if (!isAdmin && isWritten) iSlideDeltaX = -300;
             if (!isAdmin && !isWritten) iSlideDeltaX = -160;
             if (isPeer && isWritten) iSlideDeltaX = -300;
@@ -358,12 +358,12 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
         private void adminSlideMenu(View v) {
             ibDelete.setVisibility(View.VISIBLE);
-            ibView.setVisibility(View.VISIBLE);
             ibDelete.setClickable(true);
-            ibView.setClickable(true);
             if (isWritten) {
                 ibReply.setVisibility(View.VISIBLE);
                 ibReply.setClickable(true);
+                ibView.setVisibility(View.VISIBLE);
+                ibView.setClickable(true);
             }
             if (!isSlideMenuOpen) {
                 vQuestionView.startAnimation(slideRecyclerCell(v, iSlideDeltaX));
