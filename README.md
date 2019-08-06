@@ -36,8 +36,8 @@
 - [x] Progress bars shown when loading. 
 - [x] Queue, board, and inbox items animated.
 - [x] Student is reminded 15 minutes before a workshop their signed up for begins
-- [ ] Sound effects added.   
-- [ ] Orientation changes handled.
+- [x] Sound effects added.   
+- [x] Orientation changes handled.
 - [x] Our own logo (: 
 
 ## 2. Screen Archetypes
