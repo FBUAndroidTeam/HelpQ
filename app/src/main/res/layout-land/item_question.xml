@@ -126,12 +126,25 @@
             android:layout_marginBottom="8dp"
             android:text="Description"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="20dp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tvHelpEmoji"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivMarker"
             app:layout_constraintTop_toBottomOf="@+id/tvStudentName"
             app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/ivMarker"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvWaitTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvPriorityEmoji"
+            app:srcCompat="@drawable/item_notification" />
 
         <TextView
             android:id="@+id/tvAnswerTime"

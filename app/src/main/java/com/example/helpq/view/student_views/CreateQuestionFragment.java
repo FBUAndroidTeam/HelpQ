@@ -240,7 +240,6 @@ public class CreateQuestionFragment extends DialogFragment {
                             Toast.LENGTH_LONG).show();
                 } else {
                     submitQuestion();
-                    notifyAdmin();
                 }
             }
         });
@@ -275,9 +274,10 @@ public class CreateQuestionFragment extends DialogFragment {
                 }
             }
         });
+        notifyAdmin(newQuestion);
     }
 
-    private void notifyAdmin() {
+    private void notifyAdmin(final Question question) {
         ParseQuery<ParseUser> query = QueryFactory.Users.getAdmin();
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
@@ -291,6 +291,7 @@ public class CreateQuestionFragment extends DialogFragment {
                 for (ParseUser admin : objects) {
                     Notification notification = new Notification();
                     notification.setUser(admin);
+                    notification.setQuestionId(question.getObjectId());
                     notification.setTab(2);
                     notification.saveInBackground();
                 }

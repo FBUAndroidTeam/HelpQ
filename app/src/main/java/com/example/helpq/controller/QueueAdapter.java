@@ -11,10 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.helpq.R;
+import com.example.helpq.model.Notification;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Sound;
@@ -32,6 +34,7 @@ import com.parse.SaveCallback;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
 public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> {
@@ -45,11 +48,16 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     // Array to store state of adapter items (open/closed menu)
     private SparseBooleanArray mOpenItemArray = new SparseBooleanArray();
 
+    // Maps Question objectIds to the notifications that point to them
+    private Hashtable<String, Notification> mNotifications;
+
     // Constructor
     public QueueAdapter(Context context, List<Question> questions, QueueFragment fragment) {
         mContext = context;
         mQuestions = questions;
         mQueueFragment = fragment;
+        mNotifications = new Hashtable<>();
+        if (User.isAdmin(ParseUser.getCurrentUser())) findHighlightedQuestions();
     }
 
     @NonNull
@@ -118,6 +126,25 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         QueueAdapter.mClickListener = clickListener;
     }
 
+    private void findHighlightedQuestions() {
+        ParseQuery query = QueryFactory.Notifications.getNotifications();
+        query.findInBackground(new FindCallback<Notification>() {
+            @Override
+            public void done(List<Notification> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error with notification query");
+                    return;
+                }
+                for (int i = 0; i < objects.size(); i++) {
+                    String questionId = objects.get(i).getQuestionId();
+                    if (questionId != null) {
+                        mNotifications.put(objects.get(i).getQuestionId(), objects.get(i));
+                    }
+                }
+            }
+        });
+    }
+
     public interface ClickListener {
         void onItemClick(int position, View v);
         void onItemLongClick(int position, View v);
@@ -139,6 +166,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         private TextView tvSeeMore;
         private String questionText;
         private TextView tvWaitTime;
+        private ImageView ivMarker;
 
         // Number of lines (needed to implement See More)
         private int originalLines;
@@ -192,6 +220,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             setLikeButtonImage(ibLike, question.isLiked());
             setLikeText(question, tvLikes);
             setWaitTimeText(question, tvWaitTime);
+            ivMarker = itemView.findViewById(R.id.ivMarker);
 
             isAdmin = User.isAdmin(ParseUser.getCurrentUser());
             isWritten = question.getHelpType()
@@ -205,6 +234,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             setupLikeButton();
             setupViewButton(question);
             openMenuIfApplicable();
+            markNewQuestion(question);
         }
 
         private void onClickSeeMore() {
@@ -229,6 +259,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
         @Override
         public boolean onLongClick(View v) {
+            ivMarker.setVisibility(View.GONE);
             mClickListener.onItemLongClick(getAdapterPosition(), v);
             if(!mOpenItemArray.get(getAdapterPosition())) {
                 Sound.openSlideMenu(mContext);
@@ -434,6 +465,26 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     }
                 }
             });
+        }
+
+        // Place a marker on this question if a notification points to it.
+        // Delete the notification.
+        private void markNewQuestion(Question question) {
+            String questionId = question.getObjectId();
+            if (mNotifications.containsKey(questionId)) {
+                ivMarker.setVisibility(View.VISIBLE);
+                Notification notification = mNotifications.get(questionId);
+                try {
+                    notification.delete();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                notification.saveInBackground();
+                mNotifications.remove(questionId);
+            }
+            else {
+                ivMarker.setVisibility(View.GONE);
+            }
         }
 
         //determines whether to expand or collapse cell when cell is clicked on

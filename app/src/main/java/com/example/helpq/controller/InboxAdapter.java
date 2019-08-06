@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,12 +35,14 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
     private static final String TAG = "InboxAdapter";
     private Context mContext;
     private List<Question> mMessages;
-    private Hashtable<String, Notification> mNotifications;
     private static ClickListener mClickListener;
     private InboxFragment mInboxFragment;
 
     // Array to store state of adapter items (open/closed menu)
     private SparseBooleanArray mOpenItemArray = new SparseBooleanArray();
+
+    // Maps Question objectIds to the notifications that point to them
+    private Hashtable<String, Notification> mNotifications;
 
     // Constructor
     public InboxAdapter(Context context, List<Question> mMessages, InboxFragment fragment) {
@@ -111,8 +114,15 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         query.findInBackground(new FindCallback<Notification>() {
             @Override
             public void done(List<Notification> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error with notification query");
+                    return;
+                }
                 for (int i = 0; i < objects.size(); i++) {
-                    mNotifications.put(objects.get(i).getQuestionId(), objects.get(i));
+                    String questionId = objects.get(i).getQuestionId();
+                    if (questionId != null) {
+                        mNotifications.put(objects.get(i).getQuestionId(), objects.get(i));
+                    }
                 }
             }
         });
@@ -158,7 +168,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             setupMessageText(message);
             setupMenuClickListeners();
             openMenuIfApplicable();
-            markNewMessages(message);
+            markNewMessage(message);
         }
 
         @Override
@@ -237,9 +247,9 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             }
         }
 
-        // Place a marker on messages that have a notification pointing to them.
+        // Place a marker on this message if a notification points to it.
         // Delete the notification.
-        private void markNewMessages(Question message) {
+        private void markNewMessage(Question message) {
             String messageId = message.getObjectId();
             if (mNotifications.containsKey(messageId)) {
                 ivMarker.setVisibility(View.VISIBLE);
