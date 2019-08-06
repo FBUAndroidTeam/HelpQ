@@ -48,16 +48,11 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     // Array to store state of adapter items (open/closed menu)
     private SparseBooleanArray mOpenItemArray = new SparseBooleanArray();
 
-    // Maps Question objectIds to the notifications that point to them
-    private Hashtable<String, Notification> mNotifications;
-
     // Constructor
     public QueueAdapter(Context context, List<Question> questions, QueueFragment fragment) {
         mContext = context;
         mQuestions = questions;
         mQueueFragment = fragment;
-        mNotifications = new Hashtable<>();
-        if (User.isAdmin(ParseUser.getCurrentUser())) findHighlightedQuestions();
     }
 
     @NonNull
@@ -124,25 +119,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
     public void setOnItemClickListener(ClickListener clickListener) {
         QueueAdapter.mClickListener = clickListener;
-    }
-
-    private void findHighlightedQuestions() {
-        ParseQuery query = QueryFactory.Notifications.getNotifications();
-        query.findInBackground(new FindCallback<Notification>() {
-            @Override
-            public void done(List<Notification> objects, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error with notification query");
-                    return;
-                }
-                for (int i = 0; i < objects.size(); i++) {
-                    String questionId = objects.get(i).getQuestionId();
-                    if (questionId != null) {
-                        mNotifications.put(objects.get(i).getQuestionId(), objects.get(i));
-                    }
-                }
-            }
-        });
     }
 
     public interface ClickListener {
@@ -234,7 +210,12 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             setupLikeButton();
             setupViewButton(question);
             openMenuIfApplicable();
-            markNewQuestion(question);
+            if (User.isAdmin(ParseUser.getCurrentUser())) {
+                markNewQuestion(question);
+            }
+            else {
+                ivMarker.setVisibility(View.GONE);
+            }
         }
 
         private void onClickSeeMore() {
@@ -471,16 +452,17 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         // Delete the notification.
         private void markNewQuestion(Question question) {
             String questionId = question.getObjectId();
-            if (mNotifications.containsKey(questionId)) {
+            Hashtable<String, Notification> table = mQueueFragment.mNotifications;
+            if (table.containsKey(questionId)) {
                 ivMarker.setVisibility(View.VISIBLE);
-                Notification notification = mNotifications.get(questionId);
+                Notification notification = table.get(questionId);
                 try {
                     notification.delete();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 notification.saveInBackground();
-                mNotifications.remove(questionId);
+                table.remove(questionId);
             }
             else {
                 ivMarker.setVisibility(View.GONE);

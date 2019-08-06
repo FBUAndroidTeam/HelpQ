@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.example.helpq.R;
 import com.example.helpq.controller.QueueAdapter;
 import com.example.helpq.model.DialogDismissListener;
+import com.example.helpq.model.Notification;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Search;
@@ -35,6 +36,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
 
 public class QueueFragment extends Fragment implements DialogDismissListener {
@@ -56,6 +58,9 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     // Swipe to refresh and progress bar
     private SwipeRefreshLayout mSwipeContainer;
     private ProgressBar pbLoading;
+
+    // Maps Question objectIds to the notifications that point to them
+    public Hashtable<String, Notification> mNotifications;
 
     public static QueueFragment newInstance() {
         return new QueueFragment();
@@ -96,6 +101,8 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvQuestions.setLayoutManager(layoutManager);
 
+        if (User.isAdmin(ParseUser.getCurrentUser())) findHighlightedQuestions();
+
         setupSwipeRefreshing(view);
         queryQuestions("");
         search();
@@ -131,11 +138,32 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                 android.R.color.holo_red_light);
     }
 
+    private void findHighlightedQuestions() {
+        mNotifications = new Hashtable<>();
+        ParseQuery query = QueryFactory.Notifications.getNotifications();
+        query.findInBackground(new FindCallback<Notification>() {
+            @Override
+            public void done(List<Notification> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error with notification query");
+                    return;
+                }
+                for (int i = 0; i < objects.size(); i++) {
+                    String questionId = objects.get(i).getQuestionId();
+                    if (questionId != null) {
+                        mNotifications.put(objects.get(i).getQuestionId(), objects.get(i));
+                    }
+                }
+            }
+        });
+    }
+
     // Refresh the queue, and load questions.
     public void fetchQueueAsync(String input) {
         mAdapter.clear();
         tvNotice.setVisibility(View.GONE);
         tvSearchNotice.setVisibility(View.GONE);
+        findHighlightedQuestions();
         queryQuestions(input);
         mSwipeContainer.setRefreshing(false);
     }
