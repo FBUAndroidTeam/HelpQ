@@ -50,6 +50,11 @@ public class NotificationHelper {
         });
     }
 
+    // Delete current user's notification that points to the Question with this id.
+    public static void deleteQuestionNotification(String questionId) {
+
+    }
+
     // Add a notification badge to the item with given id.
     public void addBadge(int itemId, int number)
     {

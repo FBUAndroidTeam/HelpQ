@@ -10,16 +10,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.helpq.R;
+import com.example.helpq.model.Notification;
+import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.view.ReplyQuestionFragment;
 import com.example.helpq.view.student_views.InboxFragment;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.Hashtable;
 import java.util.List;
 
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> {
@@ -27,6 +34,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
     private static final String TAG = "InboxAdapter";
     private Context mContext;
     private List<Question> mMessages;
+    private Hashtable<String, Notification> mNotifications;
     private static ClickListener mClickListener;
     private InboxFragment mInboxFragment;
 
@@ -38,6 +46,8 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         this.mContext = context;
         this.mMessages = mMessages;
         mInboxFragment = fragment;
+        mNotifications = new Hashtable<>();
+        findHighlightedMessages();
     }
 
     @NonNull
@@ -96,6 +106,18 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         ib.setBackgroundResource(isActive ? R.drawable.heart_icon_active : R.drawable.heart_icon);
     }
 
+    private void findHighlightedMessages() {
+        ParseQuery query = QueryFactory.Notifications.getNotifications();
+        query.findInBackground(new FindCallback<Notification>() {
+            @Override
+            public void done(List<Notification> objects, ParseException e) {
+                for (int i = 0; i < objects.size(); i++) {
+                    mNotifications.put(objects.get(i).getQuestionId(), objects.get(i));
+                }
+            }
+        });
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
             View.OnLongClickListener {
 
@@ -134,6 +156,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             setupMessageText(message);
             setupMenuClickListeners();
             openMenuIfApplicable();
+            markNewMessages(message);
         }
 
         @Override
@@ -198,6 +221,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             });
         }
 
+        // If the menu should be open, open it.
         private void openMenuIfApplicable() {
             if (mOpenItemArray.get(getAdapterPosition())) {
                 resetRecyclerCell(0);
@@ -207,6 +231,27 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                 resetRecyclerCell(0);
                 ibView.setClickable(false);
                 ibLike.setClickable(false);
+            }
+        }
+
+        // Place a marker on messages that have a notification pointing to them.
+        // Delete the notification.
+        private void markNewMessages(Question message) {
+            ImageView highlight = itemView.findViewById(R.id.ivHighlight);
+            String messageId = message.getObjectId();
+            if (mNotifications.containsKey(messageId)) {
+                highlight.setVisibility(View.VISIBLE);
+                Notification notification = mNotifications.get(messageId);
+                try {
+                    notification.delete();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                notification.saveInBackground();
+                mNotifications.remove(messageId);
+            }
+            else {
+                highlight.setVisibility(View.GONE);
             }
         }
 

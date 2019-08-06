@@ -152,6 +152,7 @@ public class AnswerQuestionFragment extends DialogFragment {
     private void notifyStudent() {
         Notification notification = new Notification();
         notification.setUser(mQuestion.getAsker());
+        notification.setQuestionId(mQuestion.getObjectId());
         notification.setTab(3);
         notification.saveInBackground();
     }
@@ -177,6 +178,7 @@ public class AnswerQuestionFragment extends DialogFragment {
                             }
                             Notification notification = new Notification();
                             notification.setUser(objects.get(0));
+                            notification.setQuestionId(mQuestion.getObjectId());
                             notification.setTab(3);
                             notification.saveInBackground();
                         }
@@ -205,6 +207,7 @@ public class AnswerQuestionFragment extends DialogFragment {
                 for (ParseUser student : objects) {
                     Notification notification = new Notification();
                     notification.setUser(student);
+                    notification.setQuestionId(mQuestion.getObjectId());
                     notification.setTab(4);
                     notification.saveInBackground();
                 }

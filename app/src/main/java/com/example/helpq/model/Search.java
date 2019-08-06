@@ -78,13 +78,13 @@ public class Search {
         Resources resource = svSearch.getContext().getResources();
         ImageView closeBtn = ((ImageView) svSearch.findViewById(resource.getIdentifier
                 ("android:id/search_close_btn", null, null)));
-        closeBtn.setColorFilter(context.getResources().getColor(R.color.colorFaded));
+        closeBtn.setColorFilter(context.getResources().getColor(R.color.colorMint));
         ((ImageView) svSearch.findViewById(resource
                 .getIdentifier("android:id/search_button", null, null)))
-                .setColorFilter(context.getResources().getColor(R.color.colorFaded));
+                .setColorFilter(context.getResources().getColor(R.color.colorMint));
         TextView searchText = (TextView) svSearch.findViewById(resource
                 .getIdentifier("android:id/search_src_text", null, null));
-        searchText.setTextColor(context.getResources().getColor(R.color.colorFaded));
+        searchText.setTextColor(context.getResources().getColor(R.color.colorMint));
         searchText.setHint("");
     }
 }

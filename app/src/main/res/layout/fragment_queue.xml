@@ -81,7 +81,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/search_hint"
-        android:textColor="@color/colorFaded"
+        android:textColor="@color/colorMint"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/svQueueSearch"
         app:layout_constraintEnd_toEndOf="parent"
