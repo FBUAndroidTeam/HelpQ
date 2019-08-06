@@ -47,7 +47,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         this.mMessages = mMessages;
         mInboxFragment = fragment;
         mNotifications = new Hashtable<>();
-        findHighlightedMessages();
+        if (!User.isAdmin(ParseUser.getCurrentUser())) findHighlightedMessages();
     }
 
     @NonNull
@@ -132,6 +132,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         private TextView tvLikes;
         private ImageButton ibLike;
         private ImageButton ibView;
+        private ImageView ivMarker;
         private View vQuestionView;
         private int iSlideDeltaX;
 
@@ -145,6 +146,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             tvLikes = itemView.findViewById(R.id.tvLikes);
             ibLike = itemView.findViewById(R.id.ibLike);
             ibView = itemView.findViewById(R.id.ibView);
+            ivMarker = itemView.findViewById(R.id.ivMarker);
             vQuestionView = itemView.findViewById(R.id.clQuestion);
 
             itemView.setOnClickListener(this);
@@ -170,6 +172,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         @Override
         public boolean onLongClick(View v) {
             mClickListener.onItemLongClick(getAdapterPosition(), v);
+            ivMarker.setVisibility(View.GONE);
             if (!mOpenItemArray.get(getAdapterPosition())) {
                 Sound.openSlideMenu(mContext);
                 getMenu(DURATION);
@@ -237,10 +240,9 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         // Place a marker on messages that have a notification pointing to them.
         // Delete the notification.
         private void markNewMessages(Question message) {
-            ImageView highlight = itemView.findViewById(R.id.ivHighlight);
             String messageId = message.getObjectId();
             if (mNotifications.containsKey(messageId)) {
-                highlight.setVisibility(View.VISIBLE);
+                ivMarker.setVisibility(View.VISIBLE);
                 Notification notification = mNotifications.get(messageId);
                 try {
                     notification.delete();
@@ -251,7 +253,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                 mNotifications.remove(messageId);
             }
             else {
-                highlight.setVisibility(View.GONE);
+                ivMarker.setVisibility(View.GONE);
             }
         }
 
