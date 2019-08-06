@@ -76,7 +76,6 @@ public class AnswerQuestionFragment extends DialogFragment {
         tvStudent = view.findViewById(R.id.tvStudent);
         tvDescription = view.findViewById(R.id.tvQuestion);
         etAnswer = view.findViewById(R.id.etAnswer);
-        etAnswer.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         btnSubmit = view.findViewById(R.id.btnSubmit);
         tbPrivate = view.findViewById(R.id.tbPrivate);
         ibCancel = view.findViewById(R.id.ibCancel);

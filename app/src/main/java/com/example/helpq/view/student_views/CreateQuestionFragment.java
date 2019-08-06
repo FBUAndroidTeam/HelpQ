@@ -91,7 +91,6 @@ public class CreateQuestionFragment extends DialogFragment {
         tbWritten = view.findViewById(R.id.tbWritten);
 
         etQuestion = (EditText) view.findViewById(R.id.etQuestion);
-        etQuestion.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         btnSubmit = view.findViewById(R.id.btnSubmit);
 
         tvWaitTime = view.findViewById(R.id.tvWaitTime);

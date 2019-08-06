@@ -78,7 +78,7 @@ public class ReplyQuestionFragment extends DialogFragment {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ||
                 newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            FragmentManager m = getParentFragment().getChildFragmentManager();
+            FragmentManager m = getFragmentManager();
             FragmentTransaction transaction = m.beginTransaction();
             ReplyQuestionFragment frag =
                     ReplyQuestionFragment.newInstance((Question) getArguments().get("Question"));
@@ -97,7 +97,6 @@ public class ReplyQuestionFragment extends DialogFragment {
         btnReply = view.findViewById(R.id.btnReply);
         tvNoComments = view.findViewById(R.id.tvNoComments);
         etReply = view.findViewById(R.id.etReply);
-        etReply.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         ibCancel = view.findViewById(R.id.ibCancel);
         setCancelButton();
 
