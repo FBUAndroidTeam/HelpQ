@@ -281,7 +281,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         if (input.isEmpty()) {
             mQuestions.addAll(mAllQuestions);
         } else {
-            List<Question> result = Search.mSearch(mAllQuestions, input);
+            List<Question> result = Search.searchQueue(mAllQuestions, input);
             mQuestions.addAll(result);
         }
         mAdapter.notifyDataSetChanged();
