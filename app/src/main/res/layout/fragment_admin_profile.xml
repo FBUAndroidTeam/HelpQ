@@ -38,7 +38,7 @@
         android:layout_marginRight="8dp"
         android:text="Name"
         android:textSize="25dp"
-        android:textColor="@color/colorFaded"
+        android:textColor="@color/colorMint"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tvUsername"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +76,7 @@
         android:layout_marginRight="8dp"
         android:text="Username"
         android:textSize="15dp"
-        android:textColor="@color/colorFaded"
+        android:textColor="@color/colorMint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvFullName" />

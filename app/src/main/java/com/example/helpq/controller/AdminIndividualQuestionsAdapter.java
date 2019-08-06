@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.view.admin_views.AdminIndividualQuestionsFragment;
 import com.example.helpq.view.ReplyQuestionFragment;
@@ -95,6 +96,7 @@ public class AdminIndividualQuestionsAdapter extends
                 fragment.setTargetFragment(mAdminQuestionsFragment, 300);
                 FragmentManager manager = mAdminQuestionsFragment.getFragmentManager();
                 fragment.show(manager, ReplyQuestionFragment.TAG);
+                Sound.openDialogWindow(mContext);
             }
         }
 

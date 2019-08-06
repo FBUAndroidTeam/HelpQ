@@ -5,21 +5,29 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.helpq.R;
+import com.example.helpq.model.Notification;
+import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.view.ReplyQuestionFragment;
 import com.example.helpq.view.student_views.InboxFragment;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.Hashtable;
 import java.util.List;
 
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> {
@@ -33,11 +41,16 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
     // Array to store state of adapter items (open/closed menu)
     private SparseBooleanArray mOpenItemArray = new SparseBooleanArray();
 
+    // Maps Question objectIds to the notifications that point to them
+    private Hashtable<String, Notification> mNotifications;
+
     // Constructor
     public InboxAdapter(Context context, List<Question> mMessages, InboxFragment fragment) {
         this.mContext = context;
         this.mMessages = mMessages;
         mInboxFragment = fragment;
+        mNotifications = new Hashtable<>();
+        if (!User.isAdmin(ParseUser.getCurrentUser())) findHighlightedMessages();
     }
 
     @NonNull
@@ -96,6 +109,25 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         ib.setBackgroundResource(isActive ? R.drawable.heart_icon_active : R.drawable.heart_icon);
     }
 
+    private void findHighlightedMessages() {
+        ParseQuery query = QueryFactory.Notifications.getNotifications();
+        query.findInBackground(new FindCallback<Notification>() {
+            @Override
+            public void done(List<Notification> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error with notification query");
+                    return;
+                }
+                for (int i = 0; i < objects.size(); i++) {
+                    String questionId = objects.get(i).getQuestionId();
+                    if (questionId != null) {
+                        mNotifications.put(objects.get(i).getQuestionId(), objects.get(i));
+                    }
+                }
+            }
+        });
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
             View.OnLongClickListener {
 
@@ -110,6 +142,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         private TextView tvLikes;
         private ImageButton ibLike;
         private ImageButton ibView;
+        private ImageView ivMarker;
         private View vQuestionView;
         private int iSlideDeltaX;
 
@@ -123,6 +156,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             tvLikes = itemView.findViewById(R.id.tvLikes);
             ibLike = itemView.findViewById(R.id.ibLike);
             ibView = itemView.findViewById(R.id.ibView);
+            ivMarker = itemView.findViewById(R.id.ivMarker);
             vQuestionView = itemView.findViewById(R.id.clQuestion);
 
             itemView.setOnClickListener(this);
@@ -134,6 +168,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             setupMessageText(message);
             setupMenuClickListeners();
             openMenuIfApplicable();
+            markNewMessage(message);
         }
 
         @Override
@@ -147,6 +182,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         @Override
         public boolean onLongClick(View v) {
             mClickListener.onItemLongClick(getAdapterPosition(), v);
+            ivMarker.setVisibility(View.GONE);
             if (!mOpenItemArray.get(getAdapterPosition())) {
                 Sound.openSlideMenu(mContext);
                 getMenu(DURATION);
@@ -198,6 +234,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             });
         }
 
+        // If the menu should be open, open it.
         private void openMenuIfApplicable() {
             if (mOpenItemArray.get(getAdapterPosition())) {
                 resetRecyclerCell(0);
@@ -207,6 +244,26 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                 resetRecyclerCell(0);
                 ibView.setClickable(false);
                 ibLike.setClickable(false);
+            }
+        }
+
+        // Place a marker on this message if a notification points to it.
+        // Delete the notification.
+        private void markNewMessage(Question message) {
+            String messageId = message.getObjectId();
+            if (mNotifications.containsKey(messageId)) {
+                ivMarker.setVisibility(View.VISIBLE);
+                Notification notification = mNotifications.get(messageId);
+                try {
+                    notification.delete();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                notification.saveInBackground();
+                mNotifications.remove(messageId);
+            }
+            else {
+                ivMarker.setVisibility(View.GONE);
             }
         }
 

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +24,7 @@ import com.example.helpq.model.Notification;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Sound;
+import com.example.helpq.model.User;
 import com.example.helpq.model.WaitTime;
 import com.example.helpq.model.WaitTimeHelper;
 import com.parse.FindCallback;
@@ -181,7 +181,13 @@ public class CreateQuestionFragment extends DialogFragment {
                     Log.e(TAG, "Every admin should only have one WaitTime dataset!");
                     return;
                 }
-                waitTime = objects.get(0);
+                if (objects.size() == 0) {
+                    waitTime = new WaitTime();
+                    waitTime.setAdminName(User.getAdminName(ParseUser.getCurrentUser()));
+                    waitTime.saveInBackground();
+                } else {
+                    waitTime = objects.get(0);
+                }
                 tvWaitTime.setText(helper.getBlockingWaitTime(waitTime.getBlockingTime()));
                 togglePriorityButtons();
             }
@@ -234,7 +240,6 @@ public class CreateQuestionFragment extends DialogFragment {
                             Toast.LENGTH_LONG).show();
                 } else {
                     submitQuestion();
-                    notifyAdmin();
                 }
             }
         });
@@ -258,6 +263,7 @@ public class CreateQuestionFragment extends DialogFragment {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
+                    Sound.actionDone(getContext());
                     DialogDismissListener listener = (DialogDismissListener) getTargetFragment();
                     Log.d(TAG, "Question created successfully");
                     listener.onDismiss();
@@ -268,9 +274,10 @@ public class CreateQuestionFragment extends DialogFragment {
                 }
             }
         });
+        notifyAdmin(newQuestion);
     }
 
-    private void notifyAdmin() {
+    private void notifyAdmin(final Question question) {
         ParseQuery<ParseUser> query = QueryFactory.Users.getAdmin();
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
@@ -284,6 +291,7 @@ public class CreateQuestionFragment extends DialogFragment {
                 for (ParseUser admin : objects) {
                     Notification notification = new Notification();
                     notification.setUser(admin);
+                    notification.setQuestionId(question.getObjectId());
                     notification.setTab(2);
                     notification.saveInBackground();
                 }

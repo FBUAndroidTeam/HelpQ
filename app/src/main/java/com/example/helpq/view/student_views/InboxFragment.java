@@ -177,7 +177,7 @@ public class InboxFragment extends Fragment {
         if (input.isEmpty()) {
             mMessages.addAll(mAllMessages);
         } else {
-            List<Question> result = Search.mSearch(mAllMessages, input);
+            List<Question> result = Search.searchInbox(mAllMessages, input);
             mMessages.addAll(result);
         }
         mAdapter.notifyDataSetChanged();

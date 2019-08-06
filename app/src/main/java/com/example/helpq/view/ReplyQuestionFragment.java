@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,7 +81,7 @@ public class ReplyQuestionFragment extends DialogFragment {
             FragmentTransaction transaction = m.beginTransaction();
             ReplyQuestionFragment frag =
                     ReplyQuestionFragment.newInstance((Question) getArguments().get("Question"));
-            transaction.detach(this).attach(this).show(this);
+            transaction.remove(this);
             frag.show(transaction, TAG);
         }
     }

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
     android:background="@drawable/item_question_rounded"
-    android:backgroundTint="@color/colorFaded">
+    android:backgroundTint="@color/colorMint">
 
     <TextView
         android:id="@+id/tvAnswerTime"

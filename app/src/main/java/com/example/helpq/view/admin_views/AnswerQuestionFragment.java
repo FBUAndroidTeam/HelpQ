@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -136,6 +135,7 @@ public class AnswerQuestionFragment extends DialogFragment {
                     Toast.makeText(getContext(), R.string.success_question_answered,
                             Toast.LENGTH_LONG).show();
                     Log.d(TAG, "Answer submitted successfully");
+                    Sound.actionDone(getContext());
                     DialogDismissListener listener = (DialogDismissListener) getTargetFragment();
                     listener.onDismiss();
                     dismiss();
@@ -152,6 +152,7 @@ public class AnswerQuestionFragment extends DialogFragment {
     private void notifyStudent() {
         Notification notification = new Notification();
         notification.setUser(mQuestion.getAsker());
+        notification.setQuestionId(mQuestion.getObjectId());
         notification.setTab(3);
         notification.saveInBackground();
     }
@@ -177,6 +178,7 @@ public class AnswerQuestionFragment extends DialogFragment {
                             }
                             Notification notification = new Notification();
                             notification.setUser(objects.get(0));
+                            notification.setQuestionId(mQuestion.getObjectId());
                             notification.setTab(3);
                             notification.saveInBackground();
                         }
@@ -205,6 +207,7 @@ public class AnswerQuestionFragment extends DialogFragment {
                 for (ParseUser student : objects) {
                     Notification notification = new Notification();
                     notification.setUser(student);
+                    notification.setQuestionId(mQuestion.getObjectId());
                     notification.setTab(4);
                     notification.saveInBackground();
                 }

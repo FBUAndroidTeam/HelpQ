@@ -9,7 +9,8 @@
     <color name="colorStrongGreen">#176D7A</color>
     <color name="colorRed">#F20000</color>
     <color name="realFBBlue">#3C5A99</color>
-    <color name="colorFaded">#F0FBF7</color>
-    <color name="colorGray">	#808080</color>
+    <color name="colorMint">#F0FBF7</color>
+    <color name="colorFadedRed">#FFB5C5</color>
+    <color name="colorGray">#808080</color>
     <color name="colorSubtleGray">#E0DFDF</color>
 </resources>
