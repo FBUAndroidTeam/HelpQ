@@ -3,7 +3,12 @@ package com.example.helpq.model;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+
+import static com.example.helpq.model.Question.KEY_ASKER;
 
 public class QueryFactory {
 
@@ -15,7 +20,7 @@ public class QueryFactory {
         public static ParseQuery<Question> getArchivedQuestions() {
             ParseQuery<Question> query = new ParseQuery<>(Question.class);
             query.whereEqualTo(Question.KEY_ARCHIVED, true)
-                    .include(Question.KEY_ASKER);
+                    .include(KEY_ASKER);
             return query;
         }
 
@@ -23,14 +28,14 @@ public class QueryFactory {
         public static ParseQuery<Question> getQuestionsForQueue() {
             ParseQuery<Question> query = new ParseQuery<>(Question.class);
             query.whereEqualTo(Question.KEY_ARCHIVED, false)
-                    .include(Question.KEY_ASKER);
+                    .include(KEY_ASKER);
             return query;
         }
 
         // Query for public answered questions asked by all students.
         public static ParseQuery<Question> getStudentBoardMessages() {
             ParseQuery<Question> query = new ParseQuery<>(Question.class);
-            query.include(Question.KEY_ASKER)
+            query.include(KEY_ASKER)
                     .whereEqualTo(Question.KEY_ARCHIVED, true)
                     .whereEqualTo(Question.KEY_IS_PRIVATE, false)
                     .whereEqualTo(Question.KEY_HELP_TYPE, KEY_WRITTEN)
@@ -41,7 +46,7 @@ public class QueryFactory {
         // Query for answered questions asked by the current user only.
         public static ParseQuery<Question> getStudentInboxMessages() {
             ParseQuery<Question> query = new ParseQuery<>(Question.class);
-            query.include(Question.KEY_ASKER)
+            query.include(KEY_ASKER)
                     .whereEqualTo(Question.KEY_HELP_TYPE, KEY_WRITTEN)
                     .whereEqualTo(Question.KEY_ARCHIVED, true)
                     .orderByDescending(Question.KEY_ANSWERED_AT);
@@ -51,10 +56,17 @@ public class QueryFactory {
         // Query for all questions answered by this admin (the current user).
         public static ParseQuery<Question> getAdminBoardMessages() {
             ParseQuery<Question> query = new ParseQuery<Question>(Question.class);
-            query.include(Question.KEY_ASKER)
+            query.include(KEY_ASKER)
                     .whereEqualTo(Question.KEY_ARCHIVED, true)
                     .whereEqualTo(Question.KEY_HELP_TYPE, KEY_WRITTEN)
                     .orderByDescending(Question.KEY_ANSWERED_AT);
+            return query;
+        }
+
+        public static ParseQuery<Question> getNumberOfPendingQuestions(List<ParseUser> students) {
+            ParseQuery<Question> query = new ParseQuery<Question>(Question.class);
+            query.whereEqualTo(Question.KEY_ARCHIVED, false)
+                    .whereContainedIn(KEY_ASKER, Arrays.asList(students));
             return query;
         }
     }
