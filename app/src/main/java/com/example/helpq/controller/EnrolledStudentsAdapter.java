@@ -20,10 +20,12 @@ import com.example.helpq.view.admin_views.AdminEnrolledFragment;
 import com.example.helpq.view.admin_views.AdminIndividualQuestionsFragment;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EnrolledStudentsAdapter extends
@@ -92,7 +94,8 @@ public class EnrolledStudentsAdapter extends
 
         private void queryForStats(final ParseUser student) {
             final int[] unAnsweredQuestions = {0};
-            ParseQuery<Question> query = QueryFactory.Questions.getQuestionsForQueue();
+            ParseQuery<Question> query =
+                    QueryFactory.Questions.getNumberOfPendingQuestions(mEnrolledStudents);
             query.findInBackground(new FindCallback<Question>() {
                 @Override
                 public void done(List<Question> objects, ParseException e) {
@@ -103,7 +106,14 @@ public class EnrolledStudentsAdapter extends
                     }
                     for(int i = 0; i < objects.size(); i++) {
                         ParseUser user = objects.get(i).getAsker();
-                        if ((user.getUsername()).equals(student.getUsername())) {
+                        String name1 = "";
+                        try {
+                            name1 = user.fetchIfNeeded().getUsername();
+                        } catch (ParseException e1) {
+                            Log.v(TAG, e1.toString());
+                            e1.printStackTrace();
+                        }
+                        if (name1.equals(student.getUsername())) {
                             unAnsweredQuestions[0] += 1;
                         }
                     }

@@ -73,4 +73,6 @@
     <string name="no_pending_student">This student has no pending questions.</string>
     <string name="no_comments">This question has no comments.</string>
     <string name="not_able_to_have_comments">In-person questions do not contain written replies.</string>
+    <string name="at_least_one_verify">You must have at least one reply verified</string>
+    <string name="see_student_reply">See student reply</string>
 </resources>

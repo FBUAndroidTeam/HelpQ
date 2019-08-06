@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.ReplyAdapter;
+import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Reply;
 import com.example.helpq.model.Sound;
@@ -105,7 +106,7 @@ public class ReplyQuestionFragment extends DialogFragment {
         mReplies = new ArrayList<>();
         rvReplies = view.findViewById(R.id.rvReplies);
         mQuestion = getArguments().getParcelable("Question");
-        adapter = new ReplyAdapter(getContext(), mReplies);
+        adapter = new ReplyAdapter(getContext(), mReplies, mQuestion);
         rvReplies.setAdapter(adapter);
         populateReplyList();
         rvReplies.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -128,6 +129,10 @@ public class ReplyQuestionFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 Sound.closeDialogWindow(getContext());
+                if(adapter.anyNewVerifications()) {
+                    DialogDismissListener listener = (DialogDismissListener) getTargetFragment();
+                    listener.onDismiss();
+                }
                 dismiss();
             }
         });
@@ -144,6 +149,7 @@ public class ReplyQuestionFragment extends DialogFragment {
             @Override
             public void onClick(final View v) {
                 if(!etReply.getText().toString().equals("")) {
+                    Sound.actionDone(getContext());
                     final Reply newReply = new Reply();
                     newReply.setText(etReply.getText().toString());
                     newReply.setQuestion(mQuestion);
@@ -175,6 +181,8 @@ public class ReplyQuestionFragment extends DialogFragment {
             }
         });
     }
+
+
 
     private void populateReplyList() {
         ParseQuery<Reply> query = new ParseQuery<Reply>(Reply.class);
