@@ -50,6 +50,18 @@ public class Sound {
         playSound();
     }
 
+    public static void actionDone(Context context) {
+        player = MediaPlayer.create(context,
+                R.raw.zapsplat_multimedia_notification_chime_bell_002_26402);
+        playSound();
+    }
+
+    public static void unSignUp(Context context) {
+        player = MediaPlayer.create(context,
+                R.raw.zapsplat_multimedia_notification_chime_bell_001_26401);
+        playSound();
+    }
+
     private static void playSound() {
         player.start();
         player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {

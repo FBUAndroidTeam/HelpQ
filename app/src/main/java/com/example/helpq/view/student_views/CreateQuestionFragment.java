@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -258,6 +257,7 @@ public class CreateQuestionFragment extends DialogFragment {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
+                    Sound.actionDone(getContext());
                     DialogDismissListener listener = (DialogDismissListener) getTargetFragment();
                     Log.d(TAG, "Question created successfully");
                     listener.onDismiss();

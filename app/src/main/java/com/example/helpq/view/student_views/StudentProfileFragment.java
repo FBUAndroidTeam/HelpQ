@@ -78,6 +78,7 @@ public class StudentProfileFragment extends Fragment {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnLogout.setVisibility(View.INVISIBLE);
                 ParseUser.logOut();
                 startActivity(new Intent(getContext(), LoginActivity.class));
                 getActivity().finish();

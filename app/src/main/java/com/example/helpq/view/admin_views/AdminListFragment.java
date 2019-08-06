@@ -80,6 +80,7 @@ public class AdminListFragment extends DialogFragment {
                     Toast.makeText(getContext(), R.string.select_admin,
                             Toast.LENGTH_LONG).show();
                 } else {
+                    Sound.actionDone(getContext());
                     DialogDismissListener listener =
                             (DialogDismissListener) getTargetFragment();
                     listener.onDismiss();

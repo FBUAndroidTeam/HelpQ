@@ -73,6 +73,7 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnRegister.setEnabled(false);
                 validRegistrationCheck();
             }
         });
@@ -119,6 +120,7 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
         newUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
+                Sound.actionDone(getContext());
                 Toast.makeText(getContext(), R.string.registration_complete,
                         Toast.LENGTH_LONG).show();
                 startActivity(new Intent(getContext(), MainActivity.class));
@@ -142,6 +144,7 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
                     e.printStackTrace();
                 } else if (objects.size() != 0){
                     Toast.makeText(getContext(), R.string.username_taken, Toast.LENGTH_LONG).show();
+                    btnRegister.setClickable(true);
                 } else {
                     completeRegister(ParseUser.getCurrentUser(), username);
                 }
