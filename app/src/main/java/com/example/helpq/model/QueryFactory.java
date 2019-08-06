@@ -66,7 +66,8 @@ public class QueryFactory {
         public static ParseQuery<Question> getNumberOfPendingQuestions(List<ParseUser> students) {
             ParseQuery<Question> query = new ParseQuery<Question>(Question.class);
             query.whereEqualTo(Question.KEY_ARCHIVED, false)
-                    .whereContainedIn(KEY_ASKER, Arrays.asList(students));
+                    .whereContainedIn(KEY_ASKER, Arrays.asList(students))
+                    .include(KEY_ASKER);
             return query;
         }
     }
