@@ -72,6 +72,7 @@ public class AdminProfileFragment extends Fragment {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnLogout.setVisibility(View.INVISIBLE);
                 ParseUser.logOut();
                 Intent intent = new Intent(getContext(), LoginActivity.class);
                 startActivity(intent);

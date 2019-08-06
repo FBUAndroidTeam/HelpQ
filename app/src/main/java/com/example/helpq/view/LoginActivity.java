@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
         btnFacebookLogin = findViewById(R.id.btnFacebookLogin);
+        btnFacebookLogin.setVisibility(View.VISIBLE);
         faceBookLogin();
     }
 
@@ -63,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         btnFacebookLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnFacebookLogin.setVisibility(View.INVISIBLE);
             ParseFacebookUtils.logInWithReadPermissionsInBackground(LoginActivity.this,
                 null, new LogInCallback() {
                     @Override
@@ -71,8 +73,10 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "Error occurred" + err.toString());
                             err.printStackTrace();
                             printKeyHash();
+                            btnFacebookLogin.setVisibility(View.VISIBLE);
                         } else if (user == null) {
                             Log.d(TAG, "The user cancelled the Facebook login.");
+                            btnFacebookLogin.setVisibility(View.VISIBLE);
                         } else {
                             handleValidUser(user);
                         }
