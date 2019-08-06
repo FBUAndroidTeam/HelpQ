@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.helpq.R;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.Workshop;
 import com.example.helpq.view.student_views.StudentWorkshopFragment;
 import com.parse.ParseUser;
@@ -133,6 +134,7 @@ public class StudentWorkshopAdapter extends
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if(!isChecked) {
+                        Sound.unSignUp(mContext);
                         workshop.unsignUp(ParseUser.getCurrentUser());
                         workshop.saveInBackground();
                         setButtonText(workshop);
@@ -141,6 +143,7 @@ public class StudentWorkshopAdapter extends
                                 R.string.unenrolled,
                                 Toast.LENGTH_LONG).show();
                     } else {
+                        Sound.actionDone(mContext);
                         workshop.setAttendee(ParseUser.getCurrentUser());
                         Date time = workshop.getStartTime();
                         mStudentWorkshopFragment.onTimeSet(time);
