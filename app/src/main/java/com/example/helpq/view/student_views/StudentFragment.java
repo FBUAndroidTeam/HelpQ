@@ -108,29 +108,6 @@ public class StudentFragment extends Fragment {
         });
     }
 
-    // Remove notifications badge from this tab, if one exists.
-    private void removeNotificationBadges(int tab, final int itemId) {
-        ParseQuery<Notification> query = QueryFactory.Notifications.getNotificationsForTab(tab);
-        query.findInBackground(new FindCallback<Notification>() {
-            @Override
-            public void done(List<Notification> objects, ParseException e) {
-                for (Notification notification : objects) {
-                    if (e != null) {
-                        Log.e(TAG, "Error querying for notifications");
-                        return;
-                    }
-                    try {
-                        notification.delete();
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
-                    }
-                    notification.saveInBackground();
-                }
-            }
-        });
-        mHelper.removeBadge(itemId);
-    }
-
     private void setupNavigationView() {
         mNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -224,23 +201,28 @@ public class StudentFragment extends Fragment {
             switch (position) {
                 case 0:
                     mNavigationView.setSelectedItemId(R.id.action_profile);
-                    removeNotificationBadges(0, R.id.action_profile);
+                    NotificationHelper.deleteNotifications(0);
+                    mHelper.removeBadge(R.id.action_profile);
                     break;
                 case 1:
                     mNavigationView.setSelectedItemId(R.id.action_workshop);
-                    removeNotificationBadges(1, R.id.action_workshop);
+                    NotificationHelper.deleteNotifications(1);
+                    mHelper.removeBadge(R.id.action_workshop);
                     break;
                 case 2:
                     mNavigationView.setSelectedItemId(R.id.action_queue);
-                    removeNotificationBadges(2, R.id.action_queue);
+                    NotificationHelper.deleteNotifications(2);
+                    mHelper.removeBadge(R.id.action_workshop);
                     break;
                 case 3:
                     mNavigationView.setSelectedItemId(R.id.action_inbox);
-                    removeNotificationBadges(3, R.id.action_inbox);
+                    NotificationHelper.deleteNotifications(3);
+                    mHelper.removeBadge(R.id.action_inbox);
                     break;
                 case 4:
                     mNavigationView.setSelectedItemId(R.id.action_board);
-                    removeNotificationBadges(4, R.id.action_board);
+                    NotificationHelper.deleteNotifications(4);
+                    mHelper.removeBadge(R.id.action_board);
                     break;
                 default:
                     break;

@@ -24,6 +24,7 @@ import com.example.helpq.model.Notification;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Sound;
+import com.example.helpq.model.User;
 import com.example.helpq.model.WaitTime;
 import com.example.helpq.model.WaitTimeHelper;
 import com.parse.FindCallback;
@@ -180,7 +181,13 @@ public class CreateQuestionFragment extends DialogFragment {
                     Log.e(TAG, "Every admin should only have one WaitTime dataset!");
                     return;
                 }
-                waitTime = objects.get(0);
+                if (objects.size() == 0) {
+                    waitTime = new WaitTime();
+                    waitTime.setAdminName(User.getAdminName(ParseUser.getCurrentUser()));
+                    waitTime.saveInBackground();
+                } else {
+                    waitTime = objects.get(0);
+                }
                 tvWaitTime.setText(helper.getBlockingWaitTime(waitTime.getBlockingTime()));
                 togglePriorityButtons();
             }
