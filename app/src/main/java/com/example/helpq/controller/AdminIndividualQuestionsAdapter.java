@@ -107,17 +107,22 @@ public class AdminIndividualQuestionsAdapter extends
             } else {
                 ParseUser student = q.getAsker();
                 tvStudentName.setText(User.getFullName(student.fetchIfNeeded()));
-                tvStudentName.setVisibility(tvStudentName.INVISIBLE);
-                tvSeeMore.setVisibility(tvSeeMore.INVISIBLE);
-                tvWaitTime.setVisibility(tvWaitTime.INVISIBLE);
+                tvStudentName.setVisibility(View.INVISIBLE);
+                tvSeeMore.setVisibility(View.INVISIBLE);
+                tvWaitTime.setVisibility(View.INVISIBLE);
                 tvPriorityEmoji.setText(q.getPriority());
                 setHelpType(q.getHelpType());
                 tvDescription.setText(q.getText());
                 tvStartTime.setText(q.getCreatedTimeAgo());
-                tvLikes.setText(Integer.toString(q.getLikeCount()) + " " +
-                        mContext.getResources().getString(R.string.likes));
+                setLikeText(q, tvLikes);
                 itemView.findViewById(R.id.ivMarker).setVisibility(View.GONE);
             }
+        }
+
+        private void setLikeText(Question question, TextView view) {
+            int likeCount = question.getLikeCount();
+            if (likeCount == 1) view.setText(String.format("%d like", question.getLikeCount()));
+            else view.setText(String.format("%d likes", question.getLikeCount()));
         }
 
         private void setHelpType(String helpType) {

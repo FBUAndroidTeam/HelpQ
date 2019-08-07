@@ -1,7 +1,7 @@
 
 # HelpQ
 
-**HelpQ** is an app that aims to create a better experience for interns and smoother facilitation for CodePath engineers during mobile development training that occurs the first three weeks of FBU for Engineering.
+**HelpQ** is an app that revamps the CodePath training that FBU Engineering interns experience during the first three weeks of their internships by facilitating smoother communication between students and instructors.
 
 ## 1. User Stories (Required and Optional)
 

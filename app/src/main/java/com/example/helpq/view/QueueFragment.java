@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -59,7 +58,6 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     // Swipe to refresh and progress bar
     private SwipeRefreshLayout mSwipeContainer;
     private ProgressBar pbLoading;
-    private static FloatingActionButton fabCreateQuestion;
 
     // Maps Question objectIds to the notifications that point to them
     public Hashtable<String, Notification> mNotifications;
@@ -103,10 +101,8 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvQuestions.setLayoutManager(layoutManager);
 
-        if (User.isAdmin(ParseUser.getCurrentUser())) findHighlightedQuestions();
-
         setupSwipeRefreshing(view);
-        queryQuestions("");
+        queryQuestionsWithNotifications("");
         search();
 
         mAdapter.setOnItemClickListener(new QueueAdapter.ClickListener() {
@@ -140,7 +136,9 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                 android.R.color.holo_red_light);
     }
 
-    private void findHighlightedQuestions() {
+    // Clear the hashtable, and fill it with mappings from question object ids to
+    // the current user's notifications that point to them. Query for all questions.
+    private void queryQuestionsWithNotifications(final String input) {
         mNotifications = new Hashtable<>();
         ParseQuery query = QueryFactory.Notifications.getNotifications();
         query.findInBackground(new FindCallback<Notification>() {
@@ -150,12 +148,16 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                     Log.e(TAG, "Error with notification query");
                     return;
                 }
+
+                // Map the user's notifications to the object ids of the questions
+                // they correspond to.
                 for (int i = 0; i < objects.size(); i++) {
                     String questionId = objects.get(i).getQuestionId();
                     if (questionId != null) {
                         mNotifications.put(objects.get(i).getQuestionId(), objects.get(i));
                     }
                 }
+                queryQuestions(input);
             }
         });
     }
@@ -165,8 +167,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
         mAdapter.clear();
         tvNotice.setVisibility(View.GONE);
         tvSearchNotice.setVisibility(View.GONE);
-        findHighlightedQuestions();
-        queryQuestions(input);
+        queryQuestionsWithNotifications(input);
         mSwipeContainer.setRefreshing(false);
     }
 

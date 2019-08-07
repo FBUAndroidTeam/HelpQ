@@ -122,7 +122,7 @@ public class CreateWorkshopFragment extends DialogFragment {
     }
 
     private void createWorkshop() {
-        Workshop workshop = new Workshop();
+        final Workshop workshop = new Workshop();
         workshop.setAttendees(new JSONArray());
         workshop.setLocation(etLocation.getText().toString());
         workshop.setCreator(ParseUser.getCurrentUser());
@@ -136,6 +136,7 @@ public class CreateWorkshopFragment extends DialogFragment {
                 public void done(ParseException e) {
                     if (e == null) {
                         Sound.actionDone(getContext());
+                        notifyAllStudents(workshop);
                         DialogDismissListener listener =
                                 (DialogDismissListener) getTargetFragment();
                         Toast.makeText(getContext(),
@@ -149,7 +150,6 @@ public class CreateWorkshopFragment extends DialogFragment {
                     }
                 }
             });
-            notifyAllStudents();
         } else {
             Toast.makeText(getContext(), R.string.edge_case_wrong_date_workshop,
                     Toast.LENGTH_LONG).show();
@@ -170,7 +170,7 @@ public class CreateWorkshopFragment extends DialogFragment {
     }
 
     // Send notifications to all students that this workshops has been created.
-    private void notifyAllStudents() {
+    private void notifyAllStudents(final Workshop workshop) {
         ParseQuery<ParseUser> studentQuery = ParseUser.getQuery();
         studentQuery.whereEqualTo(User.KEY_ADMIN_NAME, ParseUser.getCurrentUser().getUsername());
         studentQuery.findInBackground(new FindCallback<ParseUser>() {
@@ -186,6 +186,7 @@ public class CreateWorkshopFragment extends DialogFragment {
                 for (ParseUser student : objects) {
                     Notification notification = new Notification();
                     notification.setUser(student);
+                    notification.setWorkshopId(workshop.getObjectId());
                     notification.setTab(1);
                     notification.saveInBackground();
                 }

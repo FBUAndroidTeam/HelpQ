@@ -263,7 +263,6 @@ public class CreateQuestionFragment extends DialogFragment {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    notifyAdmin(newQuestion);
                     Sound.actionDone(getContext());
                     notifyAdmin(newQuestion);
                     DialogDismissListener listener = (DialogDismissListener) getTargetFragment();
