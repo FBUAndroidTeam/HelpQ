@@ -145,10 +145,10 @@ public class StudentWorkshopFragment extends Fragment {
             if(name.equals(name2)) {
                 mWorkshops.add(objects.get(i));
                 mAdapter.notifyDataSetChanged();
-                pbLoading.setVisibility(View.INVISIBLE);
                 Log.d(TAG, "mAdapter notified");
             }
         }
+        pbLoading.setVisibility(View.INVISIBLE);
         if(mWorkshops.size() == 0) {
             tvNotice.setVisibility(View.VISIBLE);
         } else {
