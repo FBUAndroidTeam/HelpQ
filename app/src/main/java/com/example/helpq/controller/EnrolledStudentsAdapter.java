@@ -106,16 +106,9 @@ public class EnrolledStudentsAdapter extends
                     }
                     for(int i = 0; i < objects.size(); i++) {
                         ParseUser user = objects.get(i).getAsker();
-                        String name1 = "";
-                        try {
-                            name1 = user.fetchIfNeeded().getUsername();
-                        } catch (ParseException e1) {
-                            Log.v(TAG, e1.toString());
-                            e1.printStackTrace();
-                        }
-                        if (name1.equals(student.getUsername())) {
-                            unAnsweredQuestions[0] += 1;
-                        }
+                            if (user.getUsername().equals(student.getUsername())) {
+                                unAnsweredQuestions[0] += 1;
+                            }
                     }
                     tvStats.setText(unAnsweredQuestions[0] + " " +
                             mContext.getResources().getString(R.string.stat_question));
