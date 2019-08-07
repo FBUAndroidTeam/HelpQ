@@ -213,7 +213,7 @@ public class InboxFragment extends Fragment {
     // the current user's notifications that point to them. Query for all messages.
     private void queryMessagesWithNotifications(final String input) {
         mNotifications = new Hashtable<>();
-        ParseQuery query = QueryFactory.Notifications.getNotifications();
+        ParseQuery<Notification> query = QueryFactory.Notifications.getNotifications();
         query.findInBackground(new FindCallback<Notification>() {
             @Override
             public void done(List<Notification> objects, ParseException e) {

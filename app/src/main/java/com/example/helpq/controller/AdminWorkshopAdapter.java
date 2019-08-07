@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.helpq.R;
+import com.example.helpq.model.NotificationHelper;
 import com.example.helpq.model.Sound;
 import com.example.helpq.model.Workshop;
 import com.example.helpq.view.admin_views.AdminWorkshopFragment;
@@ -56,11 +57,13 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
 
     // Deletes this workshop from parse
     public void deleteWorkshop(Workshop w) {
+        String workshopId = w.getObjectId();
         try {
             w.delete();
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        NotificationHelper.deleteNotificationsByWorkshop(workshopId);
         w.saveInBackground();
     }
 
