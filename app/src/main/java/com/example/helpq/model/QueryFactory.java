@@ -3,7 +3,6 @@ package com.example.helpq.model;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -139,11 +138,17 @@ public class QueryFactory {
             return query;
         }
 
-        // Query for the current user's notifications that correspond to this tab.
-        public static ParseQuery<Notification> getNotificationsForTab(int tab) {
+        // Find all notifications related to the question with the given object id.
+        public static ParseQuery<Notification> getNotificationsByQuestion(String questionId) {
             ParseQuery<Notification> query = new ParseQuery<>(Notification.class);
-            query.whereEqualTo(Notification.KEY_USER, ParseUser.getCurrentUser());
-            query.whereEqualTo(Notification.KEY_TAB, tab);
+            query.whereEqualTo(Notification.KEY_QUESTION_ID, questionId);
+            return query;
+        }
+
+        // Find all notifications related to the workshop with the given object id.
+        public static ParseQuery<Notification> getNotificationsByWorkshop(String workshopId) {
+            ParseQuery<Notification> query = new ParseQuery<>(Notification.class);
+            query.whereEqualTo(Notification.KEY_WORKSHOP_ID, workshopId);
             return query;
         }
     }

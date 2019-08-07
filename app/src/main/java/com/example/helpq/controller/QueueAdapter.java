@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Notification;
+import com.example.helpq.model.NotificationHelper;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Sound;
@@ -101,12 +102,14 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
     // Deletes this question from parse
     public void deleteQuestion(Question q) {
+        String questionId = q.getObjectId();
         try {
             q.delete();
         } catch (ParseException e) {
             e.printStackTrace();
         }
         q.saveInBackground();
+        NotificationHelper.deleteNotificationsByQuestion(questionId);
         notifyDataSetChanged();
     }
 

@@ -140,7 +140,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     // the current user's notifications that point to them. Query for all questions.
     private void queryQuestionsWithNotifications(final String input) {
         mNotifications = new Hashtable<>();
-        ParseQuery query = QueryFactory.Notifications.getNotifications();
+        ParseQuery<Notification> query = QueryFactory.Notifications.getNotifications();
         query.findInBackground(new FindCallback<Notification>() {
             @Override
             public void done(List<Notification> objects, ParseException e) {
