@@ -203,8 +203,10 @@ public class AnswerQuestionFragment extends DialogFragment {
                     return;
                 }
 
-                // Add Notification to student's board tab.
+                // Add notifications to all students' board tab (except the asker).
                 for (ParseUser student : objects) {
+                    if (student.getUsername().equals(mQuestion.getAsker().getUsername()))
+                        continue;
                     Notification notification = new Notification();
                     notification.setUser(student);
                     notification.setQuestionId(mQuestion.getObjectId());
