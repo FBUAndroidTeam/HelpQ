@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Sound;
@@ -100,6 +101,9 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
                     Sound.delete(mContext);
                     deleteWorkshop(mWorkshops.get(getAdapterPosition()));
                     removeAt(getAdapterPosition());
+                    Toast.makeText(mContext,
+                            mContext.getResources().getString(R.string.workshop_deleted),
+                            Toast.LENGTH_LONG).show();
                 }
         });
         }

@@ -292,7 +292,6 @@ public class CreateQuestionFragment extends DialogFragment {
                 for (ParseUser admin : objects) {
                     Notification notification = new Notification();
                     notification.setUser(admin);
-                    String n = question.getObjectId();
                     notification.setQuestionId(question.getObjectId());
                     notification.setTab(2);
                     notification.saveInBackground();
