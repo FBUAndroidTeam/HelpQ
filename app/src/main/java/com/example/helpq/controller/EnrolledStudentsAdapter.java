@@ -20,12 +20,10 @@ import com.example.helpq.view.admin_views.AdminEnrolledFragment;
 import com.example.helpq.view.admin_views.AdminIndividualQuestionsFragment;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EnrolledStudentsAdapter extends
@@ -59,6 +57,12 @@ public class EnrolledStudentsAdapter extends
     @Override
     public int getItemCount() {
         return mEnrolledStudents.size();
+    }
+
+    // Clean all elements of the recycler
+    public void clear() {
+        mEnrolledStudents.clear();
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
