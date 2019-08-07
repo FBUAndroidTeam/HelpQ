@@ -68,17 +68,21 @@ public class StudentWorkshopAdapter extends
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvWorkshopName;
-        private TextView tvWorkshopDate;
         private TextView tvWorkshopLocation;
         private TextView tvWorkshopAttendanceCount;
         private Switch swSignUp;
         private ImageView ivMarker;
+        private TextView tvDate;
+        private TextView tvTime;
+        private TextView tvMonth;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvWorkshopName = itemView.findViewById(R.id.tvStudentWorkshopName);
-            tvWorkshopDate = itemView.findViewById(R.id.tvStudentWorkshopDate);
             tvWorkshopLocation = itemView.findViewById(R.id.tvStudentWorkshopLocation);
+            tvDate = itemView.findViewById(R.id.tvDate);
+            tvMonth = itemView.findViewById(R.id.tvMonth);
+            tvTime = itemView.findViewById(R.id.tvTime);
             tvWorkshopAttendanceCount = itemView.findViewById(R.id.tvStudentWorkshopSignedUpCount);
             swSignUp = itemView.findViewById(R.id.swSignUp);
             ivMarker = itemView.findViewById(R.id.ivMarker);
@@ -130,8 +134,11 @@ public class StudentWorkshopAdapter extends
         }
 
         public void bind(final Workshop workshop) {
+            String startDate = workshop.getDate();
             tvWorkshopName.setText(workshop.getTitle());
-            tvWorkshopDate.setText(workshop.getDate());
+            tvMonth.setText(startDate.substring(0,3));
+            tvDate.setText(startDate.substring(3));
+            tvTime.setText(workshop.getTime());
             tvWorkshopLocation.setText(workshop.getLocation());
             setSwitchStatus(workshop);
             setAttendeeText(workshop);

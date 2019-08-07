@@ -1,6 +1,5 @@
 package com.example.helpq.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -132,7 +130,9 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
             }
         });
         // Configure the refreshing colors
-        mSwipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+        mSwipeContainer.setProgressBackgroundColorSchemeColor(
+                getContext().getResources().getColor(R.color.colorAccent));
+        mSwipeContainer.setColorSchemeResources(R.color.colorMint,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
