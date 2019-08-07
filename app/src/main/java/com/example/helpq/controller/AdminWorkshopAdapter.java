@@ -76,18 +76,22 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvTitle;
-        private TextView tvStartTime;
+        private TextView tvMonth;
         private TextView tvLocation;
         private TextView tvAttendees;
         private ImageButton ibDelete;
+        private TextView tvDate;
+        private TextView tvTime;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvAttendees = itemView.findViewById(R.id.tvAttendees);
             tvLocation = itemView.findViewById(R.id.tvLocation);
-            tvStartTime = itemView.findViewById(R.id.tvAnswerTime);
+            tvMonth= itemView.findViewById(R.id.tvMonth);
+            tvDate = itemView.findViewById(R.id.tvDate);
             tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvTime = itemView.findViewById(R.id.tvTime);
             ibDelete = itemView.findViewById(R.id.ibAdminDeleteWorkshop);
             ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -101,8 +105,11 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
         }
 
         public void bind(Workshop workshop) {
+            String wholeDate = workshop.getDate();
             tvTitle.setText(workshop.getTitle());
-            tvStartTime.setText(workshop.getDate());
+            tvMonth.setText(wholeDate.substring(0,3));
+            tvDate.setText(wholeDate.substring(3));
+            tvTime.setText(workshop.getTime());
             tvLocation.setText( workshop.getLocation());
             int attendees = workshop.getAttendees().length();
             if (attendees == 1) {

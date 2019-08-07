@@ -122,7 +122,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             super(itemView);
             tvQuestion = itemView.findViewById(R.id.tvQuestion);
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
-            tvAnswerTime = itemView.findViewById(R.id.tvAnswerTime);
+            tvAnswerTime = itemView.findViewById(R.id.tvMonth);
             tvAdminName = itemView.findViewById(R.id.tvAdminName);
             tvAnswer = itemView.findViewById(R.id.tvAnswer);
             tvLikes = itemView.findViewById(R.id.tvLikes);
