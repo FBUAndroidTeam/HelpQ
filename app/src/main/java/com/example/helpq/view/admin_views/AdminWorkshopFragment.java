@@ -24,7 +24,6 @@ import com.example.helpq.R;
 import com.example.helpq.controller.AdminWorkshopAdapter;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.QueryFactory;
-import com.example.helpq.model.Question;
 import com.example.helpq.model.Sound;
 import com.example.helpq.model.Workshop;
 import com.parse.FindCallback;
@@ -32,7 +31,6 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class AdminWorkshopFragment extends Fragment implements DialogDismissListener {
@@ -98,7 +96,9 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
             }
         });
         // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+        swipeContainer.setProgressBackgroundColorSchemeColor(
+                getContext().getResources().getColor(R.color.colorAccent));
+        swipeContainer.setColorSchemeResources(R.color.colorMint,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
