@@ -1,5 +1,6 @@
 package com.example.helpq.view.student_views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,7 +24,6 @@ import com.example.helpq.controller.InboxAdapter;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Search;
 import com.example.helpq.model.Sound;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -20,6 +20,7 @@ import com.example.helpq.model.Notification;
 import com.example.helpq.model.NotificationHelper;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Sound;
+import com.example.helpq.view.MainActivity;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -116,18 +117,23 @@ public class StudentFragment extends Fragment {
                 switch (menuItem.getItemId()) {
                     case R.id.action_profile:
                         vpPager.setCurrentItem(0);
+                        MainActivity.hideKeyboardFrom(getContext(), getView());
                         return true;
                     case R.id.action_workshop:
                         vpPager.setCurrentItem(1);
+                        MainActivity.hideKeyboardFrom(getContext(), getView());
                         return true;
                     case R.id.action_queue:
                         vpPager.setCurrentItem(2);
+                        MainActivity.hideKeyboardFrom(getContext(), getView());
                         return true;
                     case R.id.action_inbox:
                         vpPager.setCurrentItem(3);
+                        MainActivity.hideKeyboardFrom(getContext(), getView());
                         return true;
                     case R.id.action_board:
                         vpPager.setCurrentItem(4);
+                        MainActivity.hideKeyboardFrom(getContext(), getView());
                         return true;
                 }
                 return false;
