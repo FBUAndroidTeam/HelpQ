@@ -182,8 +182,6 @@ public class ReplyQuestionFragment extends DialogFragment {
         });
     }
 
-
-
     private void populateReplyList() {
         ParseQuery<Reply> query = new ParseQuery<Reply>(Reply.class);
         query.whereEqualTo("question", mQuestion);

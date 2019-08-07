@@ -56,7 +56,7 @@ public class Sound {
         playSound();
     }
 
-    public static void unSignUp(Context context) {
+    public static void actionUndo(Context context) {
         player = MediaPlayer.create(context,
                 R.raw.zapsplat_multimedia_notification_chime_bell_001_26401);
         playSound();

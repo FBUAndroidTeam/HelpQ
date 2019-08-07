@@ -263,6 +263,7 @@ public class CreateQuestionFragment extends DialogFragment {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
+                    notifyAdmin(newQuestion);
                     Sound.actionDone(getContext());
                     notifyAdmin(newQuestion);
                     DialogDismissListener listener = (DialogDismissListener) getTargetFragment();
@@ -291,6 +292,7 @@ public class CreateQuestionFragment extends DialogFragment {
                 for (ParseUser admin : objects) {
                     Notification notification = new Notification();
                     notification.setUser(admin);
+                    String n = question.getObjectId();
                     notification.setQuestionId(question.getObjectId());
                     notification.setTab(2);
                     notification.saveInBackground();
