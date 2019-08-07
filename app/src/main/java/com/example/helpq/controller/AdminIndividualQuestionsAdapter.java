@@ -15,8 +15,8 @@ import com.example.helpq.R;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
-import com.example.helpq.view.admin_views.AdminIndividualQuestionsFragment;
 import com.example.helpq.view.ReplyQuestionFragment;
+import com.example.helpq.view.admin_views.AdminIndividualQuestionsFragment;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -116,6 +116,7 @@ public class AdminIndividualQuestionsAdapter extends
                 tvStartTime.setText(q.getCreatedTimeAgo());
                 tvLikes.setText(Integer.toString(q.getLikeCount()) + " " +
                         mContext.getResources().getString(R.string.likes));
+                itemView.findViewById(R.id.ivMarker).setVisibility(View.GONE);
             }
         }
 
