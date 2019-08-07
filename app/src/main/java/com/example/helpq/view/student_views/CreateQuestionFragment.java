@@ -265,6 +265,7 @@ public class CreateQuestionFragment extends DialogFragment {
                 if (e == null) {
                     notifyAdmin(newQuestion);
                     Sound.actionDone(getContext());
+                    notifyAdmin(newQuestion);
                     DialogDismissListener listener = (DialogDismissListener) getTargetFragment();
                     Log.d(TAG, "Question created successfully");
                     listener.onDismiss();
