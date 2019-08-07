@@ -2,13 +2,13 @@ package com.example.helpq.controller;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Sound;
@@ -23,12 +23,12 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
     private Context mContext;
     private List<Workshop> mWorkshops;
     private AdminWorkshopFragment mAdminWorkshopFragment;
-    private static ClickListener mClickListener;
 
 
-    public AdminWorkshopAdapter(Context context, List<Workshop> workshops) {
+    public AdminWorkshopAdapter(Context context, List<Workshop> workshops, Fragment frag) {
         mContext = context;
         mWorkshops = workshops;
+        mAdminWorkshopFragment = (AdminWorkshopFragment) frag;
     }
 
     @NonNull
@@ -71,15 +71,6 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
         notifyItemRangeChanged(position, mWorkshops.size());
     }
 
-    public void setOnItemClickListener(ClickListener clickListener) {
-        AdminWorkshopAdapter.mClickListener = clickListener;
-    }
-
-    public interface ClickListener {
-        void onItemClick(int position, View v);
-        void onItemLongClick(int position, View v);
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvTitle;
         private TextView tvStartTime;
@@ -99,11 +90,9 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
                 @Override
                 public void onClick(View v) {
                     Sound.delete(mContext);
-                    deleteWorkshop(mWorkshops.get(getAdapterPosition()));
+                    mAdminWorkshopFragment.createSnackbar(getLayoutPosition(),
+                            mWorkshops.get(getAdapterPosition()));
                     removeAt(getAdapterPosition());
-                    Toast.makeText(mContext,
-                            mContext.getResources().getString(R.string.workshop_deleted),
-                            Toast.LENGTH_LONG).show();
                 }
         });
         }
