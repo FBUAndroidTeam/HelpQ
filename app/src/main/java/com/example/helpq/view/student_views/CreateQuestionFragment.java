@@ -97,7 +97,7 @@ public class CreateQuestionFragment extends DialogFragment {
         helper = new WaitTimeHelper(getParentFragment().getContext());
         setupWaitTimes(view);
 
-        toggleHelpSelected = tbInPerson;
+        toggleHelpSelected = tbWritten;
         togglePrioritySelected = tbBlocker;
 
         // Fetch arguments from bundle and set title

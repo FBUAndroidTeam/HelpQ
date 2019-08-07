@@ -97,7 +97,7 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
                             mWorkshops.get(getAdapterPosition()));
                     removeAt(getAdapterPosition());
                 }
-        });
+            });
         }
 
         public void bind(Workshop workshop) {
