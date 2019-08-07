@@ -1,8 +1,12 @@
 package com.example.helpq.view;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.example.helpq.R;
 import com.example.helpq.model.User;
@@ -34,5 +38,13 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.flMainContainer, StudentFragment.newInstance(), StudentFragment.TAG)
                     .commit();
         }
+    }
+
+    //hides the keyboard when switching between fragments
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService
+                (Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        view.clearFocus();
     }
 }

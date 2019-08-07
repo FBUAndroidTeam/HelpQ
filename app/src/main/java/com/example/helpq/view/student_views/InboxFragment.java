@@ -123,7 +123,7 @@ public class InboxFragment extends Fragment {
     // Handle logic for swipe to refresh.
     private void setupSwipeToRefresh(View view) {
         // Lookup the swipe container view
-        mSwipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        mSwipeContainer = view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
         mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
