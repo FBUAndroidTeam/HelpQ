@@ -60,7 +60,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/tvAnswerTime"
+            android:id="@+id/tvMonth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -93,7 +93,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tvAnswerTime"
+            app:layout_constraintEnd_toStartOf="@+id/tvMonth"
             app:layout_constraintStart_toEndOf="@+id/tvPriorityEmoji"
             app:layout_constraintTop_toTopOf="@+id/tvPriorityEmoji"
             app:layout_constraintVertical_bias="0.0" />
@@ -127,7 +127,7 @@
             android:textColor="@color/colorGray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvAnswerTime"
+            app:layout_constraintTop_toBottomOf="@+id/tvMonth"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView

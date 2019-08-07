@@ -7,7 +7,6 @@ import com.parse.ParseUser;
 import org.json.JSONArray;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -72,23 +71,16 @@ public class Workshop extends ParseObject {
     }
 
     public String getDate() {
-        String strDate = "";
+        String date = "";
+        DateFormat srcDf = new SimpleDateFormat("MMMd", Locale.ENGLISH);
+        date = srcDf.format(this.getStartTime());
+        return date;
+    }
 
-        try {
-            DateFormat srcDf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-
-            // Parse the date string into Date object
-            Date date = srcDf.parse(srcDf.format(this.getStartTime().getTime()));
-            DateFormat destDf = new SimpleDateFormat("EEE, h:mm a");
-
-            // Format the date into another format
-            strDate = destDf.format(date);
-
-        }
-        catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return strDate;
+    public String getTime() {
+        String time = "";
+        DateFormat srcDf = new SimpleDateFormat("hh:mm aaa", Locale.ENGLISH);
+        time = srcDf.format(this.getStartTime());
+        return time;
     }
 }

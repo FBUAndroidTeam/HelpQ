@@ -175,7 +175,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
             tvHelpEmoji = itemView.findViewById(R.id.tvHelpEmoji);
             tvDescription = itemView.findViewById(R.id.tvQuestion);
-            tvStartTime = itemView.findViewById(R.id.tvAnswerTime);
+            tvStartTime = itemView.findViewById(R.id.tvMonth);
             tvLikes = itemView.findViewById(R.id.tvLikes);
             tvSeeMore = itemView.findViewById(R.id.tvSeeMore);
             tvWaitTime = itemView.findViewById(R.id.tvWaitTime);
