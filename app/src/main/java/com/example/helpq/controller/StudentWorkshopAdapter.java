@@ -134,7 +134,7 @@ public class StudentWorkshopAdapter extends
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if(!isChecked) {
-                        Sound.unSignUp(mContext);
+                        Sound.actionUndo(mContext);
                         workshop.unsignUp(ParseUser.getCurrentUser());
                         workshop.saveInBackground();
                         setButtonText(workshop);

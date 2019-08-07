@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -58,6 +59,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     // Swipe to refresh and progress bar
     private SwipeRefreshLayout mSwipeContainer;
     private ProgressBar pbLoading;
+    private static FloatingActionButton fabCreateQuestion;
 
     // Maps Question objectIds to the notifications that point to them
     public Hashtable<String, Notification> mNotifications;
