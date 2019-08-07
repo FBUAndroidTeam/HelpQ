@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -23,6 +24,7 @@ import com.example.helpq.R;
 import com.example.helpq.controller.AdminWorkshopAdapter;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.QueryFactory;
+import com.example.helpq.model.Question;
 import com.example.helpq.model.Sound;
 import com.example.helpq.model.Workshop;
 import com.parse.FindCallback;
@@ -30,6 +32,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AdminWorkshopFragment extends Fragment implements DialogDismissListener {
@@ -58,7 +61,7 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
         tvNotice.setVisibility(View.GONE);
         rvAdminWorkshops = view.findViewById(R.id.rvAdminWorkshops);
         mWorkshops = new ArrayList<>();
-        mAdapter = new AdminWorkshopAdapter(getContext(), mWorkshops);
+        mAdapter = new AdminWorkshopAdapter(getContext(), mWorkshops, this);
         rvAdminWorkshops.setAdapter(mAdapter);
         rvAdminWorkshops.setLayoutManager(new LinearLayoutManager(getContext()));
         fabAddWorkshop = view.findViewById(R.id.fabAddWorkshop);
@@ -80,17 +83,6 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
 
         queryWorkshops();
         setupSwipeRefreshing(view);
-
-        mAdapter.setOnItemClickListener(new AdminWorkshopAdapter.ClickListener() {
-            @Override
-            public void onItemClick(int position, View v) {
-                Log.d(TAG, "onItemClick position: " + position);
-            }
-            @Override
-            public void onItemLongClick(int position, View v) {
-                Log.d(TAG, "onItemLongClick position: " + position);
-            }
-        });
     }
 
     // Handle logic for Swipe to Refresh.
@@ -144,6 +136,29 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
         } else {
             tvNotice.setVisibility(View.GONE);
         }
+    }
+
+    public void createSnackbar(final int adapterpos, final Workshop workshop){
+        View.OnClickListener myOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWorkshops.add(adapterpos, workshop);
+                mAdapter.notifyItemInserted(adapterpos);
+                rvAdminWorkshops.scrollToPosition(adapterpos);
+            }
+        };
+
+        Snackbar.make(getView(), R.string.workshop_deleted, Snackbar.LENGTH_LONG)
+                .setAction(R.string.snackbar_action, myOnClickListener)
+                .addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        if(event == DISMISS_EVENT_SWIPE || event == DISMISS_EVENT_TIMEOUT) {
+                            mAdapter.deleteWorkshop(workshop);
+                        }
+                    }
+                })
+                .show();
     }
 
     // Animate RecyclerView items falling onto the screen.

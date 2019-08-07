@@ -1,6 +1,5 @@
 package com.example.helpq.view.student_views;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,10 +20,17 @@ import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.InboxAdapter;
+import com.example.helpq.model.Notification;
+import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Search;
 import com.example.helpq.model.Sound;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 public class InboxFragment extends Fragment {
@@ -46,6 +52,9 @@ public class InboxFragment extends Fragment {
     // Swipe to refresh and progress bar
     private SwipeRefreshLayout mSwipeContainer;
     protected ProgressBar pbLoading;
+
+    // Maps Question objectIds to the notifications that point to them
+    public Hashtable<String, Notification> mNotifications;
 
     public static InboxFragment newInstance() {
         return new InboxFragment();
@@ -87,7 +96,7 @@ public class InboxFragment extends Fragment {
         rvMessages.setLayoutManager(layoutManager);
 
         setupSwipeToRefresh(view);
-        queryMessages("");
+        queryMessagesWithNotifications("");
         search();
 
         mAdapter.setOnItemClickListener(new InboxAdapter.ClickListener() {
@@ -196,8 +205,34 @@ public class InboxFragment extends Fragment {
         mAdapter.clear();
         tvNotice.setVisibility(View.GONE);
         tvSearchNotice.setVisibility(View.GONE);
-        queryMessages(input);
+        queryMessagesWithNotifications(input);
         mSwipeContainer.setRefreshing(false);
+    }
+
+    // Clear the hashtable, and fill it with mappings from question object ids to
+    // the current user's notifications that point to them. Query for all messages.
+    private void queryMessagesWithNotifications(final String input) {
+        mNotifications = new Hashtable<>();
+        ParseQuery<Notification> query = QueryFactory.Notifications.getNotifications();
+        query.findInBackground(new FindCallback<Notification>() {
+            @Override
+            public void done(List<Notification> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error with notification query");
+                    return;
+                }
+
+                // Map the user's notifications to the object ids of the messages
+                // they correspond to.
+                for (int i = 0; i < objects.size(); i++) {
+                    String questionId = objects.get(i).getQuestionId();
+                    if (questionId != null) {
+                        mNotifications.put(objects.get(i).getQuestionId(), objects.get(i));
+                    }
+                }
+                queryMessages(input);
+            }
+        });
     }
 
     // Query for messages intended for the current user

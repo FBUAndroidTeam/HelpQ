@@ -28,33 +28,6 @@ public class NotificationHelper {
         mContext = context;
     }
 
-    // Delete the current user's notifications on this tab.
-    public static void deleteNotifications(int tab) {
-        ParseQuery<Notification> query = QueryFactory.Notifications.getNotificationsForTab(tab);
-        query.findInBackground(new FindCallback<Notification>() {
-            @Override
-            public void done(List<Notification> objects, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error querying for notifications");
-                    return;
-                }
-                for (Notification notification : objects) {
-                    try {
-                        notification.delete();
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
-                    }
-                    notification.saveInBackground();
-                }
-            }
-        });
-    }
-
-    // Delete current user's notification that points to the Question with this id.
-    public static void deleteQuestionNotification(String questionId) {
-
-    }
-
     // Add a notification badge to the item with given id.
     public void addBadge(int itemId, int number)
     {
@@ -77,5 +50,52 @@ public class NotificationHelper {
         if (notificationsTab.getChildCount() > 2) {
             notificationsTab.removeViewAt(2);
         }
+    }
+
+    // Delete all notifications that points to the Question with this object id.
+    public static void deleteNotificationsByQuestion(String questionId) {
+        ParseQuery<Notification> query =
+                QueryFactory.Notifications.getNotificationsByQuestion(questionId);
+        query.findInBackground(new FindCallback<Notification>() {
+            @Override
+            public void done(List<Notification> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error querying for notifications by question");
+                    return;
+                }
+                deleteNotifications(objects);
+            }
+        });
+    }
+
+    // Delete all notifications that points to the Question with this object id.
+    public static void deleteNotificationsByWorkshop(String workshopId) {
+        ParseQuery<Notification> query =
+                QueryFactory.Notifications.getNotificationsByWorkshop(workshopId);
+        query.findInBackground(new FindCallback<Notification>() {
+            @Override
+            public void done(List<Notification> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error querying for notifications by workshop");
+                    return;
+                }
+                deleteNotifications(objects);
+            }
+        });
+    }
+
+    // Delete all notifications in the list of objects.
+    private static void deleteNotifications(List<Notification> objects) {
+        for (int i = 0; i < objects.size(); i++) {
+            Notification notification = objects.get(i);
+            try {
+                notification.delete();
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+            }
+            Log.d(TAG, "Notification deleted successfully!");
+            notification.saveInBackground();
+        }
+        Log.d(TAG, objects.size() + " notifications deleted!");
     }
 }

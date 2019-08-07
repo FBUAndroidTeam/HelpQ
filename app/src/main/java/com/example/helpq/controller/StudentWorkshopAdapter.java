@@ -7,20 +7,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.helpq.R;
+import com.example.helpq.model.Notification;
 import com.example.helpq.model.Sound;
 import com.example.helpq.model.Workshop;
 import com.example.helpq.view.student_views.StudentWorkshopFragment;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
 public class StudentWorkshopAdapter extends
@@ -68,6 +72,7 @@ public class StudentWorkshopAdapter extends
         private TextView tvWorkshopLocation;
         private TextView tvWorkshopAttendanceCount;
         private Switch swSignUp;
+        private ImageView ivMarker;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,6 +81,7 @@ public class StudentWorkshopAdapter extends
             tvWorkshopLocation = itemView.findViewById(R.id.tvStudentWorkshopLocation);
             tvWorkshopAttendanceCount = itemView.findViewById(R.id.tvStudentWorkshopSignedUpCount);
             swSignUp = itemView.findViewById(R.id.swSignUp);
+            ivMarker = itemView.findViewById(R.id.ivMarker);
         }
 
         private boolean setButtonText(final Workshop workshop) {
@@ -129,12 +135,17 @@ public class StudentWorkshopAdapter extends
             tvWorkshopLocation.setText(workshop.getLocation());
             setSwitchStatus(workshop);
             setAttendeeText(workshop);
+            markNewWorkshop(workshop);
+            setupSignUpSwitch(workshop);
+        }
 
+        private void setupSignUpSwitch(final Workshop workshop) {
             swSignUp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    ivMarker.setVisibility(View.GONE);
                     if(!isChecked) {
-                        Sound.unSignUp(mContext);
+                        Sound.actionUndo(mContext);
                         workshop.unsignUp(ParseUser.getCurrentUser());
                         workshop.saveInBackground();
                         setButtonText(workshop);
@@ -156,6 +167,27 @@ public class StudentWorkshopAdapter extends
                     }
                 }
             });
+        }
+
+        // Place a marker on this workshop if a notification points to it.
+        // Delete the notification.
+        private void markNewWorkshop(Workshop workshop) {
+            String workshopId = workshop.getObjectId();
+            Hashtable<String, Notification> table = mStudentWorkshopFragment.mNotifications;
+            if (table.containsKey(workshopId)) {
+                ivMarker.setVisibility(View.VISIBLE);
+                Notification notification = table.get(workshopId);
+                try {
+                    notification.delete();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                notification.saveInBackground();
+                table.remove(workshopId);
+            }
+            else {
+                ivMarker.setVisibility(View.GONE);
+            }
         }
     }
 }

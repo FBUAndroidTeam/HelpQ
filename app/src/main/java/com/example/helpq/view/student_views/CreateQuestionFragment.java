@@ -247,7 +247,7 @@ public class CreateQuestionFragment extends DialogFragment {
 
     // Method that deals with submitting question to parse
     private void submitQuestion() {
-        Question newQuestion = new Question();
+        final Question newQuestion = new Question();
         newQuestion.setText(etQuestion.getText().toString());
         newQuestion.setAsker(ParseUser.getCurrentUser());
         newQuestion.setIsArchived(false);
@@ -264,6 +264,7 @@ public class CreateQuestionFragment extends DialogFragment {
             public void done(ParseException e) {
                 if (e == null) {
                     Sound.actionDone(getContext());
+                    notifyAdmin(newQuestion);
                     DialogDismissListener listener = (DialogDismissListener) getTargetFragment();
                     Log.d(TAG, "Question created successfully");
                     listener.onDismiss();
@@ -274,7 +275,6 @@ public class CreateQuestionFragment extends DialogFragment {
                 }
             }
         });
-        notifyAdmin(newQuestion);
     }
 
     private void notifyAdmin(final Question question) {

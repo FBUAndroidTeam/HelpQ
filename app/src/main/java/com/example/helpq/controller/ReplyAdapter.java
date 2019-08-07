@@ -116,16 +116,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                         reply.setVerified(true);
                         saveQuestionChanges();
                         newVerifications = true;
-                    } else { //unverifying
-                        if(anyRepliesVerified(reply)) {
-                            ivVerified.clearColorFilter();
-                            reply.setVerified(false);
-                            tvVerification.setVisibility(View.GONE);
-                        } else {
-                            Toast.makeText(mContext,
-                                    mContext.getResources().getString(R.string.at_least_one_verify),
-                                    Toast.LENGTH_LONG).show();
-                        }
+                    } else {
+                        unverify(reply);
                     }
                     reply.saveInBackground(new SaveCallback() {
                         @Override
@@ -140,33 +132,47 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                 }
             });
         }
-    }
 
-    private void saveQuestionChanges() {
-        mQuestion.setAnswer(mContext.getResources().getString(R.string.see_student_reply));
-        mQuestion.setIsArchived(true);
-        mQuestion.setIsPrivate(false);
-        mQuestion.setAnsweredAt(new Date(System.currentTimeMillis()));
-        mQuestion.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(e == null) {
-                    Log.d(ReplyQuestionFragment.TAG, "question verification saved");
-                } else {
-                    Log.d(ReplyQuestionFragment.TAG, "question verification fail");
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private boolean anyRepliesVerified(Reply targetReply) {
-        for(int i = 0; i < mReplies.size(); i++) {
-            Reply reply = mReplies.get(i);
-            if(reply.getVerification() && reply != targetReply) {
-                return true;
+        private void unverify(Reply reply) {
+            if(anyRepliesVerified(reply)) {
+                Sound.actionUndo(mContext);
+                ivVerified.clearColorFilter();
+                reply.setVerified(false);
+                tvVerification.setVisibility(View.GONE);
+            } else {
+                Toast.makeText(mContext,
+                        mContext.getResources().getString(R.string.at_least_one_verify),
+                        Toast.LENGTH_LONG).show();
             }
         }
-        return false;
+
+        private void saveQuestionChanges() {
+            mQuestion.setAnswer(mContext.getResources().getString(R.string.see_student_reply));
+            mQuestion.setIsArchived(true);
+            mQuestion.setIsPrivate(false);
+            mQuestion.setAnsweredAt(new Date(System.currentTimeMillis()));
+            mQuestion.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if(e == null) {
+                        Log.d(ReplyQuestionFragment.TAG, "question verification saved");
+                    } else {
+                        Log.d(ReplyQuestionFragment.TAG, "question verification fail");
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        private boolean anyRepliesVerified(Reply targetReply) {
+            for(int i = 0; i < mReplies.size(); i++) {
+                Reply reply = mReplies.get(i);
+                if(reply.getVerification() && reply != targetReply) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 }

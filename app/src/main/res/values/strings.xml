@@ -75,4 +75,5 @@
     <string name="not_able_to_have_comments">In-person questions do not contain written replies.</string>
     <string name="at_least_one_verify">You must have at least one reply verified</string>
     <string name="see_student_reply">See student reply</string>
+    <string name="workshop_deleted">Workshop deleted</string>
 </resources>

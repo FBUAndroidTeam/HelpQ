@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Notification;
+import com.example.helpq.model.NotificationHelper;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Sound;
@@ -30,10 +31,8 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -101,12 +100,14 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
 
     // Deletes this question from parse
     public void deleteQuestion(Question q) {
+        String questionId = q.getObjectId();
         try {
             q.delete();
         } catch (ParseException e) {
             e.printStackTrace();
         }
         q.saveInBackground();
+        NotificationHelper.deleteNotificationsByQuestion(questionId);
         notifyDataSetChanged();
     }
 
@@ -179,6 +180,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             tvSeeMore = itemView.findViewById(R.id.tvSeeMore);
             tvWaitTime = itemView.findViewById(R.id.tvWaitTime);
             ibDelete = itemView.findViewById(R.id.ibDelete);
+            ibDelete.setVisibility(View.GONE);
             ibReply = itemView.findViewById(R.id.ibReply);
             ibLike = itemView.findViewById(R.id.ibLike);
             ibView = itemView.findViewById(R.id.ibView);
@@ -315,36 +317,22 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     Sound.delete(mContext);
+                    question.setIsArchived(true);
+                    question.setAnsweredAt(Calendar.getInstance().getTime());
+                    question.saveInBackground();
+                    resetRecyclerCell(400);
                     if (isAdmin) {
-                        question.setIsArchived(true);
-                        question.setAnsweredAt(new Date(System.currentTimeMillis()));
-                        question.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if(e == null) {
-                                    Toast.makeText(mContext, R.string.archive_question,
-                                            Toast.LENGTH_LONG).show();
-                                    resetRecyclerCell(400);
-                                    removeAt(getAdapterPosition());
-                                } else {
-                                    Log.d(TAG, "Failed to archive question");
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
                         updateWaitTime(mQuestions.get(getAdapterPosition()));
+                        Toast.makeText(mContext,
+                                mContext.getResources().getString(R.string.delete_question),
+                                Toast.LENGTH_LONG).show();
                     } else {
-                        question.setIsArchived(true);
-                        question.setAnsweredAt(Calendar.getInstance().getTime());
-                        question.saveInBackground();
-                        resetRecyclerCell(400);
-                        removeAt(getAdapterPosition());
                         mQueueFragment.createSnackbar(getLayoutPosition(), question);
-                        ibDelete.setVisibility(View.GONE);
                     }
+                    removeAt(getAdapterPosition());
+                    ibDelete.setVisibility(View.GONE);
                 }
             });
-            ibDelete.setVisibility(View.GONE);
         }
 
         private void openMenuIfApplicable() {
