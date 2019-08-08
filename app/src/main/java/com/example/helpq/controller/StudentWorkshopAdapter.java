@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -146,11 +145,11 @@ public class StudentWorkshopAdapter extends
         }
 
         private void setupSignUpSwitch(final Workshop workshop) {
-            swSignUp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            swSignUp.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                public void onClick(View v) {
                     ivMarker.setVisibility(View.GONE);
-                    if(!isChecked) {
+                    if(!swSignUp.isChecked()) {
                         Sound.actionUndo(mContext);
                         workshop.unsignUp(ParseUser.getCurrentUser());
                         workshop.saveInBackground();
