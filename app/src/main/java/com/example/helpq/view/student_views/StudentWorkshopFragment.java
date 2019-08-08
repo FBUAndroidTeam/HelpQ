@@ -54,6 +54,7 @@ public class StudentWorkshopFragment extends Fragment {
     private TextView tvNotice;
     private Question q;
     private ProgressBar pbLoading;
+    public static String workshop;
 
     // Set of strings representing the objectIds of workshops that have notifications
     public Set<String> mNotifications;
@@ -198,10 +199,11 @@ public class StudentWorkshopFragment extends Fragment {
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public void onTimeSet(Date workshopTime) {
+    public void onTimeSet(Date workshopTime, String workshopName) {
         Calendar c = Calendar.getInstance();
         c.setTime(workshopTime);
         c.setTime(timeSetHelper(c));
+        workshop = workshopName;
         Log.d(TAG, "alarm time: " + q.getRelativeTimeAgo(c.getTimeInMillis()));
         startAlarm(c);
     }

@@ -9,6 +9,7 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 import com.example.helpq.R;
+import com.example.helpq.view.student_views.StudentWorkshopFragment;
 import com.parse.ParseUser;
 
 import static android.app.Notification.PRIORITY_HIGH;
@@ -51,8 +52,9 @@ public class AlarmHelper extends ContextWrapper {
     public NotificationCompat.Builder getChannelNotification() {
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setContentTitle(getResources().getString(R.string.workshop_alarm))
-                .setContentText(getResources().getString(R.string.workshop_alarm_description))
-                .setSmallIcon(R.drawable.com_facebook_button_login_logo)
+                .setContentText(StudentWorkshopFragment.workshop + " " +
+                        getResources().getString(R.string.workshop_alarm_description))
+                .setSmallIcon(R.drawable.notification_icon)
                 .setPriority(PRIORITY_HIGH)
                 .setAutoCancel(true);
     }
