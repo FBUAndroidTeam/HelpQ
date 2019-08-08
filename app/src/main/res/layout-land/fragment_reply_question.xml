@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@color/colorMint">
 
     <com.facebook.drawee.view.SimpleDraweeView
@@ -44,8 +44,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvReplies"
-        android:layout_width="550dp"
-        android:layout_height="150dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="20dp"
@@ -92,7 +92,7 @@
         android:inputType="textMultiLine|textCapSentences|textAutoCorrect|textPersonName"
         android:padding="10dp"
         android:textColor="@color/colorFBBlue"
-        android:textColorHint="@color/colorFBBlue"
+        android:textColorHint="#687079"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnReply"
         app:layout_constraintHorizontal_bias="0.0"

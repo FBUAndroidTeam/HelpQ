@@ -72,6 +72,17 @@ public class ReplyQuestionFragment extends DialogFragment {
         return inflater.inflate(R.layout.fragment_reply_question, container, false);
     }
 
+    //ensures that dialog fragment keeps same width and height while in use, also allows the
+    //question to stay in view when a student is writing a comment
+    @Override
+    public void onResume() {
+        super.onResume();
+        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+    }
+
     //deals with configuration change by switching to new horizontal layout; recreates itself
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
