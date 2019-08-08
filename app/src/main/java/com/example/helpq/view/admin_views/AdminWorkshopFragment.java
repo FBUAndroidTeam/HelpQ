@@ -43,7 +43,7 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
     private SwipeRefreshLayout swipeContainer;
     private FragmentManager fm;
     private ProgressBar pbLoading;
-    Snackbar mSnackbar;
+    private Snackbar mSnackbar;
     private Workshop workshopToDelete;
 
     public static AdminWorkshopFragment newInstance() {
