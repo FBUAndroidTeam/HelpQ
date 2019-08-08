@@ -157,7 +157,7 @@ public class StudentWorkshopAdapter extends
                         Sound.actionDone(mContext);
                         workshop.setAttendee(ParseUser.getCurrentUser());
                         Date time = workshop.getStartTime();
-                        mStudentWorkshopFragment.onTimeSet(time);
+                        mStudentWorkshopFragment.onTimeSet(time, workshop.getTitle());
                         workshop.saveInBackground();
                         setButtonText(workshop);
                         setAttendeeText(workshop);

@@ -63,7 +63,7 @@
     <string name="empty_reply">Please enter a comment.</string>
     <string name="reply_in_person_help">You cannot reply to a question that requests in-person help.</string>
     <string name="workshop_alarm">Upcoming Workshop</string>
-    <string name="workshop_alarm_description">Your workshop will begin in 15 minutes.</string>
+    <string name="workshop_alarm_description">will begin in 15 minutes.</string>
     <string name="verfication">Verified</string>
     <string name="likes">likes</string>
     <string name="no_questions_student">This student has not asked any questions.</string>
