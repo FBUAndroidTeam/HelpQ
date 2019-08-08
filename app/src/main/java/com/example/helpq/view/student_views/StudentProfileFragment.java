@@ -100,15 +100,20 @@ public class StudentProfileFragment extends Fragment {
             @Override
             public void done(List<Reply> objects, ParseException e) {
                 int numRepliesVerified = 0;
-                for(Reply reply : objects) {
-                    if(reply.getUser().getObjectId()
+                for (Reply reply : objects) {
+                    if (reply.getUser().getObjectId()
                             .equals(ParseUser.getCurrentUser().getObjectId())) {
                         numRepliesVerified++;
                     }
 
                 }
-                tvStat.setText(numRepliesVerified + " " +
-                        getContext().getResources().getString(R.string.verified_replies));
+                if (numRepliesVerified == 1) {
+                    tvStat.setText(numRepliesVerified + " " +
+                            getContext().getResources().getString(R.string.verified_reply));
+                } else {
+                    tvStat.setText(numRepliesVerified + " " +
+                            getContext().getResources().getString(R.string.verified_replies));
+                }
             }
         });
     }
