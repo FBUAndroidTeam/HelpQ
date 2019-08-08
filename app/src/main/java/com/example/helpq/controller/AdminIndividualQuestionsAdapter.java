@@ -58,6 +58,12 @@ public class AdminIndividualQuestionsAdapter extends
         return mQuestions.size();
     }
 
+    // Clean all elements of the recycler
+    public void clear() {
+        mQuestions.clear();
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView tvStudentName;
