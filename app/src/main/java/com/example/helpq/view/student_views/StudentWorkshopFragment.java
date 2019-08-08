@@ -133,6 +133,7 @@ public class StudentWorkshopFragment extends Fragment {
     // Clear the hashtable, and fill it with mappings from workshop object ids to
     // the current user's notifications that point to them. Query for all workshops.
     private void queryWorkshopsWithNotifications() {
+        pbLoading.setVisibility(View.VISIBLE);
         mNotifications = new HashSet<>();
         ParseQuery<Notification> query = QueryFactory.Notifications.getNotifications();
         query.findInBackground(new FindCallback<Notification>() {
@@ -173,6 +174,7 @@ public class StudentWorkshopFragment extends Fragment {
                 }
                 addWorkshopsToAdapter(objects);
                 runLayoutAnimation();
+                pbLoading.setVisibility(View.INVISIBLE);
             }
         });
     }
