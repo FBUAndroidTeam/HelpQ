@@ -1,49 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/main_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorFBBlue">
+    android:layout_height="match_parent">
 
-    <android.widget.TextView
-        android:id="@+id/tvNotice"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="center_horizontal"
-        android:text="@string/empty_workshop"
-        android:textColor="@color/colorWhite"
-        android:elevation="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></android.widget.TextView>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorFBBlue">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeContainer"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/fabAddWorkshop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvAdminWorkshops"
+        <android.widget.TextView
+            android:id="@+id/tvNotice"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
@@ -52,43 +22,83 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorFBBlue"
+            android:gravity="center_horizontal"
+            android:text="@string/empty_workshop"
+            android:textColor="@color/colorWhite"
+            android:elevation="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvAdminWorkshops"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/colorFBBlue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/swipeContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabAddWorkshop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
         android:backgroundTint="@color/colorAccent"
         android:clickable="true"
+        android:iconTint="@android:color/black"
         android:src="@drawable/ic_add_question"
+        app:layout_behavior=".model.HideFabOnScroll"
         app:borderWidth="0dp"
         app:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_anchorGravity="bottom|right|end"
         app:srcCompat="@android:color/background_dark" />
 
-    <ProgressBar
-        android:id="@+id/pbLoading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/swipeContainer"
-        app:layout_constraintEnd_toEndOf="@+id/swipeContainer"
-        app:layout_constraintStart_toStartOf="@+id/swipeContainer"
-        app:layout_constraintTop_toTopOf="@+id/swipeContainer" />
-
-
-</android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

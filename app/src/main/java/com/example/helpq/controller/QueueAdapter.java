@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.helpq.R;
-import com.example.helpq.model.Notification;
 import com.example.helpq.model.NotificationHelper;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
@@ -33,8 +32,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.Calendar;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 
 public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> {
 
@@ -213,7 +212,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
             setupViewButton(question);
             openMenuIfApplicable();
             if (User.isAdmin(ParseUser.getCurrentUser())) {
-                markNewQuestion(question);
+                markNewQuestion(question.getObjectId());
             }
             else {
                 ivMarker.setVisibility(View.GONE);
@@ -256,7 +255,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         }
 
         private void setupSlideDeltaX() {
-            if (isAdmin && isWritten) iSlideDeltaX = -425;
+            if (isAdmin && isWritten) iSlideDeltaX = -440;
             if (isAdmin && !isWritten) iSlideDeltaX = -160;
             if (!isAdmin && isWritten) iSlideDeltaX = -300;
             if (!isAdmin && !isWritten) iSlideDeltaX = -160;
@@ -437,20 +436,10 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         }
 
         // Place a marker on this question if a notification points to it.
-        // Delete the notification.
-        private void markNewQuestion(Question question) {
-            String questionId = question.getObjectId();
-            Hashtable<String, Notification> table = mQueueFragment.mNotifications;
-            if (table.containsKey(questionId)) {
+        private void markNewQuestion(String questionId) {
+            Set<String> notifications = mQueueFragment.mNotifications;
+            if (notifications.contains(questionId)) {
                 ivMarker.setVisibility(View.VISIBLE);
-                Notification notification = table.get(questionId);
-                try {
-                    notification.delete();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                notification.saveInBackground();
-                table.remove(questionId);
             }
             else {
                 ivMarker.setVisibility(View.GONE);

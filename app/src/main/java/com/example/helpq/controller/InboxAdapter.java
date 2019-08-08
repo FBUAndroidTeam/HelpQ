@@ -14,17 +14,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.helpq.R;
-import com.example.helpq.model.Notification;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.view.ReplyQuestionFragment;
 import com.example.helpq.view.student_views.InboxFragment;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
-import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> {
 
@@ -140,7 +138,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             setupMessageText(message);
             setupMenuClickListeners();
             openMenuIfApplicable();
-            markNewMessage(message);
+            markNewMessage(message.getObjectId());
         }
 
         @Override
@@ -221,19 +219,10 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
 
         // Place a marker on this message if a notification points to it.
         // Delete the notification.
-        private void markNewMessage(Question message) {
-            String messageId = message.getObjectId();
-            Hashtable<String, Notification> table = mInboxFragment.mNotifications;
-            if (table.containsKey(messageId)) {
+        private void markNewMessage(String messageId) {
+            Set<String> notifications = mInboxFragment.mNotifications;
+            if (notifications.contains(messageId)) {
                 ivMarker.setVisibility(View.VISIBLE);
-                Notification notification = table.get(messageId);
-                try {
-                    notification.delete();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                notification.saveInBackground();
-                table.remove(messageId);
             }
             else {
                 ivMarker.setVisibility(View.GONE);

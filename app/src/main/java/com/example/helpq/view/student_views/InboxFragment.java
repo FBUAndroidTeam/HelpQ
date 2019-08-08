@@ -30,8 +30,9 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class InboxFragment extends Fragment {
 
@@ -53,8 +54,8 @@ public class InboxFragment extends Fragment {
     private SwipeRefreshLayout mSwipeContainer;
     protected ProgressBar pbLoading;
 
-    // Maps Question objectIds to the notifications that point to them
-    public Hashtable<String, Notification> mNotifications;
+    // Set of strings representing the objectIds of messages that have notifications
+    public Set<String> mNotifications;
 
     public static InboxFragment newInstance() {
         return new InboxFragment();
@@ -214,7 +215,7 @@ public class InboxFragment extends Fragment {
     // Clear the hashtable, and fill it with mappings from question object ids to
     // the current user's notifications that point to them. Query for all messages.
     private void queryMessagesWithNotifications(final String input) {
-        mNotifications = new Hashtable<>();
+        mNotifications = new HashSet<>();
         ParseQuery<Notification> query = QueryFactory.Notifications.getNotifications();
         query.findInBackground(new FindCallback<Notification>() {
             @Override
@@ -224,12 +225,17 @@ public class InboxFragment extends Fragment {
                     return;
                 }
 
-                // Map the user's notifications to the object ids of the messages
-                // they correspond to.
+                // Get the message objectIds of the user's notifications,
+                // and delete the notifications.
                 for (int i = 0; i < objects.size(); i++) {
-                    String questionId = objects.get(i).getQuestionId();
-                    if (questionId != null) {
-                        mNotifications.put(objects.get(i).getQuestionId(), objects.get(i));
+                    Notification notification = objects.get(i);
+                    if (notification.getQuestionId() != null) {
+                        mNotifications.add(notification.getQuestionId());
+                        try {
+                            notification.delete();
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
                 queryMessages(input);
