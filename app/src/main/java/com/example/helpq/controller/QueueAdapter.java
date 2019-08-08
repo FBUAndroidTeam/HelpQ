@@ -256,7 +256,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         }
 
         private void setupSlideDeltaX() {
-            if (isAdmin && isWritten) iSlideDeltaX = -425;
+            if (isAdmin && isWritten) iSlideDeltaX = -440;
             if (isAdmin && !isWritten) iSlideDeltaX = -160;
             if (!isAdmin && isWritten) iSlideDeltaX = -300;
             if (!isAdmin && !isWritten) iSlideDeltaX = -160;
