@@ -40,8 +40,9 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class StudentWorkshopFragment extends Fragment {
     public static final String TAG = "StudentWorkshopFragment";
@@ -54,8 +55,8 @@ public class StudentWorkshopFragment extends Fragment {
     private Question q;
     private ProgressBar pbLoading;
 
-    // Maps Workshop objectIds to the notifications that point to them
-    public Hashtable<String, Notification> mNotifications;
+    // Set of strings representing the objectIds of workshops that have notifications
+    public Set<String> mNotifications;
 
     public static StudentWorkshopFragment newInstance() {
         return new StudentWorkshopFragment();
@@ -132,7 +133,7 @@ public class StudentWorkshopFragment extends Fragment {
     // Clear the hashtable, and fill it with mappings from workshop object ids to
     // the current user's notifications that point to them. Query for all workshops.
     private void queryWorkshopsWithNotifications() {
-        mNotifications = new Hashtable<>();
+        mNotifications = new HashSet<>();
         ParseQuery<Notification> query = QueryFactory.Notifications.getNotifications();
         query.findInBackground(new FindCallback<Notification>() {
             @Override
@@ -142,12 +143,17 @@ public class StudentWorkshopFragment extends Fragment {
                     return;
                 }
 
-                // Map the user's notifications to the object ids of the messages
-                // they correspond to.
+                // Get the workshop objectIds of the user's notifications,
+                // and delete the notifications.
                 for (int i = 0; i < objects.size(); i++) {
-                    String workshopId = objects.get(i).getWorkshopId();
-                    if (workshopId != null) {
-                        mNotifications.put(objects.get(i).getWorkshopId(), objects.get(i));
+                    Notification notification = objects.get(i);
+                    if (notification.getWorkshopId() != null) {
+                        mNotifications.add(notification.getWorkshopId());
+                        try {
+                            notification.delete();
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
                 queryWorkshops();

@@ -12,19 +12,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.helpq.R;
-import com.example.helpq.model.Notification;
 import com.example.helpq.model.Sound;
 import com.example.helpq.model.Workshop;
 import com.example.helpq.view.student_views.StudentWorkshopFragment;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 
 public class StudentWorkshopAdapter extends
         RecyclerView.Adapter<StudentWorkshopAdapter.ViewHolder> {
@@ -141,7 +139,7 @@ public class StudentWorkshopAdapter extends
             tvWorkshopLocation.setText(workshop.getLocation());
             setSwitchStatus(workshop);
             setAttendeeText(workshop);
-            markNewWorkshop(workshop);
+            markNewWorkshop(workshop.getObjectId());
             setupSignUpSwitch(workshop);
         }
 
@@ -171,19 +169,10 @@ public class StudentWorkshopAdapter extends
 
         // Place a marker on this workshop if a notification points to it.
         // Delete the notification.
-        private void markNewWorkshop(Workshop workshop) {
-            String workshopId = workshop.getObjectId();
-            Hashtable<String, Notification> table = mStudentWorkshopFragment.mNotifications;
-            if (table.containsKey(workshopId)) {
+        private void markNewWorkshop(String workshopId) {
+            Set<String> notifications = mStudentWorkshopFragment.mNotifications;
+            if (notifications.contains(workshopId)) {
                 ivMarker.setVisibility(View.VISIBLE);
-                Notification notification = table.get(workshopId);
-                try {
-                    notification.delete();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                notification.saveInBackground();
-                table.remove(workshopId);
             }
             else {
                 ivMarker.setVisibility(View.GONE);

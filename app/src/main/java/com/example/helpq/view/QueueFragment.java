@@ -36,8 +36,9 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Hashtable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class QueueFragment extends Fragment implements DialogDismissListener {
 
@@ -59,8 +60,8 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     private SwipeRefreshLayout mSwipeContainer;
     private ProgressBar pbLoading;
 
-    // Maps Question objectIds to the notifications that point to them
-    public Hashtable<String, Notification> mNotifications;
+    // Set of strings representing the objectIds of questions that have notifications
+    public Set<String> mNotifications;
 
     public static QueueFragment newInstance() {
         return new QueueFragment();
@@ -141,7 +142,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
     // Clear the hashtable, and fill it with mappings from question object ids to
     // the current user's notifications that point to them. Query for all questions.
     private void queryQuestionsWithNotifications(final String input) {
-        mNotifications = new Hashtable<>();
+        mNotifications = new HashSet<>();
         ParseQuery<Notification> query = QueryFactory.Notifications.getNotifications();
         query.findInBackground(new FindCallback<Notification>() {
             @Override
@@ -151,12 +152,17 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
                     return;
                 }
 
-                // Map the user's notifications to the object ids of the questions
-                // they correspond to.
+                // Get the question objectIds of the user's notifications,
+                // and delete the notifications.
                 for (int i = 0; i < objects.size(); i++) {
-                    String questionId = objects.get(i).getQuestionId();
-                    if (questionId != null) {
-                        mNotifications.put(objects.get(i).getQuestionId(), objects.get(i));
+                    Notification notification = objects.get(i);
+                    if (notification.getQuestionId() != null) {
+                        mNotifications.add(notification.getQuestionId());
+                        try {
+                            notification.delete();
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
                 queryQuestions(input);
