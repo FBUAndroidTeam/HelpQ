@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.controller.EnrolledStudentsAdapter;
+import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Sound;
 import com.parse.FindCallback;
@@ -29,7 +30,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminEnrolledFragment extends Fragment {
+public class AdminEnrolledFragment extends Fragment implements DialogDismissListener {
 
     public static final String TAG = "AdminEnrolledFragment";
     private RecyclerView rvEnrolledStudents;
@@ -135,5 +136,10 @@ public class AdminEnrolledFragment extends Fragment {
         rvEnrolledStudents.setLayoutAnimation(controller);
         mAdapter.notifyDataSetChanged();
         rvEnrolledStudents.scheduleLayoutAnimation();
+    }
+
+    @Override
+    public void onDismiss() {
+        fetchEnrolledAsync();
     }
 }

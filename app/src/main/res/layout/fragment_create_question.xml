@@ -110,8 +110,8 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.973"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toEndOf="@+id/tvWaitTime"
         app:layout_constraintTop_toBottomOf="@+id/tbInPerson"
         app:layout_constraintVertical_bias="0.0" />
 
