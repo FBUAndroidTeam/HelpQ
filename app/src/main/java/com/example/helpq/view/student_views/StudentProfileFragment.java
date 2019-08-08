@@ -14,10 +14,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.helpq.R;
+import com.example.helpq.model.QueryFactory;
+import com.example.helpq.model.Reply;
 import com.example.helpq.model.User;
 import com.example.helpq.view.LoginActivity;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseUser;
+
+import java.util.List;
 
 public class StudentProfileFragment extends Fragment {
 
@@ -30,6 +36,7 @@ public class StudentProfileFragment extends Fragment {
     private Button btnLogout;
     private SimpleDraweeView ppvPicture;
     private String mProfile;
+    private TextView tvStat;
 
     public static StudentProfileFragment newInstance() {
         return new StudentProfileFragment();
@@ -60,11 +67,13 @@ public class StudentProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getNumberOfVerifiedReplies();
         ppvPicture = view.findViewById(R.id.ppvPicture);
         tvAdmin = view.findViewById(R.id.tvAdmin);
         tvFullName = view.findViewById(R.id.tvFullName);
         tvUsername = view.findViewById(R.id.tvUsername);
         btnLogout = view.findViewById(R.id.btnLogout);
+        tvStat = view.findViewById(R.id.tvStat);
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         tvAdmin.setText(User.getAdminName(ParseUser.getCurrentUser()));
         tvFullName.setText(User.getFullName(ParseUser.getCurrentUser()));
@@ -82,6 +91,24 @@ public class StudentProfileFragment extends Fragment {
                 ParseUser.logOut();
                 startActivity(new Intent(getContext(), LoginActivity.class));
                 getActivity().finish();
+            }
+        });
+    }
+
+    private void getNumberOfVerifiedReplies() {
+        QueryFactory.Replies.getVerifiedReplies().findInBackground(new FindCallback<Reply>() {
+            @Override
+            public void done(List<Reply> objects, ParseException e) {
+                int numRepliesVerified = 0;
+                for(Reply reply : objects) {
+                    if(reply.getUser().getObjectId()
+                            .equals(ParseUser.getCurrentUser().getObjectId())) {
+                        numRepliesVerified++;
+                    }
+
+                }
+                tvStat.setText(numRepliesVerified + " " +
+                        getContext().getResources().getString(R.string.verified_replies));
             }
         });
     }

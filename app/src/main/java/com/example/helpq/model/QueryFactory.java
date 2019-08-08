@@ -167,4 +167,14 @@ public class QueryFactory {
             return query;
         }
     }
+
+    public static class Replies {
+
+        public static ParseQuery<Reply> getVerifiedReplies() {
+            ParseQuery<Reply> query = ParseQuery.getQuery("Reply");
+            query.whereEqualTo(Reply.KEY_VERIFY, true);
+            query.include(Reply.KEY_USER);
+            return query;
+        }
+    }
 }
