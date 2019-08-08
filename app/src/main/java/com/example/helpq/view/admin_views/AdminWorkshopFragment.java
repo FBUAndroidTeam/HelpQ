@@ -43,6 +43,8 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
     private SwipeRefreshLayout swipeContainer;
     private FragmentManager fm;
     private ProgressBar pbLoading;
+    Snackbar mSnackbar;
+    private Workshop workshopToDelete;
 
     public static AdminWorkshopFragment newInstance() {
         return new AdminWorkshopFragment();
@@ -106,6 +108,12 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
 
     // Reload workshops.
     protected void fetchWorkshopsAsync() {
+        if(mSnackbar != null) {
+            mSnackbar.dismiss();
+            mAdapter.deleteWorkshop(workshopToDelete);
+            mSnackbar = null;
+
+        }
         mAdapter.clear();
         queryWorkshops();
         swipeContainer.setRefreshing(false);
@@ -147,13 +155,13 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
                 rvAdminWorkshops.scrollToPosition(adapterpos);
             }
         };
-
-        Snackbar.make(getView(), R.string.workshop_deleted, Snackbar.LENGTH_LONG)
-                .setAction(R.string.snackbar_action, myOnClickListener)
-                .addCallback(new Snackbar.Callback() {
+        workshopToDelete = workshop;
+         mSnackbar = Snackbar.make(getView(), R.string.workshop_deleted, Snackbar.LENGTH_LONG);
+         mSnackbar.setAction(R.string.snackbar_action, myOnClickListener).addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar transientBottomBar, int event) {
-                        if(event == DISMISS_EVENT_SWIPE || event == DISMISS_EVENT_TIMEOUT) {
+                        if(event == DISMISS_EVENT_SWIPE || event == DISMISS_EVENT_TIMEOUT
+                                || event == DISMISS_EVENT_CONSECUTIVE) {
                             mAdapter.deleteWorkshop(workshop);
                         }
                     }
