@@ -10,7 +10,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.Notification;
@@ -157,9 +156,6 @@ public class StudentWorkshopAdapter extends
                         workshop.saveInBackground();
                         setButtonText(workshop);
                         setAttendeeText(workshop);
-                        Toast.makeText(mContext,
-                                R.string.unenrolled,
-                                Toast.LENGTH_LONG).show();
                     } else {
                         Sound.actionDone(mContext);
                         workshop.setAttendee(ParseUser.getCurrentUser());
@@ -168,9 +164,6 @@ public class StudentWorkshopAdapter extends
                         workshop.saveInBackground();
                         setButtonText(workshop);
                         setAttendeeText(workshop);
-                        Toast.makeText(mContext,
-                                R.string.enrolled,
-                                Toast.LENGTH_LONG).show();
                     }
                 }
             });
