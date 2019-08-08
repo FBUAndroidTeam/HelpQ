@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
+    android:layout_margin="6dp"
     android:background="@drawable/item_question_rounded">
 
 
@@ -55,7 +55,7 @@
 
     <TextView
         android:id="@+id/tvStudentWorkshopLocation"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -63,8 +63,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text="MPK 21.65.23"
-        android:textSize="15sp"
         android:textColor="@color/colorFBBlue"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvStudentWorkshopSignedUpCount"
         app:layout_constraintHorizontal_bias="0.0"
