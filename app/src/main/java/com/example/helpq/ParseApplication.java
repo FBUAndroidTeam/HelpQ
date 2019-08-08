@@ -2,6 +2,7 @@ package com.example.helpq;
 
 import android.app.Application;
 
+import com.example.helpq.controller.TypefaceUtil;
 import com.example.helpq.model.Notification;
 import com.example.helpq.model.Question;
 import com.example.helpq.model.Reply;
@@ -28,5 +29,6 @@ public class ParseApplication extends Application {
 
         Parse.initialize(configuration);
         ParseFacebookUtils.initialize(this);
+        TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "font_tweb.ttf");
     }
 }
