@@ -1,5 +1,6 @@
 package com.example.helpq.view.admin_views;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -108,6 +111,16 @@ public class AdminIndividualQuestionsFragment extends DialogFragment
         setupSwipeRefreshing(view);
     }
 
+    // Ensures that dialog fragment keeps same width and height while in use
+    @Override
+    public void onResume() {
+        super.onResume();
+        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+    }
+
     // Handle logic for Swipe to Refresh.
     private void setupSwipeRefreshing(@NonNull View view) {
         mSwipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
@@ -160,11 +173,23 @@ public class AdminIndividualQuestionsFragment extends DialogFragment
                     if(mQuestions.isEmpty()) {
                         tvNoQuestions.setVisibility(View.VISIBLE);
                     }
+                    runLayoutAnimation();
                 } else {
                     Log.d(TAG, "error querying replies");
                 }
             }
         });
+    }
+
+    // Animate RecyclerView items falling onto the screen.
+    protected void runLayoutAnimation() {
+        final Context context = rvQuestions.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_enter);
+
+        rvQuestions.setLayoutAnimation(controller);
+        mAdapter.notifyDataSetChanged();
+        rvQuestions.scheduleLayoutAnimation();
     }
 
     @Override
