@@ -50,6 +50,7 @@ public class AdminIndividualQuestionsFragment extends DialogFragment
     private TextView tvNoQuestions;
     private ParseUser mStudent;
     private ImageButton ibCancel;
+    private boolean changesMade;
 
     // Swipe to refresh and progress bar
     private SwipeRefreshLayout mSwipeContainer;
@@ -86,6 +87,8 @@ public class AdminIndividualQuestionsFragment extends DialogFragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        changesMade = false;
 
         pbLoading = view.findViewById(R.id.pbLoading);
         pbLoading.setVisibility(View.VISIBLE);
@@ -147,6 +150,10 @@ public class AdminIndividualQuestionsFragment extends DialogFragment
             @Override
             public void onClick(View v) {
                 Sound.closeDialogWindow(getContext());
+                if(changesMade) {
+                    DialogDismissListener listener = (DialogDismissListener) getTargetFragment();
+                    listener.onDismiss();
+                }
                 dismiss();
             }
         });
@@ -195,5 +202,6 @@ public class AdminIndividualQuestionsFragment extends DialogFragment
     @Override
     public void onDismiss() {
         fetchQuestionsAsync();
+        changesMade = true;
     }
 }
