@@ -6,7 +6,4 @@
     <item
         android:drawable="@drawable/login_gradient2"
         android:duration="6000" />
-    <item
-        android:drawable="@drawable/login_gradient3"
-        android:duration="6000" />
 </animation-list>
