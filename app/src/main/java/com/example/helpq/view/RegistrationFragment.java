@@ -40,6 +40,7 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
 
     public static final String TAG = "RegistrationFragment";
     private static final String KEY_FULL_NAME = "fullName";
+    private static final int DEFAULT_REMIND_TIME = 15;
 
 
     private EditText etNewUsername;
@@ -116,6 +117,7 @@ public class RegistrationFragment extends Fragment implements DialogDismissListe
         User.setFullName(fullName, newUser);
         User.setIsAdmin(false, newUser);
         User.setAdminName(adminUsername, newUser);
+        User.setReminderTime(DEFAULT_REMIND_TIME, newUser);
         User.setProfilePicture(profilePicId, newUser);
         newUser.saveInBackground(new SaveCallback() {
             @Override
