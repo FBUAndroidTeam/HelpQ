@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -29,14 +30,22 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
     private Button btnFacebookLogin;
+    private AnimationDrawable mAnimationDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Fresco.initialize(this);
         FacebookSdk.setIsDebugEnabled(true);
         FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
         setContentView(R.layout.activity_login);
+
+        mAnimationDrawable = (AnimationDrawable)
+                findViewById(R.id.ivBackground).getBackground();
+        mAnimationDrawable.setEnterFadeDuration(6000);
+        mAnimationDrawable.setExitFadeDuration(3000);
+
         // Allow user to persist between app restarts
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
@@ -52,6 +61,12 @@ public class LoginActivity extends AppCompatActivity {
         btnFacebookLogin = findViewById(R.id.btnFacebookLogin);
         btnFacebookLogin.setVisibility(View.VISIBLE);
         faceBookLogin();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAnimationDrawable.start();
     }
 
     @Override
