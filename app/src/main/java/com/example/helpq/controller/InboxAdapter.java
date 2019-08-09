@@ -107,7 +107,6 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         private TextView tvQuestion;
         private TextView tvPriorityEmoji;
         private TextView tvAnswerTime;
-        private TextView tvAdminName;
         private TextView tvAnswer;
         private TextView tvLikes;
         private ImageButton ibLike;
@@ -121,7 +120,6 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             tvQuestion = itemView.findViewById(R.id.tvQuestion);
             tvPriorityEmoji = itemView.findViewById(R.id.tvPriorityEmoji);
             tvAnswerTime = itemView.findViewById(R.id.tvMonth);
-            tvAdminName = itemView.findViewById(R.id.tvAdminName);
             tvAnswer = itemView.findViewById(R.id.tvAnswer);
             tvLikes = itemView.findViewById(R.id.tvLikes);
             ibLike = itemView.findViewById(R.id.ibLike);
@@ -164,14 +162,8 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             tvPriorityEmoji.setText(message.getPriority());
             tvQuestion.setText(message.getText());
             tvAnswerTime.setText(message.getAnsweredTimeAgo());
-            if (User.isAdmin(ParseUser.getCurrentUser())) {
-                tvAdminName.setText(mContext.getResources().getString(R.string.your_answer));
-                iSlideDeltaX = -170;
-            } else {
-                tvAdminName.setText(User.getAdminName(ParseUser.getCurrentUser()) +
-                        mContext.getResources().getString(R.string.admin_answer));
-                iSlideDeltaX = -310;
-            }
+            if (User.isAdmin(ParseUser.getCurrentUser())) iSlideDeltaX = -170;
+            else iSlideDeltaX = -310;
             tvAnswer.setText(message.getAnswer());
             setTextClickableIfNeeded(message);
             setLikeText(message, tvLikes);

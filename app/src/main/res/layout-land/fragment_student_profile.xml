@@ -7,12 +7,29 @@
     android:layout_height="match_parent"
     android:background="@color/colorFBBlue">
 
+    <ImageButton
+        android:id="@+id/ibSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/colorFBBlue"
+        android:tint="@color/colorMint"
+        fresco:layout_constraintEnd_toEndOf="parent"
+        fresco:layout_constraintHorizontal_bias="0.0"
+        fresco:layout_constraintStart_toStartOf="parent"
+        fresco:layout_constraintTop_toTopOf="parent"
+        fresco:srcCompat="@drawable/ic_setting"
+        tools:ignore="VectorDrawableCompat" />
+
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="258dp"
         android:layout_height="150dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/tvFullName"
         app:layout_constraintEnd_toStartOf="@+id/ppvPicture"
         app:layout_constraintHorizontal_bias="0.5"

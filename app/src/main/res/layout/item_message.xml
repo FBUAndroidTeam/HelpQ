@@ -21,24 +21,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tvAdminName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="Admin Name"
-            android:textColor="@color/colorGray"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/tvQuestion"
-            app:layout_constraintTop_toBottomOf="@+id/tvQuestion"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
             android:id="@+id/tvPriorityEmoji"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -102,19 +84,19 @@
             android:id="@+id/tvAnswer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:autoLink="web"
             android:lineSpacingMultiplier=".7"
             android:text="Answer"
-            android:textColor="@color/colorDarkGray"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/tvAdminName"
-            app:layout_constraintTop_toBottomOf="@+id/tvAdminName"
+            app:layout_constraintEnd_toStartOf="@+id/tvLikes"
+            app:layout_constraintStart_toStartOf="@+id/tvQuestion"
+            app:layout_constraintTop_toBottomOf="@+id/tvQuestion"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
@@ -150,14 +132,11 @@
             android:id="@+id/ivMarker"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/ivBackground"
-            app:layout_constraintEnd_toStartOf="@+id/tvAdminName"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvQuestion"
+            app:layout_constraintTop_toBottomOf="@+id/tvPriorityEmoji"
             app:srcCompat="@drawable/item_notification" />
 
     </android.support.constraint.ConstraintLayout>

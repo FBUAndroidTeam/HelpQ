@@ -14,4 +14,6 @@
     <color name="colorDarkGray">#292e28</color>
     <color name="colorGray">#808080</color>
     <color name="colorSubtleGray">#E0DFDF</color>
+    <color name="colorBlack">#000A00</color>
+    <color name="colorBrightGreen">#1D5705</color>
 </resources>
