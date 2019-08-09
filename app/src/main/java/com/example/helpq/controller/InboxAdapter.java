@@ -165,7 +165,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             if (User.isAdmin(ParseUser.getCurrentUser())) iSlideDeltaX = -170;
             else iSlideDeltaX = -310;
             tvAnswer.setText(message.getAnswer());
-            setTextClickableIfNeeded(message);
+//            setTextClickableIfNeeded(message);
             setLikeText(message, tvLikes);
             setLikeButton(ibLike, message.isLiked());
         }
