@@ -171,9 +171,11 @@ public class ReplyQuestionFragment extends DialogFragment {
                         public void done(ParseException e) {
                             if (e == null) {
                                 etReply.setText("");
-                                ((InputMethodManager) getContext()
-                                        .getSystemService(Activity.INPUT_METHOD_SERVICE))
-                                        .hideSoftInputFromWindow(v.getWindowToken(), 0);
+                                if(getContext() != null) {
+                                    ((InputMethodManager) getContext()
+                                            .getSystemService(Activity.INPUT_METHOD_SERVICE))
+                                            .hideSoftInputFromWindow(v.getWindowToken(), 0);
+                                }
                                 mReplies.add(newReply);
                                 adapter.notifyItemInserted(mReplies.size() - 1);
                                 rvReplies.getLayoutManager().scrollToPosition(mReplies.size() - 1);
