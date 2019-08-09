@@ -36,7 +36,7 @@
         android:gravity="top"
         android:hint="Type your question here"
         android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
-        android:maxLines="6"
+        android:maxLines="5"
         android:minLines="2"
         android:padding="5dp"
         android:scrollbars="vertical"
