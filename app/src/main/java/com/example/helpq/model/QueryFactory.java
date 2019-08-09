@@ -176,5 +176,11 @@ public class QueryFactory {
             query.include(Reply.KEY_USER);
             return query;
         }
+
+        public static ParseQuery<Reply> deleteAssociatedReplies(Question q) {
+            ParseQuery<Reply> query = ParseQuery.getQuery("Reply");
+            query.whereEqualTo(Reply.KEY_QUESTION, q);
+            return query;
+        }
     }
 }
