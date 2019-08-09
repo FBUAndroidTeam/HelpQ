@@ -56,7 +56,7 @@ public class RemindTimesAdapter extends RecyclerView.Adapter<RemindTimesAdapter.
         }
 
         public void bind(int time) {
-            tvTime.setText(time + " minutes");
+            tvTime.setText(time + " " + mContext.getResources().getString(R.string.minutes));
             if(((Integer) User.getReminderTime(ParseUser.getCurrentUser())).intValue() == time) {
                 ivSelected.setVisibility(View.VISIBLE);
                 lastSelected = ivSelected;
