@@ -103,10 +103,12 @@ public class AnswerQuestionFragment extends DialogFragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnSubmit.setClickable(false);
                 if ((etAnswer.getText().toString().isEmpty())) {
                     Toast.makeText(getContext(),
                             R.string.edge_case_answer,
                             Toast.LENGTH_LONG).show();
+                    btnSubmit.setClickable(true);
                     return;
                 } else {
                     submitAnswer();
