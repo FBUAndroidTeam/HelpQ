@@ -78,6 +78,6 @@
     <string name="workshop_deleted">Workshop deleted</string>
     <string name="verified_replies">verified replies</string>
     <string name="verified_reply">verified reply</string>
-    <string name="slogan">Login to get all your questions answered!</string>
+    <string name="slogan">Get all your questions answered.</string>
     <string name="remind_me_in">Remind me about workshops in...</string>
 </resources>
