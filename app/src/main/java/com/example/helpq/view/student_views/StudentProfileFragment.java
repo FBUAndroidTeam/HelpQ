@@ -72,13 +72,14 @@ public class StudentProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        btnLogout = view.findViewById(R.id.btnLogout);
+        btnLogout.setClickable(false);
         getNumberOfVerifiedReplies();
         ibSetting = view.findViewById(R.id.ibSetting);
         ppvPicture = view.findViewById(R.id.ppvPicture);
         tvAdmin = view.findViewById(R.id.tvAdmin);
         tvFullName = view.findViewById(R.id.tvFullName);
         tvUsername = view.findViewById(R.id.tvUsername);
-        btnLogout = view.findViewById(R.id.btnLogout);
         tvStat = view.findViewById(R.id.tvStat);
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         tvAdmin.setText(User.getAdminName(ParseUser.getCurrentUser()));
@@ -121,6 +122,7 @@ public class StudentProfileFragment extends Fragment {
                     tvStat.setText(numRepliesVerified + " " +
                             getContext().getResources().getString(R.string.verified_replies));
                 }
+                btnLogout.setClickable(true);
             }
         });
     }
