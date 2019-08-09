@@ -159,6 +159,7 @@ public class ReplyQuestionFragment extends DialogFragment {
         btnReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                btnReply.setEnabled(false);
                 if(!etReply.getText().toString().equals("")) {
                     Sound.actionDone(getContext());
                     final Reply newReply = new Reply();
@@ -180,6 +181,7 @@ public class ReplyQuestionFragment extends DialogFragment {
                                 adapter.notifyItemInserted(mReplies.size() - 1);
                                 rvReplies.getLayoutManager().scrollToPosition(mReplies.size() - 1);
                                 tvNoComments.setVisibility(tvNoComments.INVISIBLE);
+                                btnReply.setEnabled(true);
                             } else {
                                 Log.d(TAG, "error creating reply");
                                 e.printStackTrace();
@@ -190,6 +192,7 @@ public class ReplyQuestionFragment extends DialogFragment {
                     Toast.makeText(getContext(),
                             getContext().getResources().getString(R.string.empty_reply),
                             Toast.LENGTH_LONG).show();
+                    btnReply.setEnabled(true);
                 }
             }
         });
