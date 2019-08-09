@@ -1,5 +1,11 @@
 package com.example.helpq.view.admin_views;
 
+import android.annotation.TargetApi;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,11 +23,15 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.helpq.R;
+import com.example.helpq.model.AlarmSetter;
+import com.example.helpq.model.AlertReceiver;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Notification;
+import com.example.helpq.model.Question;
 import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.model.Workshop;
+import com.example.helpq.view.student_views.StudentWorkshopFragment;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -48,6 +58,8 @@ public class CreateWorkshopFragment extends DialogFragment {
     private int mDay;
     private boolean isCalendarClicked;
     private ImageButton ibCancel;
+
+    public static String workshop;
 
     public static CreateWorkshopFragment newInstance(String title) {
         CreateWorkshopFragment frag = new CreateWorkshopFragment();
@@ -142,6 +154,9 @@ public class CreateWorkshopFragment extends DialogFragment {
                         Toast.makeText(getContext(),
                                 R.string.success_create_workshop,
                                 Toast.LENGTH_LONG).show();
+                        AlarmSetter.onTimeSet(workshop.getStartTime(),
+                                etTitle.getText().toString(),
+                                getContext());
                         listener.onDismiss();
                         dismiss();
                     } else {

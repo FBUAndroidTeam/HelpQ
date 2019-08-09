@@ -11,6 +11,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.helpq.R;
+import com.example.helpq.model.AlarmSetter;
 import com.example.helpq.model.Sound;
 import com.example.helpq.model.Workshop;
 import com.example.helpq.view.student_views.StudentWorkshopFragment;
@@ -157,7 +158,7 @@ public class StudentWorkshopAdapter extends
                         Sound.actionDone(mContext);
                         workshop.setAttendee(ParseUser.getCurrentUser());
                         Date time = workshop.getStartTime();
-                        mStudentWorkshopFragment.onTimeSet(time, workshop.getTitle());
+                        AlarmSetter.onTimeSet(time, workshop.getTitle(), mContext);
                         workshop.saveInBackground();
                         setButtonText(workshop);
                         setAttendeeText(workshop);
