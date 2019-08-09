@@ -427,6 +427,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
                     tvDescription.setMaxLines(1);
                     originalLines = tvDescription.getLineCount();
                     if (originalLines > 1) {
+                        tvSeeMore.setText(mContext.getResources().getString(R.string.see_more));
                         tvSeeMore.setVisibility(View.VISIBLE);
                     } else {
                         tvSeeMore.setVisibility(View.GONE);
