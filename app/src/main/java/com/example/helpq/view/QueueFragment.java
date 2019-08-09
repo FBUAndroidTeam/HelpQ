@@ -62,7 +62,6 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
 
     // Set of strings representing the objectIds of questions that have notifications
     public Set<String> mNotifications;
-    private boolean undoClicked;
 
     public static QueueFragment newInstance() {
         return new QueueFragment();
@@ -250,19 +249,19 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
 
     //created at, asker, text, priority, help type, set archived to false
     public void createSnackbar(final int adapterpos, final Question q){
-        undoClicked = false;
+        final boolean[] undoClicked = {false};
 
         final View.OnClickListener snackbarClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!undoClicked) {
+                if(!undoClicked[0]) {
                     q.setIsArchived(false);
                     q.saveInBackground();
                     mQuestions.add(q);
                     Collections.sort(mQuestions);
                     mAdapter.notifyItemInserted(adapterpos);
                     rvQuestions.scrollToPosition(adapterpos);
-                    undoClicked = true;
+                    undoClicked[0] = true;
                 }
             }
         };
