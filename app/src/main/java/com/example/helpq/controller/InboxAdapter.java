@@ -173,8 +173,23 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                 iSlideDeltaX = -310;
             }
             tvAnswer.setText(message.getAnswer());
+            setTextClickableIfNeeded(message);
             setLikeText(message, tvLikes);
             setLikeButton(ibLike, message.isLiked());
+        }
+
+        private void setTextClickableIfNeeded(Question message) {
+            if((message.getAnswer()).
+                    equals(mContext.getResources().getString(R.string.see_student_reply))) {
+                tvAnswer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        replyToQuestion(mMessages.get(getAdapterPosition()));
+                    }
+                });
+            } else {
+                tvAnswer.setClickable(false);
+            }
         }
 
         private void setupMenuClickListeners() {
