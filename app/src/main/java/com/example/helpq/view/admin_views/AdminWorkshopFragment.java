@@ -45,6 +45,7 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
     private ProgressBar pbLoading;
     private Snackbar mSnackbar;
     private Workshop workshopToDelete;
+    private boolean undoClicked;
 
     public static AdminWorkshopFragment newInstance() {
         return new AdminWorkshopFragment();
@@ -108,11 +109,10 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
 
     // Reload workshops.
     protected void fetchWorkshopsAsync() {
-        if(mSnackbar != null) {
+        if(mSnackbar != null && !undoClicked) {
             mSnackbar.dismiss();
             mAdapter.deleteWorkshop(workshopToDelete);
             mSnackbar = null;
-
         }
         mAdapter.clear();
         queryWorkshops();
@@ -147,12 +147,16 @@ public class AdminWorkshopFragment extends Fragment implements DialogDismissList
     }
 
     public void createSnackbar(final int adapterpos, final Workshop workshop){
+        undoClicked = false;
         View.OnClickListener myOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mWorkshops.add(adapterpos, workshop);
-                mAdapter.notifyItemInserted(adapterpos);
-                rvAdminWorkshops.scrollToPosition(adapterpos);
+                if(!undoClicked) {
+                    mWorkshops.add(adapterpos, workshop);
+                    mAdapter.notifyItemInserted(adapterpos);
+                    rvAdminWorkshops.scrollToPosition(adapterpos);
+                    undoClicked = true;
+                }
             }
         };
         workshopToDelete = workshop;

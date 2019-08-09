@@ -93,6 +93,7 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvTime = itemView.findViewById(R.id.tvTime);
             ibDelete = itemView.findViewById(R.id.ibAdminDeleteWorkshop);
+            ibDelete.setEnabled(true);
             ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -100,11 +101,13 @@ public class AdminWorkshopAdapter extends RecyclerView.Adapter<AdminWorkshopAdap
                     mAdminWorkshopFragment.createSnackbar(getLayoutPosition(),
                             mWorkshops.get(getAdapterPosition()));
                     removeAt(getAdapterPosition());
+                    ibDelete.setEnabled(false);
                 }
             });
         }
 
         public void bind(Workshop workshop) {
+            ibDelete.setEnabled(true);
             String wholeDate = workshop.getDate();
             tvTitle.setText(workshop.getTitle());
             tvMonth.setText(wholeDate.substring(0,3));
