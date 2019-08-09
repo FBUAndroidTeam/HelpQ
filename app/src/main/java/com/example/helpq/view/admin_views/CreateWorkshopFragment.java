@@ -1,11 +1,5 @@
 package com.example.helpq.view.admin_views;
 
-import android.annotation.TargetApi;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,14 +18,11 @@ import android.widget.Toast;
 
 import com.example.helpq.R;
 import com.example.helpq.model.AlarmSetter;
-import com.example.helpq.model.AlertReceiver;
 import com.example.helpq.model.DialogDismissListener;
 import com.example.helpq.model.Notification;
-import com.example.helpq.model.Question;
 import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.model.Workshop;
-import com.example.helpq.view.student_views.StudentWorkshopFragment;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -114,6 +105,7 @@ public class CreateWorkshopFragment extends DialogFragment {
             public void onClick(View v) {
                 if(!etTitle.getText().toString().isEmpty() &&
                         !etLocation.getText().toString().isEmpty()) {
+                    btnSubmit.setEnabled(false);
                     createWorkshop();
                 } else {
                     Toast.makeText(getContext(), R.string.edge_case_enter_location,
@@ -166,6 +158,7 @@ public class CreateWorkshopFragment extends DialogFragment {
                 }
             });
         } else {
+            btnSubmit.setEnabled(true);
             Toast.makeText(getContext(), R.string.edge_case_wrong_date_workshop,
                     Toast.LENGTH_LONG).show();
         }
