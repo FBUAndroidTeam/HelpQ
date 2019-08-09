@@ -62,6 +62,7 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
 
     // Set of strings representing the objectIds of questions that have notifications
     public Set<String> mNotifications;
+    private boolean undoClicked;
 
     public static QueueFragment newInstance() {
         return new QueueFragment();
@@ -249,21 +250,25 @@ public class QueueFragment extends Fragment implements DialogDismissListener {
 
     //created at, asker, text, priority, help type, set archived to false
     public void createSnackbar(final int adapterpos, final Question q){
+        undoClicked = false;
 
-        View.OnClickListener myOnClickListener = new View.OnClickListener() {
+        final View.OnClickListener snackbarClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                q.setIsArchived(false);
-                q.saveInBackground();
-                mQuestions.add(q);
-                Collections.sort(mQuestions);
-                mAdapter.notifyItemInserted(adapterpos);
-                rvQuestions.scrollToPosition(adapterpos);
+                if(!undoClicked) {
+                    q.setIsArchived(false);
+                    q.saveInBackground();
+                    mQuestions.add(q);
+                    Collections.sort(mQuestions);
+                    mAdapter.notifyItemInserted(adapterpos);
+                    rvQuestions.scrollToPosition(adapterpos);
+                    undoClicked = true;
+                }
             }
         };
 
         Snackbar.make(getView(), R.string.snackbar_text, Snackbar.LENGTH_LONG)
-                .setAction(R.string.snackbar_action, myOnClickListener)
+                .setAction(R.string.snackbar_action, snackbarClickListener)
                 .addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar transientBottomBar, int event) {
