@@ -19,6 +19,7 @@ import com.example.helpq.R;
 import com.example.helpq.model.NotificationHelper;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Question;
+import com.example.helpq.model.Reply;
 import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.model.WaitTime;
@@ -101,6 +102,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
     public void deleteQuestion(Question q) {
         String questionId = q.getObjectId();
         try {
+            deleteReplies(q);
             q.delete();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -108,6 +110,18 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.ViewHolder> 
         q.saveInBackground();
         NotificationHelper.deleteNotificationsByQuestion(questionId);
         notifyDataSetChanged();
+    }
+
+    // deletes all replies associated with the question
+    private void deleteReplies(Question q) {
+        QueryFactory.Replies.deleteAssociatedReplies(q).findInBackground(new FindCallback<Reply>() {
+            @Override
+            public void done(List<Reply> objects, ParseException e) {
+                for(Reply reply : objects) {
+                    reply.deleteEventually();
+                }
+            }
+        });
     }
 
     // Removes question at this position

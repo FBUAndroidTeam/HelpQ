@@ -60,7 +60,9 @@ public class AlarmHelper extends ContextWrapper {
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setContentTitle(getResources().getString(R.string.workshop_alarm))
                 .setContentText(title + " " +
-                        getResources().getString(R.string.workshop_alarm_description))
+                        getResources().getString(R.string.workshop_alarm_description) + " " +
+                        User.getReminderTime(ParseUser.getCurrentUser()) + " " +
+                        getResources().getString(R.string.minutes))
                 .setSmallIcon(R.drawable.notification_icon)
                 .setPriority(PRIORITY_HIGH)
                 .setAutoCancel(true);
