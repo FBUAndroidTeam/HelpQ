@@ -9,6 +9,7 @@ public class User {
     public static String KEY_ADMIN_NAME = "adminName";
     public static String KEY_PROFILE_PIC = "profilePictureId";
     public static String KEY_USERNAME = "username";
+    public static String KEY_REMIND_X_MINUTES_BEFORE = "remindXMinutesBefore";
 
     // Is the user an admin?
     public static boolean isAdmin(ParseUser user) {
@@ -47,5 +48,14 @@ public class User {
     public static String getProfilePicture(ParseUser user) {
         return user.getString(KEY_PROFILE_PIC);
     }
+
+    public static void setReminderTime(int time, ParseUser user) {
+        user.put(KEY_REMIND_X_MINUTES_BEFORE, time);
+    }
+
+    public static int getReminderTime(ParseUser user) {
+        return user.getInt(KEY_REMIND_X_MINUTES_BEFORE);
+    }
+
 
 }

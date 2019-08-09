@@ -7,17 +7,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.helpq.R;
 import com.example.helpq.model.QueryFactory;
 import com.example.helpq.model.Reply;
+import com.example.helpq.model.Sound;
 import com.example.helpq.model.User;
 import com.example.helpq.view.LoginActivity;
+import com.example.helpq.view.SettingsFragment;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -37,6 +41,7 @@ public class StudentProfileFragment extends Fragment {
     private SimpleDraweeView ppvPicture;
     private String mProfile;
     private TextView tvStat;
+    private ImageButton ibSetting;
 
     public static StudentProfileFragment newInstance() {
         return new StudentProfileFragment();
@@ -68,6 +73,7 @@ public class StudentProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getNumberOfVerifiedReplies();
+        ibSetting = view.findViewById(R.id.ibSetting);
         ppvPicture = view.findViewById(R.id.ppvPicture);
         tvAdmin = view.findViewById(R.id.tvAdmin);
         tvFullName = view.findViewById(R.id.tvFullName);
@@ -80,6 +86,7 @@ public class StudentProfileFragment extends Fragment {
         ppvPicture.setImageURI(Uri.parse("http://graph.facebook.com/"+
                 mProfile+"/picture?type=large"));
         setupLogout();
+        setUpSettingsButton();
     }
 
     // Handle logic for logging out.
@@ -114,6 +121,18 @@ public class StudentProfileFragment extends Fragment {
                     tvStat.setText(numRepliesVerified + " " +
                             getContext().getResources().getString(R.string.verified_replies));
                 }
+            }
+        });
+    }
+
+    private void setUpSettingsButton() {
+        ibSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Sound.openDialogWindow(getContext());
+                FragmentManager manager = getChildFragmentManager();
+                SettingsFragment frag = SettingsFragment.newInstance();
+                frag.show(manager, SettingsFragment.TAG);
             }
         });
     }

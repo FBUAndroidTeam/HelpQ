@@ -224,7 +224,8 @@ public class StudentWorkshopFragment extends Fragment {
 
     public Date timeSetHelper (Calendar calendar) {
         long time = calendar.getTimeInMillis();
-        Date alarmTime = new Date(time - (15 * ONE_MINUTE_IN_MILLIS));
+        Date alarmTime = new Date(time - (User.getReminderTime(ParseUser.getCurrentUser())
+                * ONE_MINUTE_IN_MILLIS));
         return alarmTime;
     }
 
