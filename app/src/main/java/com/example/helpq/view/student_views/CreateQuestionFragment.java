@@ -92,6 +92,7 @@ public class CreateQuestionFragment extends DialogFragment {
 
         etQuestion = (EditText) view.findViewById(R.id.etQuestion);
         btnSubmit = view.findViewById(R.id.btnSubmit);
+        btnSubmit.setEnabled(false);
 
         tvWaitTime = view.findViewById(R.id.tvWaitTime);
         helper = new WaitTimeHelper(getParentFragment().getContext());
@@ -189,6 +190,7 @@ public class CreateQuestionFragment extends DialogFragment {
                     waitTime = objects.get(0);
                 }
                 tvWaitTime.setText(helper.getBlockingWaitTime(waitTime.getBlockingTime()));
+                btnSubmit.setEnabled(true);
                 togglePriorityButtons();
             }
         });
