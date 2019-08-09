@@ -198,37 +198,6 @@ public class StudentWorkshopFragment extends Fragment {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    public void onTimeSet(Date workshopTime, String workshopName) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(workshopTime);
-        c.setTime(timeSetHelper(c));
-        workshop = workshopName;
-        Log.d(TAG, "alarm time: " + q.getRelativeTimeAgo(c.getTimeInMillis()));
-        startAlarm(c);
-    }
-
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private void startAlarm(Calendar c) {
-        AlarmManager alarmManager = (AlarmManager) getContext()
-                .getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getContext(), AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),
-                1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        if (c.before(Calendar.getInstance())) {
-            c.add(Calendar.DATE, 1);
-        }
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-    }
-
-    public Date timeSetHelper (Calendar calendar) {
-        long time = calendar.getTimeInMillis();
-        Date alarmTime = new Date(time - (User.getReminderTime(ParseUser.getCurrentUser())
-                * ONE_MINUTE_IN_MILLIS));
-        return alarmTime;
-    }
-
     // Animate RecyclerView items falling onto the screen.
     protected void runLayoutAnimation() {
         final Context context = rvWorkshops.getContext();
