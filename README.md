@@ -34,7 +34,7 @@
 - [x] Login persists.
 - [x] In-app notifications.
 - [x] Students can like and reply to other student's questions on the queue.
-  - If a student likes a question, it will also appear in their inbox when answered.
+  - [x] If a student likes a question, it will also appear in their inbox when answered.
 - [x] Admin can verify student replies to other student's questions.
 - [x] Live estimated wait times.
   - [x] Displayed for each priority when asking a question.
@@ -123,3 +123,17 @@
    * => Student-to-student help
 * Board
    * => Student-to-student help
+   
+## 4. Video Walkthroughs
+
+Here's a walkthrough of implemented user stories:
+
+**Student Walkthrough:**
+
+<img src='https://github.com/FBUAndroidTeam/HelpQ/blob/master/helpq_walkthrough1.gif' title='Student Walkthrough' width='' alt='Student Walkthrough' />
+
+**Admin Walkthrough:**
+
+<img src='https://github.com/FBUAndroidTeam/HelpQ/blob/master/helpq_walkthrough2.gif' title='Admin Walkthrough' width='' alt='Admin Walkthrough' />
+
+GIF created with [LiceCap](http://www.cockos.com/licecap/).
