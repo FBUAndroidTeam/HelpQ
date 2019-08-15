@@ -226,7 +226,6 @@ public class CreateQuestionFragment extends DialogFragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnSubmit.setEnabled(false);
                 if (etQuestion.getText().toString().isEmpty()) {
                     Toast.makeText(getContext(),
                             R.string.edge_case_enter_question,
@@ -243,6 +242,7 @@ public class CreateQuestionFragment extends DialogFragment {
                             Toast.LENGTH_LONG).show();
                 } else {
                     submitQuestion();
+                    btnSubmit.setEnabled(false);
                 }
             }
         });
